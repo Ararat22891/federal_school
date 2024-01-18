@@ -15,7 +15,7 @@ class SpashView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
-                backgroundImage: Image.asset("assets/logo.png").image,
+                foregroundImage: Image.asset("assets/logo.png").image,
                 radius: 70,
               ),
               SizedBox(height: 5,),

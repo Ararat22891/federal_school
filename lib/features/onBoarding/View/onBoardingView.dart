@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../ViewAssets/OrLineView.dart';
+import '../../../ViewAssets/SocialNetworkSignView.dart';
 import '../../../textStyles/textStyles.dart';
 import 'package:federal_school/ViewAssets/DefaultButton.dart';
 
@@ -8,7 +10,6 @@ class OnBoardingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[900],
         body: SafeArea(
             child: Container(
               margin: EdgeInsets.all(24),
@@ -21,57 +22,17 @@ class OnBoardingView extends StatelessWidget {
                   Spacer(),
                   Column(
                         children: [
-                          Text("Федеральная  Школа — лучший способ интеграции в Мир", style: TextStyles.LittleGrey,),
-                          Row(
-                            children: [
-                              Spacer(),
-                              IconButton(
-                                  icon: Image.asset("assets/g.png", width: 20,),
-                                  onPressed: (){},
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<CircleBorder>(
-                                        CircleBorder(
-                                            side: BorderSide(color: Colors.grey)
-                                        )
-                                    ),
-                                  )
-                              ),
-                              SizedBox(width: 8,),
-                              IconButton(
-                                  icon: Icon(Icons.apple, size: 25, color: Colors.white,),
-                                  onPressed: (){},
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<CircleBorder>(
-                                        CircleBorder(
-                                            side: BorderSide(color: Colors.grey)
-                                        )
-                                    ),
-                                  )
-                              ),
-                              Spacer(),
-                            ],
-                          ),
+                          Text("Федеральная Партийная  Школа — лучший способ интеграции в единственную в России демократическую партию!", style: TextStyles.LittleGrey,),
+                          SizedBox(height: 40,),
+                          SocialNetworkSignView(),
                           SizedBox(height: 20,),
-
-                          Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Container(height: 1, color: Colors.grey, ),
-                              Container(
-                                  color: Colors.grey[900],
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text("ИЛИ", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),)
-                              ),
-                            ],
-                          ),
-
+                          OrLineView(),
                           SizedBox(height: 20,),
 
 
                           DefaultButton(
                             onPressed: () {  },
                             child: Text("Регистрация с почтой", style: TextStyle(color: Colors.black), textAlign: TextAlign.center,),
-                            backgroundColor: Colors.white,
                           ),
 
                           Row(

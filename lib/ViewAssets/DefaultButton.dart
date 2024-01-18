@@ -13,10 +13,10 @@ class DefaultButton extends FilledButton {
       ),
       style: ButtonStyle(
 
-          backgroundColor: MaterialStateProperty.all(backgroundColor),
           shape:  MaterialStateProperty.all(RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8))
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           )),
+        overlayColor: MaterialStateProperty.all(Colors.grey)
       ),
     );
 
