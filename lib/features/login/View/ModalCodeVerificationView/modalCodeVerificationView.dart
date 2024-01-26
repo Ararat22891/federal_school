@@ -1,0 +1,91 @@
+
+import 'package:federal_school/Colors.dart';
+import 'package:federal_school/ViewAssets/loadingDialog.dart';
+import 'package:federal_school/textStyles/textStyles.dart';
+import 'package:flutter/material.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../../../ViewAssets/DefaultButton.dart';
+import '../../../../ViewAssets/NumberKeyboardView.dart';
+
+class ModalCodeVerificationView extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("Ввод кода", style: TextStyles.headline2,),
+          FittedBox(
+            child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон +79600777488", style: TextStyles.subBody, textAlign: TextAlign.center,),
+          ),
+          Container(
+            height: 12,
+          ),
+          Visibility(
+              child: Text("00:20", style: TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 14),),
+              visible: true,
+          ),
+          Spacer(),
+          PinCodeTextField(
+              appContext: context,
+              length: 4,
+              mainAxisAlignment: MainAxisAlignment.center,
+              keyboardType: TextInputType.number,
+            pinTheme: PinTheme(
+              borderRadius: BorderRadius.circular(5),
+              shape: PinCodeFieldShape.underline,
+              inactiveColor: MyColors.darkbluetext,
+              fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
+              activeFillColor: Colors.white,
+            ),
+          ),
+          Spacer(),
+          Visibility(
+              child: Text("Код недействительный", style: TextStyles.errorBody,),
+              visible: false,
+          ),
+          NumberKeyboardView(),
+
+          Spacer(),
+          DefaultButton(
+            onPressed: (){
+              showDialog(
+                  context: context,
+                  builder: (context){
+                    return LoadingDialog();
+                  }
+              );
+            },
+            text: "Отправить",
+          ),
+
+          Container(
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12)
+            ),
+            child: FilledButton(
+              onPressed: (){},
+              child: Text("Отправить новый код", style: TextStyle(color: MyColors.darkbluetext, fontSize: 18),),
+              style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.white12),
+                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)
+                      ),
+                    side: BorderSide(color: MyColors.darkbluetext, width: 3)
+                  ))
+              ),
+            ),
+          ),
+
+          Spacer()
+        ],
+      ),
+    );
+  }
+}
