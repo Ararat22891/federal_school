@@ -1,4 +1,5 @@
 import 'package:federal_school/Colors.dart';
+import 'package:federal_school/features/login/View/DialogVerificationView/dialogVerificationView.dart';
 import 'package:federal_school/features/login/View/ModalCodeVerificationView/modalCodeVerificationView.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,8 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    print(height);
     return Container(
         decoration: BoxDecoration(
         gradient:  LinearGradient(
@@ -29,31 +32,31 @@ class LoginView extends StatelessWidget {
         body: Column(
           children: [
             Spacer(),
-            Image.asset("assets/onboarding.png", scale: 3.3,),
+            Container(
+              height: height/2.5,
+              child: Image.asset("assets/onboarding.png",  ),
+            ),
             Spacer(),
-            SingleChildScrollView(
-              child: Container(
+            Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
                   ),
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 18),
+                    padding: EdgeInsets.symmetric(horizontal: 18, vertical: 30),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 30,),
                         Row(
                           children: [
                             Spacer(),
-                            Text("Войти", style: TextStyles.headline2,),
+                            Text("Войти", style: TextStyles.headline2),
                             Spacer()
                           ],
                         ),
-                        SizedBox(height: 24,),
-                        Text("Номер телефона", style: TextStyle(color: MyColors.darkbluetext, fontSize: 18, fontWeight: FontWeight.bold),),
+                        SizedBox(height: 16,),
+                        Text("Номер телефона", style: TextStyles.myBodyMain),
                         PhoneField(),
-                        SizedBox(height: 8,),
                         Text("Введите номер своего телефона здесь", style: TextStyles.subBody),
                         Visibility(
                           child:Text("*Пожалуйста, введите свой номер телефона", style: TextStyles.errorBody),
@@ -62,22 +65,28 @@ class LoginView extends StatelessWidget {
                         SizedBox(height: 24,),
                         DefaultButton(
                             onPressed: (){
-                              showModalBottomSheet<void>(
+                              // showModalBottomSheet<void>(
+                              //     context: context,
+                              //     isScrollControlled: true,
+                              //     builder: (context) => FractionallySizedBox(
+                              //       heightFactor: 0.8,
+                              //       child: ModalCodeVerificationView(),
+                              //     )
+                              // );
+
+                              showDialog(
                                   context: context,
-                                  isScrollControlled: true,
-                                  builder: (context) => FractionallySizedBox(
-                                    heightFactor: 0.8,
-                                    child: ModalCodeVerificationView(),
-                                  )
+                                  builder: (context){
+                                    return DialogVerificationView();
+                                  }
                               );
                             },
                             text: "Войти"
                         ),
-                        SizedBox(height: 60,),
 
                       ],
                     ),
-                  )
+
               ),
             )
           ],

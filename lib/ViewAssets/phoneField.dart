@@ -21,39 +21,41 @@ class PhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: MyColors.darkbluetext,
-            borderRadius: BorderRadius.circular(12),
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: MyColors.darkbluetext,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DropdownButton<CountryPrefix>(
+              items: CountryPrefix.values
+                  .map<DropdownMenuItem<CountryPrefix>>((country){
+                return DropdownMenuItem<CountryPrefix>(
+                    value: country,
+                    child: Text(country.prefixNum.toString(), style: TextStyle(color: MyColors.darkbluetext),)
+                );
+              }).toList(),
+              onChanged: (country){},
+              elevation: 0,
+              value: CountryPrefix.arm,
+              dropdownColor: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              icon: Icon(Icons.keyboard_arrow_down, color: Colors.white,),
+              underline: Container(),
+              padding: EdgeInsets.symmetric(horizontal: 3),
+            ),
           ),
-          child: DropdownButton<CountryPrefix>(
-            items: CountryPrefix.values
-                .map<DropdownMenuItem<CountryPrefix>>((country){
-              return DropdownMenuItem<CountryPrefix>(
-                  value: country,
-                  child: Text(country.prefixNum.toString(), style: TextStyle(color: MyColors.darkbluetext),)
-              );
-            }).toList(),
-            onChanged: (country){},
-            elevation: 0,
-            value: CountryPrefix.arm,
-            dropdownColor: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            icon: Icon(Icons.keyboard_arrow_down, color: Colors.white,),
-            underline: Container(),
-            padding: EdgeInsets.symmetric(horizontal: 3),
-          ),
-        ),
-        SizedBox(width: 4,),
+          SizedBox(width: 4,),
 
-        Expanded(
+          Expanded(
             child: TextField(
               keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
+              decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(horizontal: 10),
                 hintText: "Ваш номер",
                 hintStyle: TextStyle(color: Colors.grey, fontSize: 15),
@@ -65,10 +67,11 @@ class PhoneField extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                   borderSide: const BorderSide(color: MyColors.darkbluetext, width: 3),
                 ),
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

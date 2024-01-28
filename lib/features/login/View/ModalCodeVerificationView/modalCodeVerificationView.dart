@@ -13,22 +13,25 @@ class ModalCodeVerificationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      padding: EdgeInsets.symmetric(horizontal: 40,),
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("Ввод кода", style: TextStyles.headline2,),
+         Spacer(),
+          FittedBox(
+            child:  Text("Верификация кода", style: TextStyles.headline2,),
+          ),
           FittedBox(
             child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон +79600777488", style: TextStyles.subBody, textAlign: TextAlign.center,),
           ),
-          Container(
-            height: 12,
-          ),
+
           Visibility(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 3),
               child: Text("00:20", style: TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 14),),
-              visible: true,
+            ),
+            visible: true,
           ),
           Spacer(),
           PinCodeTextField(
@@ -66,6 +69,7 @@ class ModalCodeVerificationView extends StatelessWidget {
 
           Container(
             width: double.infinity,
+            margin: EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12)
             ),

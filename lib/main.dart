@@ -1,5 +1,6 @@
 import 'package:federal_school/Colors.dart';
 import 'package:federal_school/features/onBoarding/View/onBoardingView.dart';
+import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 
 import 'features/login/View/loginView.dart';
@@ -15,10 +16,7 @@ class SchoolApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.blue,
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          primary: Colors.white, // Your accent color
-        ),
+        colorSchemeSeed: Colors.white
       ),
       home: LoginView(),
     );
