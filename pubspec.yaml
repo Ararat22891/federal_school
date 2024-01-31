@@ -31,7 +31,7 @@ dependencies:
   mobx: ^2.3.0+1
   flutter_mobx: ^2.2.0+2
   pin_code_fields: ^8.0.1
-
+  persistent_bottom_nav_bar: ^5.0.2
   flutter:
     sdk: flutter
 
@@ -71,6 +71,8 @@ flutter:
      - assets/onboarding.png
      - assets/checkMark.png
      - assets/code_verification.png
+     - assets/2022.jpg
+     - assets/sitting_man.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

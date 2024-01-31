@@ -34,7 +34,7 @@ class LoginView extends StatelessWidget {
             Spacer(),
             Container(
               height: height/2.5,
-              child: Image.asset("assets/onboarding.png",  ),
+              child: Image.asset("assets/sitting_man.png",  ),
             ),
             Spacer(),
             Container(

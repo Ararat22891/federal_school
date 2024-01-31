@@ -1,6 +1,7 @@
 
 
 import 'package:federal_school/Colors.dart';
+import 'package:federal_school/features/home/View/homeView.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 
@@ -35,7 +36,10 @@ class LoadingDialog extends StatelessWidget {
 
             FilledButton(
               onPressed: (){
-                Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => const HomeView()),
+                        (Route<dynamic> route) => false
+                );
               },
               child: Text("Продолжить", style: TextStyle(color: Colors.white, fontSize: 14),),
               style: ButtonStyle(

@@ -18,7 +18,7 @@ class ModalCodeVerificationView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-         Spacer(),
+          Spacer(),
           FittedBox(
             child:  Text("Верификация кода", style: TextStyles.headline2,),
           ),
@@ -86,8 +86,10 @@ class ModalCodeVerificationView extends StatelessWidget {
               ),
             ),
           ),
+          Spacer(),
+          Spacer(),
 
-          Spacer()
+
         ],
       ),
     );

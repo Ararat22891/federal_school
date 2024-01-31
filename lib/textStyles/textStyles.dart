@@ -14,4 +14,8 @@ class TextStyles{
   static TextStyle loginButton = TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold);
   static TextStyle headline2= TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 36);
   static TextStyle headline3= TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 26);
+
+  static TextStyle navBarItemSelected = TextStyle(color: MyColors.darkbluetext, fontSize: 12, fontWeight: FontWeight.bold);
+  static TextStyle navBarItemUnSelected = TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w400);
+
 }
