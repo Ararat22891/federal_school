@@ -16,7 +16,7 @@ class SchoolApp extends StatelessWidget{
   Widget build(BuildContext context) {
     return  MaterialApp(
       theme: ThemeData(
-        colorSchemeSeed: Colors.white
+        colorSchemeSeed: Colors.white,
       ),
       home: LoginView(),
     );
