@@ -13,12 +13,12 @@ class ChatHomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Set<ChatType> selection = <ChatType>{ChatType.group};
+    Set<ChatType> selection = <ChatType>{ChatType.message};
 
 
     return Column(
         children: [
-         SegmentedButton(
+          SegmentedButton(
                 showSelectedIcon: false,
                 style: ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -58,30 +58,30 @@ class ChatHomeView extends StatelessWidget {
                 ],
                 selected: selection
             ),
-          // Expanded(
-          //       child: ListView.builder(
-          //           shrinkWrap: true,
-          //           itemCount: ChatCellModel.chats.length,
-          //           itemBuilder: (context, index){
-          //             return ChatMesageCellView(chat: ChatCellModel.chats[index]);
-          //           }
-          //       ),
-          //
-          // ),
-
           Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: ChatGroupCellModel.groups.length,
-                  itemBuilder: (context, index){
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 6),
-                      child: ChatGroupCellView(group: ChatGroupCellModel.groups[index],),
-                    );
-                  },
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: ChatCellModel.chats.length,
+                    itemBuilder: (context, index){
+                      return ChatMesageCellView(chat: ChatCellModel.chats[index]);
+                    }
+                ),
 
-              )
-          )
+          ),
+
+          // Expanded(
+          //     child: ListView.builder(
+          //         shrinkWrap: true,
+          //         itemCount: ChatGroupCellModel.groups.length,
+          //         itemBuilder: (context, index){
+          //           return Container(
+          //             margin: EdgeInsets.symmetric(vertical: 6),
+          //             child: ChatGroupCellView(group: ChatGroupCellModel.groups[index],),
+          //           );
+          //         },
+          //
+          //     )
+          // )
 
 
 
