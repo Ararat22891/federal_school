@@ -95,17 +95,18 @@ class _CalendarHomeViewState extends State<CalendarHomeView> {
 
           if (DSNotification.extent >= viewModel.maxExtent) {
             viewModel.calendarFormat = CalendarFormat.week;
-            print("object");
             return false;
-          } else {
+          } else if(DSNotification.extent <= viewModel.maxExtent - 0.04){
             viewModel.calendarFormat = CalendarFormat.month;
             return true;
           }
-        }, child: Observer(
+          return false;
+            }, child: Observer(
           builder: (context) {
             return DraggableScrollableSheet(
               controller: viewModel.draggableScrollableController,
               maxChildSize: viewModel.maxExtent,
+              initialChildSize: 0.4,
               builder: (BuildContext context, scrollController) {
                 return Column(
                   children: [
