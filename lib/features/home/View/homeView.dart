@@ -1,9 +1,10 @@
 import 'package:federal_school/features/ChatHome/View/chatHomeView.dart';
+import 'package:federal_school/features/calendarHome/calendarHomeView.dart';
 import 'package:federal_school/features/login/View/loginView.dart';
 import 'package:federal_school/features/myProfile/View/myProfileView.dart';
+import 'package:federal_school/testView.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../../../Colors.dart';
 
@@ -12,7 +13,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
     return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -53,7 +53,8 @@ class HomeView extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(30),
                       topRight: Radius.circular(30))),
-              child: ChatHomeView(),
+              // child: ChatHomeView(),
+              child: CalendarHomeView()
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
