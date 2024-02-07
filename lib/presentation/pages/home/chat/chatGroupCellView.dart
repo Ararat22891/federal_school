@@ -10,12 +10,14 @@ class ChatGroupCellView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = Theme.of(context).brightness == Brightness.light ? true : false;
+
     return Material(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 6,),
-        color: Colors.transparent,
+        color: isLight ? MyColors.white : MyColors.darkThemeContainer,
         child: Card(
-          surfaceTintColor: Colors.white,
+          surfaceTintColor: isLight ? MyColors.white : MyColors.darkThemeSelected,
           elevation: 6,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20)
@@ -39,10 +41,10 @@ class ChatGroupCellView extends StatelessWidget {
                   Expanded(child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(group.groupName, style: TextStyle(color: MyColors.darkbluetext, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                      Text(group.groupName, style: TextStyle(color: isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis,),
                       Text(group.lastMessageWithSender, style: TextStyle(color: Colors.grey, fontSize: 12,), overflow: TextOverflow.ellipsis,),
                       Container(height: 4,),
-                      Text("${group.participantCount} Участников", style: TextStyle(color: MyColors.darkbluetext, fontSize: 12), overflow: TextOverflow.ellipsis,),
+                      Text("${group.participantCount} Участников", style: TextStyle(color:  isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 12), overflow: TextOverflow.ellipsis,),
                     ],
                   ),
                   ),
@@ -56,10 +58,10 @@ class ChatGroupCellView extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.all(7),
                           decoration: BoxDecoration(
-                            color: MyColors.darkbluetext,
+                            color: isLight ? MyColors.darkbluetext : MyColors.darkThemeFont,
                             shape: BoxShape.circle,
                           ),
-                          child: Text(group.newMessageCount.toString(), style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),),
+                          child: Text(group.newMessageCount.toString(), style: TextStyle(color: isLight ? Colors.white : Colors.black, fontSize: 14, fontWeight: FontWeight.bold),),
                         )
                       ],
 

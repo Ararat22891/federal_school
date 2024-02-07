@@ -1,4 +1,3 @@
-import 'package:federal_school/domain/states/main/mainState.dart';
 import 'package:federal_school/presentation/widgets/eventViewAsset.dart';
 import 'package:federal_school/domain/states/calendar/calendarHomeViewModel.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +15,7 @@ class CalendarHomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-
-
-    viewModel.draggableScrollableController.addListener(viewModel.scroll);
-    print(viewModel.maxExtent);
-    return Stack(
-      alignment: Alignment.bottomCenter,
+    return Column(
       children: [
         Observer(builder: (context) {
           return TableCalendar(
@@ -81,59 +75,30 @@ class CalendarHomeView extends StatelessWidget {
             startingDayOfWeek: StartingDayOfWeek.monday,
           );
         }),
-        NotificationListener<DraggableScrollableNotification>(
-            onNotification: (DraggableScrollableNotification DSNotification) {
-          if (!viewModel.isReady) {
-            when(
-                (p0) =>
-                    viewModel.Key.currentContext!.findRenderObject() != null,
-                () {
-              final RenderBox renderBox =
-                  viewModel.Key.currentContext!.findRenderObject() as RenderBox;
-              viewModel.maxExtent =
-                  renderBox.size.height / MediaQuery.of(context).size.height +
-                      0.02;
-              print('Размер виджета: ${viewModel.maxExtent}');
-
-            });
-            viewModel.isReady = true;
-          }
-          //
-          // if (DSNotification.extent >= viewModel.maxExtent) {
-          //   viewModel.calendarFormat = CalendarFormat.week;
-          //   return false;
-          // } else if(DSNotification.extent <= viewModel.maxExtent - 0.04){
-          //   viewModel.calendarFormat = CalendarFormat.month;
-          //   return true;
-          // }
-           return false;
-            },
-            child: Observer(
-            builder: (context) {
-            return DraggableScrollableSheet(
-              maxChildSize: viewModel.maxExtent,
-              controller: viewModel.draggableScrollableController,
-              initialChildSize: 0.3,
-              minChildSize: 0.2,
-              builder: (BuildContext context, scrollController) {
+        Expanded(child: Observer(
+          builder: (context) {
+            return BottomSheet(
+              backgroundColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              elevation: 0,
+              builder: (BuildContext context) {
                 return Column(
                   children: [
                     SizedBox(
                       child: Divider(
-                        thickness: 5,
+                        thickness: 4,
                       ),
                       width: 50,
                     ),
                     Expanded(
                         child: ListView.builder(
                             itemCount: 3,
-                            controller: scrollController,
                             itemBuilder: (context, index) {
                               return EventViewAsset();
                             }))
                   ],
                 );
-              },
+              }, onClosing: () {  },
             );
           },
         ))

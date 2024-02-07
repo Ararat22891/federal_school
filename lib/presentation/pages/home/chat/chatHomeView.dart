@@ -3,90 +3,101 @@ import 'package:federal_school/domain/models/chat/chatCellModel.dart';
 import 'package:federal_school/domain/models/chat/chatGroupCellModel.dart';
 import 'package:federal_school/presentation/pages/home/chat/chatGroupCellView.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../../domain/states/home/chat/chatViewModel.dart';
 import 'chatMessageCellView.dart';
 
-enum ChatType { message, group }
 
 
 class ChatHomeView extends StatelessWidget {
-  const ChatHomeView({super.key});
+  ChatHomeView({super.key});
+
+  ChatViewModel chatViewModel = ChatViewModel();
 
   @override
   Widget build(BuildContext context) {
-    Set<ChatType> selection = <ChatType>{ChatType.message};
-    bool isLightTheme = Theme.of(context).brightness == Brightness.light;
+    bool isLightTheme = Theme
+        .of(context)
+        .brightness == Brightness.light;
+
     return Column(
-        children: [
-          SegmentedButton(
+      children: [
+        Observer(
+            builder: (context){
+              return SegmentedButton(
                 showSelectedIcon: false,
                 style: ButtonStyle(
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   side: MaterialStatePropertyAll(BorderSide(
-                      color: isLightTheme ? Colors.white : MyColors.darkbluetext, width: 1)),
+                      color: isLightTheme ? MyColors.darkbluetext : Colors.white,
+                      width: 1)),
                   visualDensity: VisualDensity(horizontal: -2, vertical: -2),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                          (state){
-                        if (state.contains(MaterialState.selected)){
-                          return isLightTheme ?  MyColors.darkbluetext: Colors.white;
+                          (state) {
+                        if (state.contains(MaterialState.selected)) {
+                          return isLightTheme ? MyColors.darkbluetext : Colors
+                              .white;
                         }
-
                       }
                   ),
                   foregroundColor: MaterialStateProperty.resolveWith(
-                          (state){
-                        if (state.contains(MaterialState.selected)){
-                          return isLightTheme ? Colors.white :  Colors.black;
+                          (state) {
+                        if (state.contains(MaterialState.selected)) {
+                          return isLightTheme ? Colors.white : Colors.black;
                         }
-                        else if(!state.contains(MaterialState.selected)){
-                          return isLightTheme ? MyColors.darkbluetext : Colors.white;
+                        else if (!state.contains(MaterialState.selected)) {
+                          return isLightTheme ? MyColors.darkbluetext : Colors
+                              .white;
                         }
                       }
                   ),
                 ),
-                segments:[
-                  ButtonSegment(
+                segments: [
+                  ButtonSegment<ChatType>(
                       value: ChatType.message,
-                      label: Text("Сообщения", style: TextStyle( fontWeight: FontWeight.bold),)
+                      label: Text(
+                        "Сообщения", style: TextStyle(fontWeight: FontWeight.bold),)
                   ),
 
-                  ButtonSegment(
+                  ButtonSegment<ChatType>(
                       value: ChatType.group,
-                      label: Text("Группы", style: TextStyle( fontWeight: FontWeight.bold),)
+                      label: Text(
+                        "Группы", style: TextStyle(fontWeight: FontWeight.bold),)
                   ),
-
-
                 ],
-                selected: selection
-            ),
-          Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: ChatCellModel.chats.length,
-                    itemBuilder: (context, index){
-                      return ChatMesageCellView(chat: ChatCellModel.chats[index]);
-                    }
-                ),
+                selected: <ChatType>{chatViewModel.selection},
+                onSelectionChanged: chatViewModel.setTypeChat,
+              );
+            }
+        ),
 
-          ),
+        Container(
+          height: 10,
+        ),
 
-          // Expanded(
-          //     child: ListView.builder(
-          //         shrinkWrap: true,
-          //         itemCount: ChatGroupCellModel.groups.length,
-          //         itemBuilder: (context, index){
-          //           return Container(
-          //             margin: EdgeInsets.symmetric(vertical: 6),
-          //             child: ChatGroupCellView(group: ChatGroupCellModel.groups[index],),
-          //           );
-          //         },
-          //
-          //     )
-          // )
+        Expanded(child: Observer(
+            builder: (context){
+              return chatViewModel.selection == ChatType.message ? ListView.builder(
+                  itemCount: ChatCellModel.chats.length,
+                  itemBuilder: (context, index) {
+                    return ChatMesageCellView(chat: ChatCellModel.chats[index]);
+                  }
+              ) : ListView.builder(
+                itemCount: ChatGroupCellModel.groups.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    color: Colors.transparent,
+                    margin: EdgeInsets.symmetric(vertical: 6),
+                    child: ChatGroupCellView(
+                      group: ChatGroupCellModel.groups[index],),
+                  );
+                },
+              );
 
-
-
-        ],
+            }
+        ))
+      ],
 
     );
   }

@@ -1,5 +1,7 @@
-import 'package:federal_school/domain/states/main/mainState.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
+import 'package:federal_school/testView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -15,25 +17,25 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp( SchoolApp());
+  runApp(SchoolApp());
 }
 
 
 class SchoolApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return  Provider(
-        create: (context) => MainState(),
-        child: Observer(
-            builder: (context){
-              return MaterialApp(
-                theme: lightTheme(),
-                darkTheme: darkTheme(),
-                themeMode: context.read<MainState>().isDarkMode ? ThemeMode.dark : ThemeMode.light,
-                home: LoginView(),
-              );
-            }
-        ),
+    return ThemeProvider(
+      duration: Duration(milliseconds: 500),
+      initTheme: lightTheme(),
+      builder: (context, theme){
+          return MaterialApp(
+            home: HomeView(),
+            themeMode: ThemeMode.light,
+            theme: theme,
+            darkTheme: darkTheme(),
+          );
+      },
+
     );
   }
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 import '../Colors.dart';
@@ -13,7 +12,7 @@ class GradientContainer extends StatelessWidget {
     return Container(
       child: child,
       decoration: BoxDecoration(
-        gradient: Theme.of(context).brightness == Brightness.light ?
+        gradient: Theme.of(context).brightness == Brightness.light  ?
         LinearGradient(
           colors: [MyColors.blue70, MyColors.beige],
           begin: Alignment.topLeft,

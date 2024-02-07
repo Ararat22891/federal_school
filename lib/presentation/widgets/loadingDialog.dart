@@ -37,7 +37,7 @@ class LoadingDialog extends StatelessWidget {
             FilledButton(
               onPressed: (){
                 Navigator.pushAndRemoveUntil(context,
-                  MaterialPageRoute(builder: (context) => const HomeView()),
+                  MaterialPageRoute(builder: (context) => HomeView()),
                         (Route<dynamic> route) => false
                 );
               },

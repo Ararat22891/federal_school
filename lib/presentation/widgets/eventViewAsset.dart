@@ -8,10 +8,12 @@ class EventViewAsset extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isLight = Theme.of(context).brightness == Brightness.light ? true : false;
+
     return Card(
-      surfaceTintColor: MyColors.white,
-        shadowColor: MyColors.white,
-        color: MyColors.white,
+      surfaceTintColor: isLight? MyColors.white : MyColors.darkThemeMain,
+        shadowColor: isLight? MyColors.white : MyColors.darkThemeMain,
+        color: isLight? MyColors.white : MyColors.darkThemeMain,
         elevation: 12,
         child: Container(
           padding: EdgeInsets.all(12),
@@ -27,7 +29,7 @@ class EventViewAsset extends StatelessWidget {
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: MyColors.blue70
+                            color: isLight ? MyColors.blue70 : MyColors.darkThemeFont
                         ),
                       ),
 
@@ -45,7 +47,7 @@ class EventViewAsset extends StatelessWidget {
                 ],
               ),
               Container(height: 8,),
-              Text("Лекция с Явлинским", overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+              Text("Лекция с Явлинским", overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(color: isLight ? Colors.black : Colors.white, fontWeight: FontWeight.bold),),
               Container(height: 8,),
               Text("Быть всем!", style: TextStyle(color: Colors.grey,))
             ],

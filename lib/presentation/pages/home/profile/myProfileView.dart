@@ -1,6 +1,7 @@
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../Colors.dart';
 
@@ -10,7 +11,8 @@ class MyProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isLightTheme = Theme.of(context).brightness == Brightness.light;
+    var isLightTheme = Theme.of(context).brightness == Brightness.light ? true : false;
+    print(isLightTheme.toString());
     return Column(
       children: [
         Expanded(
@@ -19,7 +21,6 @@ class MyProfileView extends StatelessWidget {
           elevation: 10,
           borderRadius: BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
           child: GradientContainer(
-
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
