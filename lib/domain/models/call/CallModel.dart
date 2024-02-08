@@ -1,39 +1,43 @@
 
 
 import 'package:federal_school/domain/models/call/callType.dart';
+import 'package:federal_school/domain/models/user/user.dart';
 
 class CallModel{
   int _callID;
-  String _callerImage;
-  String _callerName;
+  User _user;
   DateTime _callTime;
   CallType _callType;
 
-  CallModel(this._callID, this._callerImage, this._callerName, this._callTime, this._callType);
+  CallModel(this._callID, this._user, this._callTime, this._callType);
 
   CallType get callType => _callType;
   DateTime get callTime => _callTime;
-  String get callerImage => _callerImage;
+  User get user => _user;
   int get callID => _callID;
-  String get callerName => _callerName;
 
 
 
   static List<CallModel> calls = [
     CallModel(
         0,
-        "https://cdn-media.tass.ru/width/1020_b9261fa1/tass/m2/uploads/i/20190927/5182903.jpg",
-        "Лионель Месси",
-        DateTime(2024, 12, 12),
+        User.users.first,
+      DateTime(2024, 2, 1, 12, 24),
         CallType(CallKind.incoming, CallVarint.audio),
     ),
 
     CallModel(
       1,
-      "https://cdn-media.tass.ru/width/1020_b9261fa1/tass/m2/uploads/i/20190927/5182903.jpg",
-      "Лионель Месси",
-      DateTime(2024, 12, 12),
-      CallType(CallKind.incoming, CallVarint.video),
+      User.users[1],
+      DateTime(2024, 2, 4, 21, 24),
+      CallType(CallKind.outgoing, CallVarint.video),
+    ),
+
+    CallModel(
+      2,
+      User.users[2],
+      DateTime.now(),
+      CallType(CallKind.missed, CallVarint.audio),
     ),
 
   ];

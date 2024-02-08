@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 part 'chatViewModel.g.dart';
@@ -16,5 +17,8 @@ abstract class _ChatViewModel with Store {
   void setTypeChat(Set<ChatType> chatType){
     selection = chatType.first;
   }
+
+
+
 
 }

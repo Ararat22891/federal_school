@@ -1,6 +1,8 @@
 
 import 'package:federal_school/presentation/Colors.dart';
+import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../domain/models/chat/chatCellModel.dart';
 
@@ -14,6 +16,11 @@ class ChatMesageCellView extends StatelessWidget {
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
 
+    String fullName = "${chat.user.surname} ${chat.user.name}";
+    String date = formatMessageDate(chat.sentTime);
+    int newMessageCount = chat.newMessagesCount;
+    bool isVerified = chat.user.role != 0 && chat.user.role != 1 ? true : false;
+
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -26,7 +33,7 @@ class ChatMesageCellView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    foregroundImage: Image.network(chat.imageUrl).image,
+                    foregroundImage: Image.network(chat.user.photoPath).image,
                     backgroundImage: Image.asset("assets/bird.jpg").image,
                     radius: 30,
                   ),
@@ -36,15 +43,15 @@ class ChatMesageCellView extends StatelessWidget {
                   Expanded(child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(chat.name, style: Theme.of(context).textTheme.titleMedium),
+                      VerifiedNameViewAsset(name: fullName, isVerified: isVerified),
                       Text(chat.lastMessage, style: TextStyle(color: Colors.grey, fontSize: 12,), overflow: TextOverflow.ellipsis,),
                     ],
                   ),),
                   Column(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          Text(chat.sentTime, style: TextStyle(color: Colors.grey, fontSize: 12,),),
-                          Container(
+                          Text(date, style: TextStyle(color: Colors.grey, fontSize: 12,),),
+                          newMessageCount > 0 ? Container(
                             padding: EdgeInsets.all(7),
                             decoration: BoxDecoration(
                               color: isLightTheme ? MyColors.darkbluetext : MyColors.darkThemeFont,
@@ -54,7 +61,7 @@ class ChatMesageCellView extends StatelessWidget {
                                 color: isLightTheme ? Colors.white : Colors.black,
                                 fontSize: 14, fontWeight: FontWeight.bold
                             ),),
-                          )
+                          ) : Container()
                         ],
 
                   )
@@ -64,5 +71,26 @@ class ChatMesageCellView extends StatelessWidget {
         ),
       )
     );
+  }
+
+
+
+  String formatMessageDate(DateTime messageDateTime) {
+    DateTime now = DateTime.now();
+    Duration difference = now.difference(messageDateTime);
+
+    if (difference.inDays == 0) {
+      // Сообщение отправлено сегодня
+      return DateFormat.Hm('ru').format(messageDateTime); // Часы и минуты
+    } else if (difference.inDays < 7) {
+      // Сообщение отправлено на этой неделе
+      return DateFormat.E('ru').format(messageDateTime); // День недели
+    } else if (difference.inDays < 365){
+      return DateFormat.MMMd('ru').format(messageDateTime); // День и месяц
+    }
+    else {
+      // Сообщение отправлено ранее
+      return DateFormat.yMMMd('ru').format(messageDateTime); // День и месяц
+    }
   }
 }

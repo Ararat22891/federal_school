@@ -9,6 +9,7 @@ class CallView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    CallModel.calls.sort((a,b) => b.callTime.compareTo(a.callTime));
     return  ListView.builder(
       itemCount: CallModel.calls.length,
         itemBuilder: (context, index){

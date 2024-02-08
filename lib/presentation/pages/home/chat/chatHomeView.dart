@@ -78,12 +78,16 @@ class ChatHomeView extends StatelessWidget {
 
         Expanded(child: Observer(
             builder: (context){
+              ChatCellModel.chats.sort((a,b) => b.sentTime.compareTo(a.sentTime));
+              ChatGroupCellModel.groups.sort((a,b) => b.sentDateTime.compareTo(a.sentDateTime));
+
               return chatViewModel.selection == ChatType.message ? ListView.builder(
                   itemCount: ChatCellModel.chats.length,
                   itemBuilder: (context, index) {
                     return ChatMesageCellView(chat: ChatCellModel.chats[index]);
                   }
-              ) : ListView.builder(
+              ) :
+              ListView.builder(
                 itemCount: ChatGroupCellModel.groups.length,
                 itemBuilder: (context, index) {
                   return Container(
