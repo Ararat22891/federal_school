@@ -26,11 +26,10 @@ class SchoolApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ThemeProvider(
-      duration: Duration(milliseconds: 500),
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: HomeView(),
+            home: TestView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),

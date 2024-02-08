@@ -3,6 +3,7 @@ import 'package:federal_school/domain/states/home/homeViewModel.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/pages/home/profile/myProfileView.dart';
+import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -41,20 +42,10 @@ class HomeView extends StatelessWidget {
                       },
                     )
                 ),
-                body: Container(
-                  padding: EdgeInsets.only(top: 18),
-                  decoration: BoxDecoration(
-                      color: isLightTheme
-                          ? MyColors.white
-                          : MyColors.darkThemeContainer,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30))),
-                  // child: ChatHomeView(),
+                body: RoundedContainer(
                   child: Observer(builder: (context) {
                     return homeViewModel.screens[homeViewModel.selectedIndex];
-                  }),
-                ),
+                  }),                ),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerDocked,
                 floatingActionButton: Container(

@@ -40,14 +40,7 @@ List<Widget> chatActions = [
   ),
 ];
 
-List<Widget> contactsActions = [
-  IconButton(
-      onPressed: () {},
-      icon: Icon(
-        Icons.search,
-        color: Colors.white,
-      )),
-];
+
 
 abstract class _HomeViewModel with Store {
   @observable
@@ -73,8 +66,8 @@ abstract class _HomeViewModel with Store {
     chatActions,
     null,
     null,
-    contactsActions,
-    contactsActions
+    null,
+    null
   ];
 
   @action

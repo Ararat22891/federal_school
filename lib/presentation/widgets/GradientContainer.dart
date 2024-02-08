@@ -5,6 +5,7 @@ import '../Colors.dart';
 class GradientContainer extends StatelessWidget {
   Widget child;
 
+
   GradientContainer({required this.child});
 
   @override
