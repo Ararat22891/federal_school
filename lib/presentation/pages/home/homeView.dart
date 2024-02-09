@@ -2,7 +2,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:federal_school/domain/states/home/homeViewModel.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
-import 'package:federal_school/presentation/pages/home/profile/myProfileView.dart';
+import 'package:federal_school/presentation/pages/home/profile/profileView.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +56,7 @@ class HomeView extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return Dialog.fullscreen(
-                              child: MyProfileView(),
+                              child: MyProfileView(isMe: true,),
                             );
                           });
                     },

@@ -1,5 +1,6 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
+import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/testView.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class SchoolApp extends StatelessWidget{
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: TestView(),
+            home: LoginView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),

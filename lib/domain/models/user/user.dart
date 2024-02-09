@@ -1,4 +1,11 @@
 
+enum UserRole {non_pupil, user, prepod, moder}
+
+String getRole(int roleId){
+  List<String> roles = ["Пользователь", "Студент", "Преподаватель", "Модератор"];
+  return roles[roleId];
+}
+
 class User{
   String _userUID;
   String _surname;
@@ -24,6 +31,7 @@ class User{
   String get surname => _surname;
 
   String get userUID => _userUID;
+
 
 
   static List<User> users = [

@@ -1,5 +1,6 @@
 
 import 'package:federal_school/presentation/Colors.dart';
+import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
 import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +27,9 @@ class ChatMesageCellView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 6),
         child: InkWell(
-            onTap: (){},
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => DialogView()));
+            },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Row(
