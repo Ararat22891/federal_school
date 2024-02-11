@@ -43,52 +43,51 @@ class LoginView extends StatelessWidget {
                   ),
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 18, vertical: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Spacer(),
-                            Text("Войти", style: TextStyles.headline),
-                            Spacer()
-                          ],
-                        ),
-                        SizedBox(height: 16,),
-                        Text("Номер телефона",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        PhoneField(),
-                        Text("Введите номер своего телефона здесь", style: TextStyles.subBody),
-                        Visibility(
-                          child:Text("*Пожалуйста, введите свой номер телефона", style: TextStyles.errorBody),
-                          visible: false,
-                        ),
-                        SizedBox(height: 24,),
-                        DefaultButton(
-                            onPressed: (){
-                              // showModalBottomSheet<void>(
-                              //     context: context,
-                              //     isScrollControlled: true,
-                              //     builder: (context) => FractionallySizedBox(
-                              //       heightFactor: 0.8,
-                              //       child: ModalCodeVerificationView(),
-                              //     )
-                              // );
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Spacer(),
+                              Text("Войти", style: TextStyles.headline),
+                              Spacer()
+                            ],
+                          ),
+                          SizedBox(height: 16,),
+                          Text("Номер телефона",
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          PhoneField(),
+                          Text("Введите номер своего телефона здесь", style: TextStyles.subBody),
+                          Visibility(
+                            child:Text("*Пожалуйста, введите свой номер телефона", style: TextStyles.errorBody),
+                            visible: false,
+                          ),
+                          SizedBox(height: 24,),
+                          DefaultButton(
+                              onPressed: (){
+                                // showModalBottomSheet<void>(
+                                //     context: context,
+                                //     isScrollControlled: true,
+                                //     builder: (context) => FractionallySizedBox(
+                                //       heightFactor: 0.8,
+                                //       child: ModalCodeVerificationView(),
+                                //     )
+                                // );
 
-                              showDialog(
-                                  context: context,
-                                  builder: (context){
-                                    return DialogVerificationView();
-                                  }
-                              );
-                            },
-                            text: "Войти"
-                        ),
+                                showDialog(
+                                    context: context,
+                                    builder: (context){
+                                      return DialogVerificationView();
+                                    }
+                                );
+                              },
+                              text: "Войти"
+                          ),
 
-                      ],
-                    ),
-
-              ),
+                        ],
+                      ),
+                    )
             )
           ],
         ),

@@ -28,19 +28,27 @@ class PhoneField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            padding: EdgeInsets.symmetric(horizontal: 3),
             decoration: BoxDecoration(
               color: MyColors.darkbluetext,
               borderRadius: BorderRadius.circular(12),
             ),
             child: DropdownButton<CountryPrefix>(
+              style: TextStyle(color: MyColors.darkbluetext, fontSize: 14, fontWeight: FontWeight.bold),
               items: CountryPrefix.values
                   .map<DropdownMenuItem<CountryPrefix>>((country){
                 return DropdownMenuItem<CountryPrefix>(
                     value: country,
-                    child: Text(country.prefixNum.toString(), style: TextStyle(color: MyColors.darkbluetext),)
+                    child: Text(country.prefixNum.toString(),)
                 );
               }).toList(),
               onChanged: (country){},
+              selectedItemBuilder: (context) => CountryPrefix.values.map(
+                      (e) => Container(
+                        alignment: Alignment.center,
+                        child: Text(e.prefixNum, style: TextStyle(fontSize: 14 ,color: Colors.white, fontWeight: FontWeight.bold),),
+                      )
+              ).toList(),
               elevation: 0,
               value: CountryPrefix.arm,
               dropdownColor: Colors.white,

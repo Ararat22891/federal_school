@@ -37,6 +37,7 @@ class ModalCodeVerificationView extends StatelessWidget {
           PinCodeTextField(
               appContext: context,
               length: 4,
+              focusNode: null,
               mainAxisAlignment: MainAxisAlignment.center,
               keyboardType: TextInputType.number,
             pinTheme: PinTheme(
