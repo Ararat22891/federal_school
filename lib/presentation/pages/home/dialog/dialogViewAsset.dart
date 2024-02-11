@@ -10,14 +10,14 @@ class DialoogViewAsset extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = dialogModel.userUUID == "dlassdl" ? true : false;
+    bool isMe = dialogModel.userInfo.userUID == "sasdfdafa" ? true : false;
     bool isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         isMe ?  Container() : CircleAvatar(
-          backgroundImage: Image.network(dialogModel.imageUrl).image,
+          backgroundImage: Image.network(dialogModel.userInfo.photoPath).image,
         ),
         Expanded(
             child: Padding(
@@ -42,28 +42,34 @@ class DialoogViewAsset extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Wrap(
-                      alignment: WrapAlignment.end,
-                      crossAxisAlignment: WrapCrossAlignment.end,
-                      spacing: 8,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(dialogModel.message),
-                        Text(
-                          "12:12",
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: isLightTheme ? Colors.grey[700] : Colors.black,
-                          ),
+                        isMe  ? SizedBox() : Text("${dialogModel.userInfo.surname}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                        Wrap(
+                          alignment: WrapAlignment.end,
+                          crossAxisAlignment: WrapCrossAlignment.end,
+                          spacing: 8,
+                          children: [
+                            Text(dialogModel.message),
+                            Text(
+                              "${dialogModel.sentTime.hour}:${dialogModel.sentTime.minute}",
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: isLightTheme ? Colors.grey[700] : MyColors.darkThemeContainer,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
+                    )
                   )),
             ],
           ),
         )),
 
         isMe ? CircleAvatar(
-          backgroundImage: Image.network(dialogModel.imageUrl).image,
+          backgroundImage: Image.network(dialogModel.userInfo.photoPath).image,
         ) : Container()
       ],
     );

@@ -2,6 +2,7 @@
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/widgets/loadingDialog.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
@@ -60,7 +61,7 @@ class ModalCodeVerificationView extends StatelessWidget {
             onPressed: (){
               showDialog(
                   context: context,
-                  builder: (context){
+                  builder: (context) {
                     return LoadingDialog();
                   }
               );

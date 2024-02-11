@@ -74,7 +74,8 @@ class DialogView extends StatelessWidget {
                         itemCount: DialogModel.dialogs.length,
                         itemBuilder: (context, index) {
                           return DialoogViewAsset(
-                              dialogModel: DialogModel.dialogs[index]);
+                              dialogModel: DialogModel.dialogs[index]
+                          );
                         },
                         separatorBuilder: (context, index) {
                           return Container(
