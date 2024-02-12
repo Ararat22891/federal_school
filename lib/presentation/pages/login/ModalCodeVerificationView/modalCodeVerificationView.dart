@@ -1,10 +1,12 @@
 
+import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/widgets/loadingDialog.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../presentation/widgets/DefaultButton.dart';
 import '../../../../presentation/widgets/NumberKeyboardView.dart';
@@ -76,7 +78,8 @@ class ModalCodeVerificationView extends StatelessWidget {
               borderRadius: BorderRadius.circular(12)
             ),
             child: FilledButton(
-              onPressed: (){},
+              onPressed: (){
+              },
               child: Text("Отправить новый код", style: TextStyle(color: MyColors.darkbluetext, fontSize: 18),),
               style: ButtonStyle(
                   backgroundColor: MaterialStatePropertyAll(Colors.white12),

@@ -5,7 +5,7 @@ import '../../../Colors.dart';
 
 class MyProfileView extends StatelessWidget {
   bool isMe;
-  User? foreignUser;
+  UserData? foreignUser;
 
   MyProfileView({required this.isMe, this.foreignUser});
 
@@ -107,7 +107,7 @@ class MyProfileView extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 TextFormField(
-                  initialValue: isMe ? "Преподаватель" : getRole(foreignUser!.role),
+                  initialValue: isMe ? "Преподаватель" : getRole(foreignUser!.role!),
                   style: Theme.of(context).textTheme.titleMedium,
                   enabled: false,
                   decoration: InputDecoration(

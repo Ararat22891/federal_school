@@ -1,11 +1,15 @@
+import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../ModalCodeVerificationView/modalCodeVerificationView.dart';
 
 class DialogVerificationView extends StatelessWidget {
-  const DialogVerificationView({super.key});
+  LoginViewModel viewModel;
+
+  DialogVerificationView({required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +50,7 @@ class DialogVerificationView extends StatelessWidget {
                 Spacer(),
                 FilledButton(
                   onPressed: (){
+                    viewModel.signInWithTelephone();
                     Navigator.of(context).pop();
                     showModalBottomSheet<void>(
                             context: context,

@@ -17,7 +17,7 @@ class DialoogViewAsset extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         isMe ?  Container() : CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath).image,
+          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
         ),
         Expanded(
             child: Padding(
@@ -69,7 +69,7 @@ class DialoogViewAsset extends StatelessWidget {
         )),
 
         isMe ? CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath).image,
+          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
         ) : Container()
       ],
     );

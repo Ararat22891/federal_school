@@ -32,7 +32,7 @@ class CallViewAsset extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CircleAvatar(
-                      foregroundImage: Image.network(call.user.photoPath).image,
+                      foregroundImage: Image.network(call.user.photoPath!).image,
                       backgroundImage: Image.asset("assets/bird.jpg").image,
                       radius: 30,
                     ),
