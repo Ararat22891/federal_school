@@ -5,6 +5,8 @@ import 'package:federal_school/presentation/widgets/loadingDialog.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
@@ -12,6 +14,9 @@ import '../../../../presentation/widgets/DefaultButton.dart';
 import '../../../../presentation/widgets/NumberKeyboardView.dart';
 
 class ModalCodeVerificationView extends StatelessWidget {
+  LoginViewModel viewModel;
+
+  ModalCodeVerificationView({required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class ModalCodeVerificationView extends StatelessWidget {
             child:  Text("Верификация кода", style: TextStyles.headline,),
           ),
           FittedBox(
-            child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон +79600777488", style: TextStyles.subBody, textAlign: TextAlign.center,),
+            child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон ${viewModel.phoneNumber}", style: TextStyles.subBody, textAlign: TextAlign.center,),
           ),
 
           Visibility(
@@ -37,26 +42,34 @@ class ModalCodeVerificationView extends StatelessWidget {
             visible: true,
           ),
           Spacer(),
-          PinCodeTextField(
-              appContext: context,
-              length: 4,
-              focusNode: null,
-              mainAxisAlignment: MainAxisAlignment.center,
-              keyboardType: TextInputType.number,
-            pinTheme: PinTheme(
-              borderRadius: BorderRadius.circular(5),
-              shape: PinCodeFieldShape.underline,
-              inactiveColor: MyColors.darkbluetext,
-              fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
-              activeFillColor: Colors.white,
-            ),
+          Observer(
+              builder: (context) => PinCodeTextField(
+                appContext: context,
+                length: 6,
+                controller: viewModel.pinEditingController,
+                focusNode: null,
+                readOnly: true,
+                textStyle: TextStyle(color: MyColors.darkbluetext),
+                mainAxisAlignment: MainAxisAlignment.center,
+                keyboardType: TextInputType.number,
+                pinTheme: PinTheme(
+                  borderRadius: BorderRadius.circular(5),
+                  shape: PinCodeFieldShape.underline,
+                  inactiveColor: MyColors.darkbluetext,
+                  disabledColor: MyColors.darkbluetext,
+                  fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
+                  activeFillColor: Colors.white,
+                ),
+              ),
           ),
           Spacer(),
           Visibility(
               child: Text("Код недействительный", style: TextStyles.errorBody,),
               visible: false,
           ),
-          NumberKeyboardView(),
+          NumberKeyboardView(
+            viewModel: viewModel,
+          ),
 
           Spacer(),
           DefaultButton(

@@ -50,14 +50,16 @@ class DialogVerificationView extends StatelessWidget {
                 Spacer(),
                 FilledButton(
                   onPressed: (){
-                    viewModel.signInWithTelephone();
+                    // viewModel.signInWithTelephone();
                     Navigator.of(context).pop();
                     showModalBottomSheet<void>(
                             context: context,
                             isScrollControlled: true,
                             builder: (context) => FractionallySizedBox(
                               heightFactor: 0.9,
-                              child: ModalCodeVerificationView(),
+                              child: ModalCodeVerificationView(
+                                viewModel: viewModel,
+                              ),
                             )
                         );
                   },

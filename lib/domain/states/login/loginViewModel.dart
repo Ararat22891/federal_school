@@ -1,5 +1,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
 part 'loginViewModel.g.dart';
@@ -10,18 +11,21 @@ class LoginViewModel = _LoginViewModel with _$LoginViewModel;
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "+79600777466";
+    String phoneNumber = "";
 
     @observable
     String? verificaionCode = "";
 
+    @observable
+     TextEditingController pinEditingController = TextEditingController();
+
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
 
     @observable
     String verificationId = "";
 
-
-    @override
+    @action
     Future<void> signInWithTelephone() async{
         await _firebaseAuth.verifyPhoneNumber(
             phoneNumber: phoneNumber,

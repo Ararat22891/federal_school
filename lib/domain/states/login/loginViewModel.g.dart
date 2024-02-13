@@ -41,6 +41,23 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
+  late final _$pinEditingControllerAtom =
+      Atom(name: '_LoginViewModel.pinEditingController', context: context);
+
+  @override
+  TextEditingController get pinEditingController {
+    _$pinEditingControllerAtom.reportRead();
+    return super.pinEditingController;
+  }
+
+  @override
+  set pinEditingController(TextEditingController value) {
+    _$pinEditingControllerAtom.reportWrite(value, super.pinEditingController,
+        () {
+      super.pinEditingController = value;
+    });
+  }
+
   late final _$verificationIdAtom =
       Atom(name: '_LoginViewModel.verificationId', context: context);
 
@@ -57,6 +74,15 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
+  late final _$signInWithTelephoneAsyncAction =
+      AsyncAction('_LoginViewModel.signInWithTelephone', context: context);
+
+  @override
+  Future<void> signInWithTelephone() {
+    return _$signInWithTelephoneAsyncAction
+        .run(() => super.signInWithTelephone());
+  }
+
   late final _$checkOTPAsyncAction =
       AsyncAction('_LoginViewModel.checkOTP', context: context);
 
@@ -70,6 +96,7 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return '''
 phoneNumber: ${phoneNumber},
 verificaionCode: ${verificaionCode},
+pinEditingController: ${pinEditingController},
 verificationId: ${verificationId}
     ''';
   }

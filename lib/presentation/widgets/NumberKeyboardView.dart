@@ -1,17 +1,18 @@
 
+import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 
 class NumberKeyboardView extends StatelessWidget {
-   NumberKeyboardView({super.key});
 
+  LoginViewModel viewModel;
+
+  NumberKeyboardView({required this.viewModel});
   TextStyle _keyboardStyle = TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 30);
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.width);
-
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 12),
       child: Column(
@@ -20,7 +21,10 @@ class NumberKeyboardView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                  onPressed: (){},
+                  onPressed: (){
+                    viewModel.pinEditingController.text = "6";
+                    viewModel.verificaionCode = "${viewModel.verificaionCode}1";
+                  },
                   child: Text("1", style: _keyboardStyle,)
               ),
 

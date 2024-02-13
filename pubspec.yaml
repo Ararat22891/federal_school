@@ -37,6 +37,8 @@ dependencies:
   provider: ^6.1.1
   animated_theme_switcher: ^2.0.10
   firebase_core: ^2.25.3
+  firebase_app_check: ^0.2.1+13
+  mask_text_input_formatter: ^2.8.0
   flutter:
     sdk: flutter
 
