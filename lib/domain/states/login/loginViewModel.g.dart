@@ -41,6 +41,22 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
+  late final _$isCodeVerifiedAtom =
+      Atom(name: '_LoginViewModel.isCodeVerified', context: context);
+
+  @override
+  bool get isCodeVerified {
+    _$isCodeVerifiedAtom.reportRead();
+    return super.isCodeVerified;
+  }
+
+  @override
+  set isCodeVerified(bool value) {
+    _$isCodeVerifiedAtom.reportWrite(value, super.isCodeVerified, () {
+      super.isCodeVerified = value;
+    });
+  }
+
   late final _$pinEditingControllerAtom =
       Atom(name: '_LoginViewModel.pinEditingController', context: context);
 
@@ -74,15 +90,6 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
-  late final _$signInWithTelephoneAsyncAction =
-      AsyncAction('_LoginViewModel.signInWithTelephone', context: context);
-
-  @override
-  Future<void> signInWithTelephone() {
-    return _$signInWithTelephoneAsyncAction
-        .run(() => super.signInWithTelephone());
-  }
-
   late final _$checkOTPAsyncAction =
       AsyncAction('_LoginViewModel.checkOTP', context: context);
 
@@ -96,6 +103,7 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return '''
 phoneNumber: ${phoneNumber},
 verificaionCode: ${verificaionCode},
+isCodeVerified: ${isCodeVerified},
 pinEditingController: ${pinEditingController},
 verificationId: ${verificationId}
     ''';

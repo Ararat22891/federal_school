@@ -1,8 +1,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-
 part 'loginViewModel.g.dart';
 
 class LoginViewModel = _LoginViewModel with _$LoginViewModel;
@@ -11,10 +10,13 @@ class LoginViewModel = _LoginViewModel with _$LoginViewModel;
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "";
+    String phoneNumber = "+7";
 
     @observable
     String? verificaionCode = "";
+
+    @observable
+    bool isCodeVerified = false;
 
     @observable
      TextEditingController pinEditingController = TextEditingController();
@@ -22,15 +24,10 @@ abstract class _LoginViewModel with Store{
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 
-    @observable
-    String verificationId = "";
-
-    @action
     Future<void> signInWithTelephone() async{
         await _firebaseAuth.verifyPhoneNumber(
-            phoneNumber: phoneNumber,
+            phoneNumber: "+7$phoneNumber",
             verificationCompleted: (credential) async{
-                await _firebaseAuth.signInWithCredential(credential);
             },
             verificationFailed: (e){
                 print(e);
@@ -44,11 +41,14 @@ abstract class _LoginViewModel with Store{
         );
     }
 
+    @observable
+    String verificationId = "";
 
     @action
     Future<bool> checkOTP() async{
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: verificaionCode!);
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: pinEditingController.text.trim());
         var answer = await _firebaseAuth.signInWithCredential(credential);
-        return answer.user != null ? true : false;
+        isCodeVerified = answer.user != null ? true : false;
+        return isCodeVerified;
     }
 }

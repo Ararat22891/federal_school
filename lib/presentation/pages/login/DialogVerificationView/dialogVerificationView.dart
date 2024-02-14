@@ -32,7 +32,7 @@ class DialogVerificationView extends StatelessWidget {
             ),
             Container(height: 4,),
             Text("Ваш код будет отправлен на номер ", style: TextStyles.subBody,),
-            Text("+79600777466", style: TextStyle(color: MyColors.darkbluetext, fontSize: 14, fontWeight: FontWeight.bold),),
+            Text(viewModel.phoneNumber, style: TextStyle(color: MyColors.darkbluetext, fontSize: 14, fontWeight: FontWeight.bold),),
 
             Container(height: 24,),
             Row(
@@ -50,18 +50,18 @@ class DialogVerificationView extends StatelessWidget {
                 Spacer(),
                 FilledButton(
                   onPressed: (){
-                    // viewModel.signInWithTelephone();
-                    Navigator.of(context).pop();
+                    viewModel.signInWithTelephone();
+                    Navigator.pop(context);
                     showModalBottomSheet<void>(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) => FractionallySizedBox(
-                              heightFactor: 0.9,
-                              child: ModalCodeVerificationView(
-                                viewModel: viewModel,
-                              ),
-                            )
-                        );
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => FractionallySizedBox(
+                          heightFactor: 0.9,
+                          child: ModalCodeVerificationView(
+                            viewModel: viewModel,
+                          ),
+                        )
+                    );
                   },
                   child: Text("Отправить", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                   style: FilledButton.styleFrom(

@@ -22,14 +22,16 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAppCheck.instance.activate();
+  await FirebaseAppCheck.instance.activate(
+    // Set appleProvider to `AppleProvider.debug`
+    appleProvider: AppleProvider.debug,
+  );
 
   runApp(SchoolApp());
 }
 
 
 class SchoolApp extends StatelessWidget{
-  final LoginViewModel loginViewModel = LoginViewModel();
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +39,7 @@ class SchoolApp extends StatelessWidget{
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: Provider.value(
-                value: loginViewModel,
-                child: LoginView(),
-            ),
+            home: LoginView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),

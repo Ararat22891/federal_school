@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:provider/provider.dart';
 
 import '../../../../presentation/widgets/DefaultButton.dart';
 import '../../../../presentation/widgets/NumberKeyboardView.dart';
@@ -26,6 +25,11 @@ class ModalCodeVerificationView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+
+          SizedBox(
+            width: 50,
+            child: Divider(thickness: 3,),
+          ),
           Spacer(),
           FittedBox(
             child:  Text("Верификация кода", style: TextStyles.headline,),
@@ -55,8 +59,8 @@ class ModalCodeVerificationView extends StatelessWidget {
                 pinTheme: PinTheme(
                   borderRadius: BorderRadius.circular(5),
                   shape: PinCodeFieldShape.underline,
-                  inactiveColor: MyColors.darkbluetext,
-                  disabledColor: MyColors.darkbluetext,
+                  inactiveColor: viewModel.isCodeVerified ? MyColors.darkbluetext : Colors.red,
+                  disabledColor: viewModel.isCodeVerified ? MyColors.darkbluetext : Colors.red,
                   fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
                   activeFillColor: Colors.white,
                 ),
@@ -77,6 +81,7 @@ class ModalCodeVerificationView extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) {
+                    viewModel.checkOTP();
                     return LoadingDialog();
                   }
               );
