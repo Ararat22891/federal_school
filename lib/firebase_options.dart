@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBN7ElS2tZULtJgcdHjluyTxgMWdaZQ9E0',
-    appId: '1:253713240677:android:5511429680f47a94596c8c',
-    messagingSenderId: '253713240677',
-    projectId: 'federal-school',
-    storageBucket: 'federal-school.appspot.com',
+    apiKey: 'AIzaSyCXECv-6Qi4S_nZ_3Z-KnGjBZfRlZwep8s',
+    appId: '1:23107628194:android:0587dff6edde252e6a7bfb',
+    messagingSenderId: '23107628194',
+    projectId: 'federalschool-47496',
+    storageBucket: 'federalschool-47496.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBabXSdstk0VwT7n4iqSkPggQbnLcD2g84',
-    appId: '1:253713240677:ios:7dd619a30ccfa5f7596c8c',
-    messagingSenderId: '253713240677',
-    projectId: 'federal-school',
-    storageBucket: 'federal-school.appspot.com',
+    apiKey: 'AIzaSyCR4FQ2RfgvBG4NlgfW7owApMfDntiMDvM',
+    appId: '1:23107628194:ios:32dc6c34f47f8fdc6a7bfb',
+    messagingSenderId: '23107628194',
+    projectId: 'federalschool-47496',
+    storageBucket: 'federalschool-47496.appspot.com',
     iosBundleId: 'com.tatdep.federalSchool',
   );
 }

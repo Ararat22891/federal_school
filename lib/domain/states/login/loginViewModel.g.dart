@@ -41,19 +41,35 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
-  late final _$isCodeVerifiedAtom =
-      Atom(name: '_LoginViewModel.isCodeVerified', context: context);
+  late final _$verificationIdAtom =
+      Atom(name: '_LoginViewModel.verificationId', context: context);
 
   @override
-  bool get isCodeVerified {
-    _$isCodeVerifiedAtom.reportRead();
-    return super.isCodeVerified;
+  String get verificationId {
+    _$verificationIdAtom.reportRead();
+    return super.verificationId;
   }
 
   @override
-  set isCodeVerified(bool value) {
-    _$isCodeVerifiedAtom.reportWrite(value, super.isCodeVerified, () {
-      super.isCodeVerified = value;
+  set verificationId(String value) {
+    _$verificationIdAtom.reportWrite(value, super.verificationId, () {
+      super.verificationId = value;
+    });
+  }
+
+  late final _$statusAtom =
+      Atom(name: '_LoginViewModel.status', context: context);
+
+  @override
+  AuthStatus get status {
+    _$statusAtom.reportRead();
+    return super.status;
+  }
+
+  @override
+  set status(AuthStatus value) {
+    _$statusAtom.reportWrite(value, super.status, () {
+      super.status = value;
     });
   }
 
@@ -74,27 +90,20 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
-  late final _$verificationIdAtom =
-      Atom(name: '_LoginViewModel.verificationId', context: context);
+  late final _$signInWithTelephoneAsyncAction =
+      AsyncAction('_LoginViewModel.signInWithTelephone', context: context);
 
   @override
-  String get verificationId {
-    _$verificationIdAtom.reportRead();
-    return super.verificationId;
-  }
-
-  @override
-  set verificationId(String value) {
-    _$verificationIdAtom.reportWrite(value, super.verificationId, () {
-      super.verificationId = value;
-    });
+  Future<void> signInWithTelephone() {
+    return _$signInWithTelephoneAsyncAction
+        .run(() => super.signInWithTelephone());
   }
 
   late final _$checkOTPAsyncAction =
       AsyncAction('_LoginViewModel.checkOTP', context: context);
 
   @override
-  Future<bool> checkOTP() {
+  Future<void> checkOTP() {
     return _$checkOTPAsyncAction.run(() => super.checkOTP());
   }
 
@@ -103,9 +112,9 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return '''
 phoneNumber: ${phoneNumber},
 verificaionCode: ${verificaionCode},
-isCodeVerified: ${isCodeVerified},
-pinEditingController: ${pinEditingController},
-verificationId: ${verificationId}
+verificationId: ${verificationId},
+status: ${status},
+pinEditingController: ${pinEditingController}
     ''';
   }
 }

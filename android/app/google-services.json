@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "253713240677",
-    "project_id": "federal-school",
-    "storage_bucket": "federal-school.appspot.com"
+    "project_number": "23107628194",
+    "project_id": "federalschool-47496",
+    "storage_bucket": "federalschool-47496.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:253713240677:android:5511429680f47a94596c8c",
+        "mobilesdk_app_id": "1:23107628194:android:0587dff6edde252e6a7bfb",
         "android_client_info": {
           "package_name": "com.tatdep.federal_school"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBN7ElS2tZULtJgcdHjluyTxgMWdaZQ9E0"
+          "current_key": "AIzaSyCXECv-6Qi4S_nZ_3Z-KnGjBZfRlZwep8s"
         }
       ],
       "services": {

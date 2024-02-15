@@ -24,7 +24,7 @@ void main() async{
 
   await FirebaseAppCheck.instance.activate(
     // Set appleProvider to `AppleProvider.debug`
-    appleProvider: AppleProvider.debug,
+    androidProvider: AndroidProvider.playIntegrity
   );
 
   runApp(SchoolApp());

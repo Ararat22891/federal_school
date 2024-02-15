@@ -6,33 +6,41 @@ part 'loginViewModel.g.dart';
 
 class LoginViewModel = _LoginViewModel with _$LoginViewModel;
 
+enum AuthStatus{checked, invalid, loading, networkError, wrongCode}
 
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "+7";
+    String phoneNumber = "+79033140199";
 
     @observable
     String? verificaionCode = "";
 
     @observable
-    bool isCodeVerified = false;
+    String verificationId = "";
 
     @observable
-     TextEditingController pinEditingController = TextEditingController();
+     AuthStatus status = AuthStatus.loading;
+
+    @observable
+    TextEditingController pinEditingController = TextEditingController();
 
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 
+    @action
     Future<void> signInWithTelephone() async{
         await _firebaseAuth.verifyPhoneNumber(
-            phoneNumber: "+7$phoneNumber",
+            phoneNumber: phoneNumber,
             verificationCompleted: (credential) async{
+                status = AuthStatus.checked;
             },
             verificationFailed: (e){
+                status = AuthStatus.invalid;
                 print(e);
             },
             codeSent: (String verificationId, int? resendToken) {
+                status =AuthStatus.loading;
                 this.verificationId = verificationId;
             },
             codeAutoRetrievalTimeout: (String verificationId){
@@ -41,14 +49,24 @@ abstract class _LoginViewModel with Store{
         );
     }
 
-    @observable
-    String verificationId = "";
-
     @action
-    Future<bool> checkOTP() async{
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: pinEditingController.text.trim());
-        var answer = await _firebaseAuth.signInWithCredential(credential);
-        isCodeVerified = answer.user != null ? true : false;
-        return isCodeVerified;
+    Future<void> checkOTP() async{
+        try{
+            status = AuthStatus.checked;
+            PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: pinEditingController.text.trim());
+            status = AuthStatus.loading;
+            var answer = await _firebaseAuth.signInWithCredential(credential);
+            if(answer.user != null){
+                status = AuthStatus.checked;
+            }
+            else{
+                status = AuthStatus.wrongCode;
+            }
+        }
+        catch(e){
+            status = AuthStatus.networkError;
+        }
+
     }
+
 }

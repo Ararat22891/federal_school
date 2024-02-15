@@ -1,7 +1,8 @@
 
 import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
-import 'package:federal_school/presentation/widgets/loadingDialog.dart';
+import 'package:federal_school/presentation/pages/home/homeView.dart';
+import 'package:federal_school/presentation/widgets/statusDialog.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -59,8 +60,7 @@ class ModalCodeVerificationView extends StatelessWidget {
                 pinTheme: PinTheme(
                   borderRadius: BorderRadius.circular(5),
                   shape: PinCodeFieldShape.underline,
-                  inactiveColor: viewModel.isCodeVerified ? MyColors.darkbluetext : Colors.red,
-                  disabledColor: viewModel.isCodeVerified ? MyColors.darkbluetext : Colors.red,
+                  inactiveColor: viewModel.status == AuthStatus.wrongCode ? MyColors.darkbluetext : Colors.red,
                   fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
                   activeFillColor: Colors.white,
                 ),
@@ -69,7 +69,7 @@ class ModalCodeVerificationView extends StatelessWidget {
           Spacer(),
           Visibility(
               child: Text("Код недействительный", style: TextStyles.errorBody,),
-              visible: false,
+              visible: viewModel.status == AuthStatus.wrongCode ? true : false,
           ),
           NumberKeyboardView(
             viewModel: viewModel,
@@ -82,7 +82,34 @@ class ModalCodeVerificationView extends StatelessWidget {
                   context: context,
                   builder: (context) {
                     viewModel.checkOTP();
-                    return LoadingDialog();
+                    return Observer(
+                        builder: (context) {
+                          switch(viewModel.status){
+                            case AuthStatus.checked:
+                              return StatusDialog(
+                                status: AuthStatus.checked,
+                              );
+                            case AuthStatus.invalid:
+                              return StatusDialog(
+                                status: AuthStatus.invalid,
+                              );
+                            case AuthStatus.loading:
+                              return StatusDialog(
+                                status: AuthStatus.loading,
+                              );
+                            case AuthStatus.networkError:
+                              return StatusDialog(
+                                status: AuthStatus.networkError,
+                              );
+                            case AuthStatus.wrongCode:
+                              return StatusDialog(
+                                status: AuthStatus.wrongCode,
+                              );
+                          }
+                        }
+                    );
+
+
                   }
               );
             },

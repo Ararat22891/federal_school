@@ -81,6 +81,7 @@ flutter:
      - assets/2022.jpg
      - assets/sitting_man.png
      - assets/bird.jpg
+     - assets/red_circle_error.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
