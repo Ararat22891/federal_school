@@ -14,7 +14,7 @@ class StatusDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     switch (status) {
-      case AuthStatus.checked:
+      case AuthStatus.validCode:
         return Dialog(
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
@@ -61,7 +61,7 @@ class StatusDialog extends StatelessWidget {
               ),
             )
         );
-      case AuthStatus.invalid:
+      case AuthStatus.invalidCode:
         return Dialog(
             backgroundColor: Colors.white,
             shadowColor: Colors.transparent,
@@ -140,7 +140,16 @@ class StatusDialog extends StatelessWidget {
       // TODO: Handle this case.
 
 
+
+      case AuthStatus.incorrectNumb:
+        // TODO: Handle this case.
+      case AuthStatus.error:
+        // TODO: Handle this case.
+
+      case AuthStatus.main:
+        // TODO: Handle this case.
       return Container();
+
     }
   }
 

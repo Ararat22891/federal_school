@@ -13,10 +13,29 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../../../presentation/widgets/DefaultButton.dart';
 import '../../../../presentation/widgets/NumberKeyboardView.dart';
 
-class ModalCodeVerificationView extends StatelessWidget {
+class ModalCodeVerificationView extends StatefulWidget {
   LoginViewModel viewModel;
 
   ModalCodeVerificationView({required this.viewModel});
+
+  @override
+  State<ModalCodeVerificationView> createState() => _ModalCodeVerificationViewState();
+}
+
+class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
+
+
+  @override
+  void initState() {
+    super.initState();
+    widget.viewModel.pinEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    widget.viewModel.pinEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +55,7 @@ class ModalCodeVerificationView extends StatelessWidget {
             child:  Text("Верификация кода", style: TextStyles.headline,),
           ),
           FittedBox(
-            child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон ${viewModel.phoneNumber}", style: TextStyles.subBody, textAlign: TextAlign.center,),
+            child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон ${widget.viewModel.phoneNumber}", style: TextStyles.subBody, textAlign: TextAlign.center,),
           ),
 
           Visibility(
@@ -51,8 +70,7 @@ class ModalCodeVerificationView extends StatelessWidget {
               builder: (context) => PinCodeTextField(
                 appContext: context,
                 length: 6,
-                controller: viewModel.pinEditingController,
-                focusNode: null,
+                controller: widget.viewModel.pinEditingController,
                 readOnly: true,
                 textStyle: TextStyle(color: MyColors.darkbluetext),
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -60,7 +78,7 @@ class ModalCodeVerificationView extends StatelessWidget {
                 pinTheme: PinTheme(
                   borderRadius: BorderRadius.circular(5),
                   shape: PinCodeFieldShape.underline,
-                  inactiveColor: viewModel.status == AuthStatus.wrongCode ? MyColors.darkbluetext : Colors.red,
+                  inactiveColor: widget.viewModel.status == AuthStatus.wrongCode ? MyColors.darkbluetext : Colors.red,
                   fieldOuterPadding: EdgeInsets.symmetric(horizontal: 5),
                   activeFillColor: Colors.white,
                 ),
@@ -69,10 +87,10 @@ class ModalCodeVerificationView extends StatelessWidget {
           Spacer(),
           Visibility(
               child: Text("Код недействительный", style: TextStyles.errorBody,),
-              visible: viewModel.status == AuthStatus.wrongCode ? true : false,
+              visible: widget.viewModel.status == AuthStatus.wrongCode ? true : false,
           ),
           NumberKeyboardView(
-            viewModel: viewModel,
+            viewModel: widget.viewModel,
           ),
 
           Spacer(),
@@ -81,17 +99,17 @@ class ModalCodeVerificationView extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (context) {
-                    viewModel.checkOTP();
+                    widget.viewModel.checkOTP();
                     return Observer(
                         builder: (context) {
-                          switch(viewModel.status){
-                            case AuthStatus.checked:
+                          switch(widget.viewModel.status){
+                            case AuthStatus.validCode:
                               return StatusDialog(
-                                status: AuthStatus.checked,
+                                status: AuthStatus.validCode,
                               );
-                            case AuthStatus.invalid:
+                            case AuthStatus.invalidCode:
                               return StatusDialog(
-                                status: AuthStatus.invalid,
+                                status: AuthStatus.invalidCode,
                               );
                             case AuthStatus.loading:
                               return StatusDialog(
@@ -101,10 +119,10 @@ class ModalCodeVerificationView extends StatelessWidget {
                               return StatusDialog(
                                 status: AuthStatus.networkError,
                               );
-                            case AuthStatus.wrongCode:
-                              return StatusDialog(
-                                status: AuthStatus.wrongCode,
-                              );
+                            default:
+                            return StatusDialog(
+                              status: AuthStatus.wrongCode,
+                            );
                           }
                         }
                     );

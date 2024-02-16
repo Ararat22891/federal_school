@@ -6,7 +6,7 @@ part 'loginViewModel.g.dart';
 
 class LoginViewModel = _LoginViewModel with _$LoginViewModel;
 
-enum AuthStatus{checked, invalid, loading, networkError, wrongCode}
+enum AuthStatus{validCode, invalidCode, loading, main, incorrectNumb, wrongCode, networkError, error}
 
 abstract class _LoginViewModel with Store{
 
@@ -20,10 +20,10 @@ abstract class _LoginViewModel with Store{
     String verificationId = "";
 
     @observable
-     AuthStatus status = AuthStatus.loading;
+     AuthStatus status = AuthStatus.main;
 
     @observable
-    TextEditingController pinEditingController = TextEditingController();
+    late TextEditingController pinEditingController;
 
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
@@ -33,10 +33,10 @@ abstract class _LoginViewModel with Store{
         await _firebaseAuth.verifyPhoneNumber(
             phoneNumber: phoneNumber,
             verificationCompleted: (credential) async{
-                status = AuthStatus.checked;
+                status = AuthStatus.validCode;
             },
             verificationFailed: (e){
-                status = AuthStatus.invalid;
+                status = AuthStatus.error;
                 print(e);
             },
             codeSent: (String verificationId, int? resendToken) {
@@ -52,19 +52,19 @@ abstract class _LoginViewModel with Store{
     @action
     Future<void> checkOTP() async{
         try{
-            status = AuthStatus.checked;
+            status = AuthStatus.loading;
             PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: pinEditingController.text.trim());
             status = AuthStatus.loading;
             var answer = await _firebaseAuth.signInWithCredential(credential);
             if(answer.user != null){
-                status = AuthStatus.checked;
+                status = AuthStatus.validCode;
             }
             else{
                 status = AuthStatus.wrongCode;
             }
         }
         catch(e){
-            status = AuthStatus.networkError;
+            status = AuthStatus.error;
         }
 
     }

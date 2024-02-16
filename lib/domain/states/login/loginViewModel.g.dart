@@ -82,11 +82,15 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return super.pinEditingController;
   }
 
+  bool _pinEditingControllerIsInitialized = false;
+
   @override
   set pinEditingController(TextEditingController value) {
-    _$pinEditingControllerAtom.reportWrite(value, super.pinEditingController,
+    _$pinEditingControllerAtom.reportWrite(value,
+        _pinEditingControllerIsInitialized ? super.pinEditingController : null,
         () {
       super.pinEditingController = value;
+      _pinEditingControllerIsInitialized = true;
     });
   }
 

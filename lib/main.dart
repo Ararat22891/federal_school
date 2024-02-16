@@ -39,7 +39,7 @@ class SchoolApp extends StatelessWidget{
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: LoginView(),
+            home: TestView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),
