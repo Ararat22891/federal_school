@@ -11,6 +11,7 @@ String getRole(int roleId){
 
 class UserData{
   String userUID;
+  String firebaseToken;
   String? surname;
   String? name;
   String? patronomyc;
@@ -20,6 +21,7 @@ class UserData{
 
    UserData({
     required this.userUID,
+     required this.firebaseToken,
     this.surname,
     this.name,
     this.patronomyc,
@@ -30,20 +32,10 @@ class UserData{
 
 
 
-  factory UserData.fromFirebaseAuthUser(
-      firebase_auth.User firebaseUser,
-      ) {
-    return UserData(
-        userUID: firebaseUser.uid,
-        telNumber: firebaseUser.phoneNumber!,
-    );
-  }
-
-
-
   static List<UserData> users = [
     UserData(
         userUID: "sasdfdafa",
+        firebaseToken: "czfzODCJRiKzrfNvKcUNpq:APA91bHy-fwezLGcW-bInZxn7fKl5XqaulrogGZii5KgQzX539gLkcPWG2NhM1XS7W-WLaj6K4wTE26osvHqOi14cXUZu8CbnwDI2uJ313h8-f5JTEJpXssYja1yW4Yxm5BFMxbNQaoM",
         surname: "Gubaidullin",
         name: "Airat",
         patronomyc: "Floridovich",
@@ -54,6 +46,7 @@ class UserData{
 
     UserData(userUID:"safkaklfafkkmfsakf",
         surname: "Утеев",
+        firebaseToken: "eUJChTCITT-m1N5wJtBxQV:APA91bFwJ5wLEnPStkhjaRrIRftmO2_o-6CZAW4uIQDvyWZhdVZR8k8guytyt8kfkzoozAyN7AgloJtykzTPbEE1gNMXJIyCYbbsK-jFjlRDPezrkEOZ249GwpSu04MA9GkdDq9CGulD",
         name: "Тимур",
         patronomyc: "Сергеевич",
         photoPath: "https://cdn.rxntxhj78z0b8muk.dprofile.ru/storage/673/profile/4f7566c26fc3d23d6b51a34458b92780e4edbe6c.jpg",
@@ -63,6 +56,7 @@ class UserData{
 
     UserData(userUID: "d;lasd,a;ldlal;",
         surname: "Явлинский",
+        firebaseToken: "czfzODCJRiKzrfNvKcUNpq:APA91bHy-fwezLGcW-bInZxn7fKl5XqaulrogGZii5KgQzX539gLkcPWG2NhM1XS7W-WLaj6K4wTE26osvHqOi14cXUZu8CbnwDI2uJ313h8-f5JTEJpXssYja1yW4Yxm5BFMxbNQaoM",
         name: "Григорий",
         patronomyc: "Алексеевич",
         photoPath: "https://www.yavlinsky.ru/wp-content/uploads/2019/06/president2018-scaled-e1661079553751.jpg",
@@ -71,6 +65,7 @@ class UserData{
     ),
 
     UserData(userUID: "dasm.m43mkldas",
+        firebaseToken: "czfzODCJRiKzrfNvKcUNpq:APA91bHy-fwezLGcW-bInZxn7fKl5XqaulrogGZii5KgQzX539gLkcPWG2NhM1XS7W-WLaj6K4wTE26osvHqOi14cXUZu8CbnwDI2uJ313h8-f5JTEJpXssYja1yW4Yxm5BFMxbNQaoM",
         surname: "Гончаров",
         name: "Кирилл",
         patronomyc: "Алексеевич",

@@ -104,19 +104,19 @@ class DialogVerificationView extends StatelessWidget {
                           Spacer(),
                           FilledButton(
                               onPressed: (){
-                                // viewModel.signInWithTelephone();
                                 viewModel.status = AuthStatus.loading;
-                                // Navigator.pop(context);
-                                // showModalBottomSheet<void>(
-                                //     context: context,
-                                //     isScrollControlled: true,
-                                //     builder: (context) => FractionallySizedBox(
-                                //       heightFactor: 0.9,
-                                //       child: ModalCodeVerificationView(
-                                //         viewModel: viewModel,
-                                //       ),
-                                //     )
-                                // );
+                                viewModel.signInWithTelephone();
+                                Navigator.pop(context);
+                                showModalBottomSheet<void>(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (context) => FractionallySizedBox(
+                                      heightFactor: 0.9,
+                                      child: ModalCodeVerificationView(
+                                        viewModel: viewModel,
+                                      ),
+                                    )
+                                );
                               },
                               child: Text("Отправить", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                               style: FilledButton.styleFrom(

@@ -11,7 +11,7 @@ enum AuthStatus{validCode, invalidCode, loading, main, incorrectNumb, wrongCode,
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "+79033140199";
+    String phoneNumber = "+79600777466";
 
     @observable
     String? verificaionCode = "";
@@ -60,11 +60,11 @@ abstract class _LoginViewModel with Store{
                 status = AuthStatus.validCode;
             }
             else{
-                status = AuthStatus.wrongCode;
+                status = AuthStatus.invalidCode;
             }
         }
         catch(e){
-            status = AuthStatus.error;
+            status = AuthStatus.invalidCode;
         }
 
     }
