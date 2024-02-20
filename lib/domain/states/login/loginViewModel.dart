@@ -1,5 +1,8 @@
 
+import 'package:federal_school/domain/models/user/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'loginViewModel.g.dart';
@@ -56,6 +59,28 @@ abstract class _LoginViewModel with Store{
             PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: verificationId, smsCode: pinEditingController.text.trim());
             status = AuthStatus.loading;
             var answer = await _firebaseAuth.signInWithCredential(credential);
+
+
+            String uid = FirebaseAuth.instance.currentUser!.uid;
+            DatabaseReference ref = FirebaseDatabase.instance.ref("users").child(uid);
+            var snapshot = await ref.get();
+            String? token = await FirebaseMessaging.instance.getToken();
+            if (snapshot.exists){
+                await ref.update(
+                    {"deviceToken" : token}
+                );
+            }
+            else{
+                await ref.set(
+                    UserData(
+                        userUID: uid,
+                        deviceToken: token!,
+                        telNumber: FirebaseAuth.instance.currentUser!.phoneNumber!
+                    ).toJson()
+                );
+            }
+
+
             if(answer.user != null){
                 status = AuthStatus.validCode;
             }

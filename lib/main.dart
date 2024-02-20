@@ -17,6 +17,7 @@ import 'firebase_options.dart';
 
 UserData user1 = UserData.users.first;
 UserData user2 = UserData.users[1];
+User? user;
 
 
 
@@ -24,17 +25,16 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('ru_RU', null);
   await initializeDateFormatting();
-
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
 
   await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity
+      androidProvider: AndroidProvider.playIntegrity
   );
 
+  user = FirebaseAuth.instance.currentUser;
   runApp(SchoolApp());
 }
 
@@ -43,12 +43,11 @@ class SchoolApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-
     return ThemeProvider(
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: TestView(),
+            home: user == null ? LoginView() : HomeView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),

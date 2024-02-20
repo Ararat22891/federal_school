@@ -37,8 +37,23 @@ class _CallViewState extends State<CallView> {
     return Scaffold(
       body: Stack(
         children: [
-          AgoraVideoViewer(client: client),
-          AgoraVideoButtons(client: client),
+          AgoraVideoViewer(
+              client: client,
+              disabledVideoWidget: Container(child: Text("sas"),),
+              layoutType: Layout.oneToOne,
+          ),
+          AgoraVideoButtons(
+              addScreenSharing: true,
+              client: client,
+              autoHideButtons: true,
+            enabledButtons: [
+              BuiltInButtons.toggleMic,
+              BuiltInButtons.callEnd,
+              BuiltInButtons.switchCamera,
+              BuiltInButtons.screenSharing,
+            ],
+
+          ),
         ],
       )
     );
