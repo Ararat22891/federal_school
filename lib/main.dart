@@ -7,6 +7,7 @@ import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/testView.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -15,9 +16,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
-UserData user1 = UserData.users.first;
-UserData user2 = UserData.users[1];
-User? user;
+User? _user;
 
 
 
@@ -34,7 +33,7 @@ void main() async{
       androidProvider: AndroidProvider.playIntegrity
   );
 
-  user = FirebaseAuth.instance.currentUser;
+  _user = FirebaseAuth.instance.currentUser;
   runApp(SchoolApp());
 }
 
@@ -47,7 +46,7 @@ class SchoolApp extends StatelessWidget{
       initTheme: lightTheme(),
       builder: (context, theme){
           return MaterialApp(
-            home: user == null ? LoginView() : HomeView(),
+            home: _user == null ? LoginView() : HomeView(),
             themeMode: ThemeMode.light,
             theme: theme,
             darkTheme: darkTheme(),

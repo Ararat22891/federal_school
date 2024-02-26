@@ -1,19 +1,40 @@
+import 'package:federal_school/domain/states/home/homeViewModel.dart';
+import 'package:federal_school/domain/states/home/profile/profileViewModel.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import '../../../../domain/models/user/user.dart';
 import '../../../Colors.dart';
 
-class MyProfileView extends StatelessWidget {
-  bool isMe;
-  UserData? foreignUser;
+class MyProfileView extends StatefulWidget {
+  HomeViewModel viewModel;
 
-  MyProfileView({required this.isMe, this.foreignUser});
+  MyProfileView({ required this.viewModel});
+
+  @override
+  State<MyProfileView> createState() => _MyProfileViewState();
+}
+
+class _MyProfileViewState extends State<MyProfileView> {
+  ProfileViewModel profileViewModel = ProfileViewModel();
+
+
+  @override
+  void initState() {
+    profileViewModel.controller = TextEditingController(text: profileViewModel.fullName);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    profileViewModel.controller.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-
-    String? fullName = foreignUser == null ? null : "${foreignUser?.surname} ${foreignUser?.name} ${foreignUser?.patronomyc}";
-
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
     print(isLightTheme.toString());
@@ -35,7 +56,22 @@ class MyProfileView extends StatelessWidget {
                     centerTitle: true,
                     foregroundColor: Colors.white,
                     actions: [
-                      IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                      IconButton(onPressed: () {
+                        if(profileViewModel.isEdit){
+                          if(profileViewModel.formKey.currentState!.validate()){
+                            profileViewModel.saveData(profileViewModel.user!);
+                            profileViewModel.isEdit = !profileViewModel.isEdit;
+                          }
+                        }
+                        else{
+                          profileViewModel.isEdit = !profileViewModel.isEdit;
+                        }
+
+                      },
+                          icon: Observer(
+                              builder: (context) =>
+                                  Icon(profileViewModel.isEdit ? Icons.done : Icons.edit))
+                      )
                     ],
                     title: Text(
                       "Профиль",
@@ -45,12 +81,14 @@ class MyProfileView extends StatelessWidget {
                   ),
                   FittedBox(
                     child: CircleAvatar(
-                      foregroundImage: Image.network(
-                        foreignUser?.photoPath ??
-                              "https://www.yabloko.ru/Persons/YAVL/Gallery/ya99p011.jpg")
-                          .image,
-                      backgroundImage: Image.asset("assets/bird.jpg").image,
-                      maxRadius: MediaQuery.of(context).size.height / 5.5,
+                      // Use a ternary operator to check if photoPath is not null or empty
+                      backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
+                      // If yes, use the photoPath as the image source
+                          ? Image.network(widget.viewModel.userData!.photoPath!).image
+                      // If no, use the bird image as the fallback
+                          : Image.asset("assets/bird.jpg").image,
+                      // Set the radius to a fixed value, or use a MediaQuery to adjust it
+                      maxRadius: MediaQuery.of(context).size.height/5.5,
                     ),
                   ),
                   Spacer()
@@ -74,15 +112,25 @@ class MyProfileView extends StatelessWidget {
                   "ФИО",
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
-                TextFormField(
-                  initialValue: fullName ?? "Явлинский Григорий Алексеевич",
-                  style: Theme.of(context).textTheme.titleMedium,
-                  enabled: false,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 6),
-                  ),
+                Form(
+                  key: profileViewModel.formKey,
+                    child: Observer(
+                      builder: (context) =>
+                          TextFormField(
+                            controller: profileViewModel.controller,
+                            style: Theme.of(context).textTheme.titleMedium,
+                            readOnly: !profileViewModel.isEdit,
+                            enabled: profileViewModel.isEdit,
+                            validator: profileViewModel.validateFIO,
+                            decoration: InputDecoration(
+                            isDense: true,
+                            hintText: "Введите ФИО",
+                            contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                          ),
+                          ),
+                    ),
                 ),
+
                 Container(
                   height: 12,
                 ),
@@ -91,7 +139,7 @@ class MyProfileView extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 TextFormField(
-                  initialValue: foreignUser?.telNumber ?? "+7 (960) 077-74-66",
+                  initialValue: widget.viewModel.userData?.telNumber,
                   style: Theme.of(context).textTheme.titleMedium,
                   enabled: false,
                   decoration: InputDecoration(
@@ -107,7 +155,7 @@ class MyProfileView extends StatelessWidget {
                   style: Theme.of(context).textTheme.labelLarge,
                 ),
                 TextFormField(
-                  initialValue: isMe ? "Преподаватель" : getRole(foreignUser!.role!),
+                  initialValue: widget.viewModel.role,
                   style: Theme.of(context).textTheme.titleMedium,
                   enabled: false,
                   decoration: InputDecoration(

@@ -33,8 +33,9 @@ abstract class _LoginViewModel with Store{
 
     @action
     Future<void> signInWithTelephone() async{
+        print("+7${phoneNumber}");
         await _firebaseAuth.verifyPhoneNumber(
-            phoneNumber: phoneNumber,
+            phoneNumber: "+7${phoneNumber}",
             verificationCompleted: (credential) async{
                 status = AuthStatus.validCode;
             },
@@ -43,6 +44,7 @@ abstract class _LoginViewModel with Store{
                 print(e);
             },
             codeSent: (String verificationId, int? resendToken) {
+                print("object");
                 status =AuthStatus.loading;
                 this.verificationId = verificationId;
             },
@@ -60,7 +62,6 @@ abstract class _LoginViewModel with Store{
             status = AuthStatus.loading;
             var answer = await _firebaseAuth.signInWithCredential(credential);
 
-
             String uid = FirebaseAuth.instance.currentUser!.uid;
             DatabaseReference ref = FirebaseDatabase.instance.ref("users").child(uid);
             var snapshot = await ref.get();
@@ -75,7 +76,8 @@ abstract class _LoginViewModel with Store{
                     UserData(
                         userUID: uid,
                         deviceToken: token!,
-                        telNumber: FirebaseAuth.instance.currentUser!.phoneNumber!
+                        telNumber: FirebaseAuth.instance.currentUser!.phoneNumber!,
+                        role: 0
                     ).toJson()
                 );
             }

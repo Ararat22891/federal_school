@@ -1,4 +1,6 @@
 
+import 'package:agora_uikit/models/agora_rtm_mute_request.dart';
+import 'package:federal_school/domain/models/contact/contactModel.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 
@@ -17,7 +19,10 @@ class UserData{
   String? patronomyc;
   String? photoPath;
   String telNumber;
-  int? role; // 0 - non-pupil ,1 - user, 2 – prepod/curator, 3 - moder
+  List<ContactModel>? contacts;
+  int? role;// 0 - non-pupil ,1 - user, 2 – prepod/curator, 3 - moder
+
+
 
    UserData({
     required this.userUID,
@@ -27,11 +32,11 @@ class UserData{
     this.patronomyc,
     this.photoPath,
     required this.telNumber,
+     this.contacts,
     this.role
   });
 
 
-  // Метод toJson(), который возвращает Map, представляющий объект UserData в формате JSON
   Map<String, dynamic> toJson() {
     return {
       'userUID': userUID,
@@ -40,10 +45,31 @@ class UserData{
       'name': name,
       'patronomyc': patronomyc,
       'photoPath': photoPath,
+      'contacts': contacts,
       'telNumber': telNumber,
       'role': role
     };
   }
+
+  static UserData fromJson(Map<String, dynamic> json) {
+    return UserData(
+      userUID: json['userUID'],
+      deviceToken: json['deviceToken'],
+      surname: json['surname'],
+      name: json['name'],
+      patronomyc: json['patronomyc'],
+      photoPath: json['photoPath'],
+      telNumber: json['telNumber'],
+      contacts: json['contacts'] != null
+          ? List<ContactModel>.from(
+          json['contacts'].map((x) => ContactModel.fromJson(x)))
+          : null,
+      role: json['role'],
+    );
+  }
+
+
+
 
 
   static List<UserData> users = [

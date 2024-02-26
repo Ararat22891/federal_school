@@ -8,7 +8,7 @@ class ContactView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: 5,
+      itemCount: 4,
         itemBuilder: (context, index){
           return ContactViewAsset(
             contact: ContactModel.contacts[index],

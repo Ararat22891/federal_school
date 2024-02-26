@@ -10,17 +10,17 @@ import '../../../../domain/models/chat/chatCellModel.dart';
 
 class ChatMesageCellView extends StatelessWidget {
 
-  ChatCellModel chat;
+  ChatCellModel? chat;
   ChatMesageCellView({required this.chat});
 
   @override
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
 
-    String fullName = "${chat.user.surname} ${chat.user.name}";
-    String date = formatMessageDate(chat.sentTime);
-    int newMessageCount = chat.newMessagesCount;
-    bool isVerified = chat.user.role != 0 && chat.user.role != 1 ? true : false;
+    String fullName = "";
+    String date = formatMessageDate(chat!.sentTime);
+    int newMessageCount = chat!.newMessagesCount;
+    bool isVerified = true;
 
     return Material(
       color: Colors.transparent,
@@ -36,7 +36,7 @@ class ChatMesageCellView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    foregroundImage: Image.network(chat.user.photoPath!).image,
+                    // foregroundImage: Image.network(chat.photoPath!).image,
                     backgroundImage: Image.asset("assets/bird.jpg").image,
                     radius: 30,
                   ),
@@ -47,7 +47,7 @@ class ChatMesageCellView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       VerifiedNameViewAsset(name: fullName, isVerified: isVerified),
-                      Text(chat.lastMessage, style: TextStyle(color: Colors.grey, fontSize: 12,), overflow: TextOverflow.ellipsis,),
+                      // Text(chat.lastMessage, style: TextStyle(color: Colors.grey, fontSize: 12,), overflow: TextOverflow.ellipsis,),
                     ],
                   ),),
                   Column(
@@ -60,7 +60,7 @@ class ChatMesageCellView extends StatelessWidget {
                               color: isLightTheme ? MyColors.darkbluetext : MyColors.darkThemeFont,
                               shape: BoxShape.circle,
                             ),
-                            child: Text(chat.newMessagesCount.toString(), style: TextStyle(
+                            child: Text("2", style: TextStyle(
                                 color: isLightTheme ? Colors.white : Colors.black,
                                 fontSize: 14, fontWeight: FontWeight.bold
                             ),),

@@ -13,10 +13,8 @@ class ContactViewAsset extends StatelessWidget {
     bool isLight = Theme.of(context).brightness == Brightness.light ? true : false;
 
     return Material(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 6,),
-        color: isLight ? MyColors.white : MyColors.darkThemeContainer,
-            child: InkWell(
+      color: Colors.transparent,
+      child: InkWell(
               onTap: (){},
               child: Container(
                 padding: EdgeInsets.all(12),
@@ -24,7 +22,7 @@ class ContactViewAsset extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
-                      foregroundImage: Image.network(contact.imageUrl).image,
+                      // foregroundImage: Image.network(contact.imageUrl).image,
                       backgroundImage: Image.asset("assets/bird.jpg").image,
                       radius: 30,
                     ),
@@ -34,9 +32,9 @@ class ContactViewAsset extends StatelessWidget {
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(contact.name, style: TextStyle(color: isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                        // Text(contact.name, style: TextStyle(color: isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis,),
                         Container(height: 2,),
-                        Text(contact.phoneNumber, style: TextStyle(color:  isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
+                        // Text(contact.phoneNumber, style: TextStyle(color:  isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
                       ],
                     ),
                     ),
@@ -45,7 +43,6 @@ class ContactViewAsset extends StatelessWidget {
                 ),
               ),
             )
-      ),
     );
   }
 }

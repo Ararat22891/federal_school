@@ -5,12 +5,25 @@ import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/pages/home/profile/profileView.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../Colors.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
   HomeViewModel homeViewModel = HomeViewModel();
+
+
+  @override
+  void initState() {
+    super.initState();
+    homeViewModel.getUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +69,7 @@ class HomeView extends StatelessWidget {
                           context: context,
                           builder: (context) {
                             return Dialog.fullscreen(
-                              child: MyProfileView(isMe: true,),
+                              child: MyProfileView(viewModel: homeViewModel,),
                             );
                           });
                     },
@@ -66,13 +79,21 @@ class HomeView extends StatelessWidget {
                         CircleAvatar(
                           radius: 34,
                           backgroundColor: Colors.white,
-                          child: CircleAvatar(
-                            foregroundImage:
-                                Image.asset("assets/2022.jpg").image,
-                            backgroundImage:
-                                Image.asset("assets/bird.jpg").image,
-                            radius: 30,
-                          ),
+                          child: Observer(
+                              builder: (context){
+                               return CircleAvatar(
+                                  // Use a ternary operator to check if photoPath is not null or empty
+                                  backgroundImage: (homeViewModel.userData?.photoPath ?? "").isNotEmpty
+                                  // If yes, use the photoPath as the image source
+                                      ? Image.asset("assets/bird.jpg").image
+                                  // If no, use the bird image as the fallback
+                                      : Image.asset("assets/bird.jpg").image,
+                                  // Set the radius to a fixed value, or use a MediaQuery to adjust it
+                                  maxRadius: 30,
+                                );
+
+                              }
+                          )
                         ),
                         Text(
                           "Профиль",
@@ -133,7 +154,7 @@ class HomeView extends StatelessWidget {
                                         : MyColors.darkThemeSelected,
                                   ),
                                   label: "Календарь"),
-                              Spacer(),
+                              Container(),
                               NavigationDestination(
                                   icon: Icon(
                                     Icons.account_circle_outlined,

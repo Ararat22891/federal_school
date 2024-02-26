@@ -3,8 +3,6 @@ import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
-
 import '../ModalCodeVerificationView/modalCodeVerificationView.dart';
 
 class DialogVerificationView extends StatelessWidget {
