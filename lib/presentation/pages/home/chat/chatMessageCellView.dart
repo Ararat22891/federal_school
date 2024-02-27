@@ -28,7 +28,10 @@ class ChatMesageCellView extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 6),
         child: InkWell(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DialogView()));
+              // Navigator.push(context, MaterialPageRoute(
+              //     builder: (context) => DialogView()
+              // )
+              // );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 14),

@@ -3,6 +3,7 @@ import 'package:federal_school/domain/states/home/homeViewModel.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/pages/home/profile/profileView.dart';
+import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/cupertino.dart';
@@ -65,32 +66,25 @@ class _HomeViewState extends State<HomeView> {
                   margin: EdgeInsets.only(top: 70),
                   child: InkWell(
                     onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog.fullscreen(
-                              child: MyProfileView(viewModel: homeViewModel,),
-                            );
-                          });
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context){
+                            return MyProfileView(viewModel: homeViewModel);
+                          }
+                          ));
                     },
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+
                         CircleAvatar(
                           radius: 34,
                           backgroundColor: Colors.white,
                           child: Observer(
                               builder: (context){
-                               return CircleAvatar(
-                                  // Use a ternary operator to check if photoPath is not null or empty
-                                  backgroundImage: (homeViewModel.userData?.photoPath ?? "").isNotEmpty
-                                  // If yes, use the photoPath as the image source
-                                      ? Image.asset("assets/bird.jpg").image
-                                  // If no, use the bird image as the fallback
-                                      : Image.asset("assets/bird.jpg").image,
-                                  // Set the radius to a fixed value, or use a MediaQuery to adjust it
-                                  maxRadius: 30,
-                                );
+                               return MyCircleAvatar(
+                                 networkAsset: homeViewModel.userData?.photoPath,
+                                 radius: 30,
+                               );
 
                               }
                           )

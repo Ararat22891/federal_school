@@ -1,34 +1,43 @@
 
 import 'package:agora_uikit/agora_uikit.dart';
-import 'package:federal_school/presentation/Colors.dart';
-import 'package:federal_school/presentation/widgets/roundedContainer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:flutter/material.dart';
 
+class CallingView extends StatefulWidget {
 
-class CallView extends StatefulWidget {
+  String channelName;
 
+  CallingView({required this.channelName});
 
   @override
-  State<CallView> createState() => _CallViewState();
+  State<CallingView> createState() => _CallingViewState();
 }
 
-class _CallViewState extends State<CallView> {
-  final AgoraClient client = AgoraClient(
-    agoraConnectionData: AgoraConnectionData(
-      appId: "116f18f433de42a9abb0c6d3f2ed5493",
-      channelName: "test",
-    ),
+class _CallingViewState extends State<CallingView> {
+
+
+  late final AgoraClient client = AgoraClient(
+      agoraConnectionData: AgoraConnectionData(
+        appId: "116f18f433de42a9abb0c6d3f2ed5493",
+        channelName: widget.channelName,
+      ),
+      agoraChannelData: AgoraChannelData(
+          videoEncoderConfiguration: VideoEncoderConfiguration(frameRate: 60),
+          channelProfileType: ChannelProfileType.channelProfileCommunication1v1
+      )
   );
 
 // Initialize the Agora Engine
   @override
   void initState() {
-    super.initState();
     initAgora();
+    super.initState();
+
   }
 
   void initAgora() async {
-    await [Permission.microphone, Permission.microphone].request();
+    await [Permission.microphone, Permission.camera].request();
     await client.initialize();
   }
 
@@ -41,6 +50,7 @@ class _CallViewState extends State<CallView> {
               client: client,
               disabledVideoWidget: Container(child: Text("sas"),),
               layoutType: Layout.oneToOne,
+
           ),
           AgoraVideoButtons(
               addScreenSharing: true,

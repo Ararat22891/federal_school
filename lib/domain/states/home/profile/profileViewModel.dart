@@ -36,7 +36,15 @@ abstract class _ProfileViewModel with Store{
   void saveData(User user){
       String displayName = controller.value.text.trim();
       user.updateDisplayName(displayName);
+      String surn = displayName.split(" ")[0];
+      String name = displayName.split(" ")[1];
+      String patr = displayName.split(" ")[2];
 
+      FirebaseDatabase.instance.ref("users").child(user.uid).update({
+        "surname": surn,
+        "name": name,
+        "patronomyc": patr,
+      });
   }
 
   @action
@@ -53,7 +61,7 @@ abstract class _ProfileViewModel with Store{
         return null; // valid FIO
       }
       else {
-        return "Введите корректное ФИО"; // invalid FIO
+        return "Введите корректное ФИО";
       }
     }
   }

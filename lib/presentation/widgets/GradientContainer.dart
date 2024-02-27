@@ -4,9 +4,11 @@ import '../Colors.dart';
 
 class GradientContainer extends StatelessWidget {
   Widget child;
+  BorderRadiusGeometry? boxRadius;
 
 
-  GradientContainer({required this.child});
+
+  GradientContainer({required this.child, this.boxRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,10 @@ class GradientContainer extends StatelessWidget {
             colors: [MyColors.darkThemeMain, MyColors.darkThemeSecondary],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-          )
+          ),
+        borderRadius: boxRadius,
       ),
+
     );
   }
 }

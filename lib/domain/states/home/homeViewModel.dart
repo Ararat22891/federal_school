@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../presentation/themes/themes.dart';
-import '../../models/user/user.dart' ;
+import '../../models/user/user.dart';
 
 part 'homeViewModel.g.dart';
 
@@ -45,34 +45,32 @@ List<Widget> chatActions = [
 
 List<Widget> contactsActions = [
   SearchAnchor(
-    isFullScreen: false,
-      builder: (context, controller){
+      isFullScreen: false,
+      builder: (context, controller) {
         return IconButton(
-          icon: const Icon(Icons.search, color: Colors.white,),
+          icon: const Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
           onPressed: () {
             controller.openView();
           },
         );
       },
-      suggestionsBuilder: (context, controller){
+      suggestionsBuilder: (context, controller) {
         return List<ListTile>.generate(5, (int index) {
           final String item = 'item $index';
           return ListTile(
             title: Text(item),
             onTap: () {
-                controller.closeView(item);
+              controller.closeView(item);
             },
           );
         });
-      }
-  )
+      })
 ];
 
-
-
-
 abstract class _HomeViewModel with Store {
-
   @observable
   int selectedIndex = 0;
 
@@ -103,19 +101,18 @@ abstract class _HomeViewModel with Store {
   @observable
   UserData? userData;
 
-
   @computed
-  String get role{
+  String get role {
     return getRole(userData?.role ?? 0);
   }
 
-
   @action
-  Future<void> getUserData() async{
+  Future<void> getUserData() async {
     User user = FirebaseAuth.instance.currentUser!;
-    DatabaseReference ref = FirebaseDatabase.instance.ref("users").child(user.uid);
+    DatabaseReference ref =
+        FirebaseDatabase.instance.ref("users").child(user.uid);
     var snapshot = await ref.get();
-    if(snapshot.exists){
+    if (snapshot.exists) {
       print(snapshot.value);
       snapshot.value;
       final data = Map<String, dynamic>.from(snapshot.value as Map);

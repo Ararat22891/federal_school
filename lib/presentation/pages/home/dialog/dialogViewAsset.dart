@@ -1,7 +1,10 @@
 import 'package:federal_school/domain/models/dialog/dialogModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
+import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DialoogViewAsset extends StatelessWidget {
   DialogModel dialogModel;
@@ -10,14 +13,18 @@ class DialoogViewAsset extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = dialogModel.userInfo.userUID == "sasdfdafa" ? true : false;
+    bool isMe = dialogModel.senderUID == FirebaseAuth.instance.currentUser!.uid ? true : false;
+    String fullName = dialogModel.userInfo?.name == null ?
+      "Пользователь" :
+        "${dialogModel.userInfo!.surname} ${dialogModel.userInfo!.name} ${dialogModel.userInfo!.patronomyc}";
+
     bool isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        isMe ?  Container() : CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
+        isMe ?  Container() : MyCircleAvatar(
+          networkAsset: dialogModel.userInfo?.photoPath,
         ),
         Expanded(
             child: Padding(
@@ -45,20 +52,26 @@ class DialoogViewAsset extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        isMe  ? SizedBox() : Text("${dialogModel.userInfo.surname}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                        isMe  ? SizedBox() : Text( fullName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                         Wrap(
                           alignment: WrapAlignment.end,
                           crossAxisAlignment: WrapCrossAlignment.end,
                           spacing: 8,
                           children: [
                             Text(dialogModel.message),
-                            Text(
-                              "${dialogModel.sentTime.hour}:${dialogModel.sentTime.minute}",
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: isLightTheme ? Colors.grey[700] : MyColors.darkThemeContainer,
-                              ),
-                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  "${DateFormat.Hm().format(dialogModel.sentTime)}",
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: isLightTheme ? Colors.grey[700] : MyColors.darkThemeContainer,
+                                  ),
+                                ),
+
+                              ],
+                            )
                           ],
                         ),
                       ],
@@ -67,9 +80,9 @@ class DialoogViewAsset extends StatelessWidget {
             ],
           ),
         )),
-
-        isMe ? CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
+        //
+        isMe ? MyCircleAvatar(
+          networkAsset: dialogModel.userInfo?.photoPath,
         ) : Container()
       ],
     );

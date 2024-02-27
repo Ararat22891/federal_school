@@ -1,22 +1,24 @@
 import 'package:federal_school/domain/models/dialog/dialogModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DialoogGroupViewAsset extends StatelessWidget {
   DialogModel dialogModel;
+  User user = FirebaseAuth.instance.currentUser!;
 
   DialoogGroupViewAsset({required this.dialogModel});
 
   @override
   Widget build(BuildContext context) {
-    bool isMe = dialogModel.userInfo.userUID == "sasdfdafa" ? true : false;
+    bool isMe = dialogModel.userInfo!.userUID ==  user.uid? true : false;
     bool isLightTheme =
     Theme.of(context).brightness == Brightness.light ? true : false;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         isMe ?  Container() : CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
+          backgroundImage: Image.network(dialogModel.userInfo!.photoPath!).image,
         ),
         Expanded(
             child: Padding(
@@ -44,7 +46,7 @@ class DialoogGroupViewAsset extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              isMe  ? SizedBox() : Text("${dialogModel.userInfo.surname}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                              isMe  ? SizedBox() : Text("${dialogModel.userInfo?.surname}", style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
                               Wrap(
                                 alignment: WrapAlignment.end,
                                 crossAxisAlignment: WrapCrossAlignment.end,
@@ -68,7 +70,7 @@ class DialoogGroupViewAsset extends StatelessWidget {
             )),
 
         isMe ? CircleAvatar(
-          backgroundImage: Image.network(dialogModel.userInfo.photoPath!).image,
+          backgroundImage: Image.network(dialogModel.userInfo!.photoPath!).image,
         ) : Container()
       ],
     );

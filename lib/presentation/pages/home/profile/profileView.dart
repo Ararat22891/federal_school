@@ -37,83 +37,78 @@ class _MyProfileViewState extends State<MyProfileView> {
   Widget build(BuildContext context) {
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
-    print(isLightTheme.toString());
-    return Column(
-      children: [
-        Expanded(
-          flex: 2,
-          child: Material(
-            elevation: 10,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(12),
-                bottomRight: Radius.circular(12)),
-            child: GradientContainer(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  AppBar(
-                    backgroundColor: Colors.transparent,
-                    centerTitle: true,
-                    foregroundColor: Colors.white,
-                    actions: [
-                      IconButton(onPressed: () {
-                        if(profileViewModel.isEdit){
-                          if(profileViewModel.formKey.currentState!.validate()){
-                            profileViewModel.saveData(profileViewModel.user!);
+    return Scaffold(
+      body: Column(
+        children: [
+          Expanded(
+            flex: 2,
+            child: Material(
+              color: isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
+              child: GradientContainer(
+                boxRadius: BorderRadius.only(bottomRight: Radius.circular(25), bottomLeft:  Radius.circular(25)),
+                child: Column(
+
+                  children: [
+                    AppBar(
+                      backgroundColor: Colors.transparent,
+                      centerTitle: true,
+                      foregroundColor: Colors.white,
+                      actions: [
+                        IconButton(onPressed: () {
+                          if(profileViewModel.isEdit){
+                            if(profileViewModel.formKey.currentState!.validate()){
+                              profileViewModel.saveData(profileViewModel.user!);
+                              profileViewModel.isEdit = !profileViewModel.isEdit;
+                            }
+                          }
+                          else{
                             profileViewModel.isEdit = !profileViewModel.isEdit;
                           }
-                        }
-                        else{
-                          profileViewModel.isEdit = !profileViewModel.isEdit;
-                        }
 
-                      },
-                          icon: Observer(
-                              builder: (context) =>
-                                  Icon(profileViewModel.isEdit ? Icons.done : Icons.edit))
-                      )
-                    ],
-                    title: Text(
-                      "Профиль",
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                        },
+                            icon: Observer(
+                                builder: (context) =>
+                                    Icon(profileViewModel.isEdit ? Icons.done : Icons.edit))
+                        )
+                      ],
+                      title: Text(
+                        "Профиль",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  FittedBox(
-                    child: CircleAvatar(
-                      // Use a ternary operator to check if photoPath is not null or empty
-                      backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
-                      // If yes, use the photoPath as the image source
-                          ? Image.network(widget.viewModel.userData!.photoPath!).image
-                      // If no, use the bird image as the fallback
-                          : Image.asset("assets/bird.jpg").image,
-                      // Set the radius to a fixed value, or use a MediaQuery to adjust it
-                      maxRadius: MediaQuery.of(context).size.height/5.5,
-                    ),
-                  ),
-                  Spacer()
-                ],
+                    Spacer(),
+                    CircleAvatar(
+                        backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
+                            ? Image.network(widget.viewModel.userData!.photoPath!).image
+                            : Image.asset("assets/bird.jpg").image,
+                        maxRadius: MediaQuery.of(context).size.height/ 6.5,
+                      ),
+                    Spacer(),
+                    Spacer(),
+
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        Flexible(
-          flex: 2,
-          child: Container(
-            color: isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
-            padding: EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 50,
-                ),
-                Text(
-                  "ФИО",
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                Form(
-                  key: profileViewModel.formKey,
+          Flexible(
+            flex: 2,
+            child: Container(
+              color: isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
+              padding: EdgeInsets.symmetric(horizontal: 30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 50,
+                  ),
+                  Text(
+                    "ФИО",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  Form(
+                    key: profileViewModel.formKey,
                     child: Observer(
                       builder: (context) =>
                           TextFormField(
@@ -123,51 +118,52 @@ class _MyProfileViewState extends State<MyProfileView> {
                             enabled: profileViewModel.isEdit,
                             validator: profileViewModel.validateFIO,
                             decoration: InputDecoration(
-                            isDense: true,
-                            hintText: "Введите ФИО",
-                            contentPadding: EdgeInsets.symmetric(horizontal: 6),
-                          ),
+                              isDense: true,
+                              hintText: "Введите ФИО",
+                              contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                            ),
                           ),
                     ),
-                ),
+                  ),
 
-                Container(
-                  height: 12,
-                ),
-                Text(
-                  "Номер телефона",
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                TextFormField(
-                  initialValue: widget.viewModel.userData?.telNumber,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  enabled: false,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                  Container(
+                    height: 12,
                   ),
-                ),
-                Container(
-                  height: 12,
-                ),
-                Text(
-                  "Статус",
-                  style: Theme.of(context).textTheme.labelLarge,
-                ),
-                TextFormField(
-                  initialValue: widget.viewModel.role,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  enabled: false,
-                  decoration: InputDecoration(
-                    isDense: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                  Text(
+                    "Номер телефона",
+                    style: Theme.of(context).textTheme.labelLarge,
                   ),
-                ),
-              ],
+                  TextFormField(
+                    initialValue:profileViewModel.user!.phoneNumber,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    enabled: false,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                    ),
+                  ),
+                  Container(
+                    height: 12,
+                  ),
+                  Text(
+                    "Статус",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  TextFormField(
+                    initialValue: widget.viewModel.role,
+                    style: Theme.of(context).textTheme.titleMedium,
+                    enabled: false,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

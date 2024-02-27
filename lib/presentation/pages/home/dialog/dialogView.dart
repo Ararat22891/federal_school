@@ -1,18 +1,48 @@
 import 'package:federal_school/domain/models/dialog/dialogModel.dart';
+import 'package:federal_school/domain/states/home/chat/dialog/dialogViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogViewAsset.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
+import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-class DialogView extends StatelessWidget {
+import '../../../../domain/models/user/user.dart';
+
+class DialogView extends StatefulWidget {
+
+  UserData data;
+  DialogView( this.data);
+
+  @override
+  State<DialogView> createState() => _DialogViewState();
+}
+
+class _DialogViewState extends State<DialogView> {
+  DialogViewModel _dialogViewModel = DialogViewModel();
+
+  @override
+  void initState() {
+    super.initState();
+    _dialogViewModel.controller = TextEditingController();
+    _dialogViewModel.getMessages(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
+  }
+
+  @override
+  void dispose() {
+    _dialogViewModel.controller.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isLight =
         Theme.of(context).brightness == Brightness.light ? true : false;
 
-    DialogModel.dialogs.sort((a, b) => a.sentTime.compareTo(b.sentTime));
     return GradientContainer(
         child: Scaffold(
             backgroundColor: Colors.transparent,
@@ -32,20 +62,17 @@ class DialogView extends StatelessWidget {
                 onTap: () {},
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      backgroundImage: Image.network(
-                              "https://www.yavlinsky.ru/wp-content/uploads/2019/06/yavlinsky-nemcov-e1661081340605.jpg")
-                          .image,
-                      foregroundImage: Image.asset("assets/bird.jpg").image,
-                      radius: 20,
+                    MyCircleAvatar(
+                      networkAsset: widget.data.photoPath,
                     ),
+
                     Container(
                       width: 8,
                     ),
                     Flexible(
                       child: VerifiedNameViewAsset(
-                        name: "Григорий Явлинский",
-                        isVerified: true,
+                        name: widget.data.name == null ? "Неизвестный пользователь" : "${widget.data.surname} ${widget.data.name} ${widget.data.patronomyc}",
+                        isVerified: false,
                         textStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -65,24 +92,35 @@ class DialogView extends StatelessWidget {
               ],
             ),
             body: RoundedContainer(
-              padding: EdgeInsets.zero,
+              padding: EdgeInsets.all(12),
               child: Column(
                 children: [
                   Expanded(
                     child: Container(
-                      child: ListView.separated(
-                        itemCount: DialogModel.dialogs.length,
-                        itemBuilder: (context, index) {
-                          return DialoogViewAsset(
-                              dialogModel: DialogModel.dialogs[index]
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Container(
-                            height: 12,
-                          );
-                        },
-                      ),
+                      child: Observer(
+                          builder: (context){
+                            if(_dialogViewModel.isDataLoaded){
+                              return ListView.separated(
+                                itemCount: _dialogViewModel.dialogs.length,
+                                itemBuilder: (context, index) {
+                                  return DialoogViewAsset(
+                                      dialogModel: _dialogViewModel.dialogs[index]
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return Container(
+                                    height: 12,
+                                  );
+                                },
+                              );
+                            }
+                            else{
+                              return Center(
+                                child: Text("Напишите первое сообщение!"),
+                              );
+                            }
+                          }
+                      )
                     ),
                   ),
                   SafeArea(
@@ -105,6 +143,7 @@ class DialogView extends StatelessWidget {
                               Expanded(
                                 child: TextField(
                                   cursorColor: Colors.green,
+                                  controller: _dialogViewModel.controller,
                                   textCapitalization: TextCapitalization.sentences,
                                   style: TextStyle(
                                       color: Theme.of(context)
@@ -121,7 +160,9 @@ class DialogView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              IconButton(onPressed: () {}, icon: Icon(Icons.send)),
+                              IconButton(onPressed: () {
+                                _dialogViewModel.sendMessage(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
+                              }, icon: Icon(Icons.send)),
                             ],
                           ),
                         )),

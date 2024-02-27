@@ -1,51 +1,60 @@
 
 import 'package:federal_school/domain/models/user/user.dart';
 
+
+enum ReadStatus {sent, read, error}
+
+ReadStatus getReadStatus(int status){
+  switch(status){
+    case 0:
+      return ReadStatus.sent;
+    case 1:
+      return ReadStatus.read;
+    case 2:
+      return ReadStatus.error;
+  }
+  return ReadStatus.error;
+}
+
 class DialogModel{
-  String _uuid;
-  UserData _userInfo;
-  String _message;
-  DateTime _sentTime;
+  String uuid;
+  UserData? userInfo;
+  String message;
+  String senderUID;
+  DateTime sentTime;
+  int readStatus;
 
-  DialogModel(this._uuid, this._userInfo,  this._message, this._sentTime);
-
-  DateTime get sentTime => _sentTime;
-
-  String get message => _message;
-
-
-  String get uuid => _uuid;
-
-  UserData get userInfo => _userInfo;
-
-  static List<DialogModel> dialogs = [
-    DialogModel("sasfasfa",
-        UserData.users.first,
-        "Привет Тимур!",
-        DateTime(2024, 1, 6, 12, 44)
-    ),
+  DialogModel(
+  {
+    required this.uuid,
+    this.userInfo,
+    required this.senderUID,
+    required this.message,
+    required this.sentTime,
+    required this.readStatus
+}
+      );
 
 
-    DialogModel(",slafalfaf;l,afl",
-        UserData.users.first,
-        "Я тут глянул брат все хорошо!",
-        DateTime(2024, 1, 6, 12, 45)
-    ),
+  static DialogModel fromJson(Map<String, dynamic> json) {
+    return DialogModel(
+      uuid:  json['uuid'] as String,
+      userInfo:  json['userInfo'] != null ? UserData.fromJson(json['userInfo']) : null,
+      senderUID: json['senderUid'] as String,
+      message:  json['message'] as String,
+      sentTime:  DateTime.parse(json['sentTime']),
+      readStatus:  json['readStatus'] as int,
+    );
+  }
 
-    DialogModel("lmflrelflrel",
-        UserData.users[1],
-        "Ты кто!",
-        DateTime(2024, 1, 6, 12, 46)
-    ),
-
-
-    DialogModel(",slafalfaf;l,afl",
-        UserData.users.first,
-        "Я тут глянул брат все хорошо!",
-        DateTime(2024, 1, 6, 12, 45)
-    ),
-
-
-
-  ];
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'userInfo': userInfo != null ? userInfo!.toJson() : null,
+      'senderUid': senderUID,
+      'message': message,
+      'sentTime': sentTime.toIso8601String(),
+      'readStatus': readStatus,
+    };
+  }
 }

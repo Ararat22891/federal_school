@@ -6,6 +6,7 @@ class MyColors{
   static const beige = Color(0xffDBADB2);
   static const darkbluetext = Color.fromARGB(255, 19,40,56);
   static const white = Color.fromARGB(255, 241,241,241);
+  static const grey = Color.fromARGB(255, 217, 217, 217);
 
   static const darkThemeMain = Color.fromARGB(255, 29, 33, 52);
   static const darkThemeFont = Color.fromARGB(255, 143, 181, 255);
