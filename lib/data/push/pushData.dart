@@ -1,10 +1,14 @@
 
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
+
+import 'notificationController.dart';
 
 class PushData{
   static Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -12,8 +16,6 @@ class PushData{
     print(data.length);
     String displayName = data["callerName"];
     String callId = data["call_id"];
-    print("dasddsada " + displayName );
-    if (message.notification != null) {
       await AwesomeNotifications().createNotification(
           actionButtons: [
             NotificationActionButton(key: "yes", label: "Принять"),
@@ -25,12 +27,103 @@ class PushData{
             category: NotificationCategory.Call,
             actionType: ActionType.Default,
             title: '${displayName}',
+            payload: {"call_id":callId},
             body: 'Вам поступил звонок',
           )
       );
-
-    }
   }
+
+
+
+  static Future<void> setIsolateForeground() async{
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      print(message.data);
+      print('fn34kfkm34fkml43mklf3mk4fmk43km');
+      print(message.data);
+        print('Got a message whilst in the foreground!');
+        await AwesomeNotifications().createNotification(
+            actionButtons: [
+              NotificationActionButton(key: "key", label: "Принять"),
+              NotificationActionButton(key: "key", label: "Отклонить")
+            ],
+            content: NotificationContent(
+              id: 10,
+              actionType: ActionType.Default,
+              channelKey: 'sound_channel',
+              payload: {"call_id": message.data["call_id"]},
+              category: NotificationCategory.Call,
+              title: '${message.data["callerName"]}',
+              body: 'Вам поступил звонок',
+            )
+        );
+        print('Notification Title: ${message.notification?.title}');
+        print('Notification Body: ${message.notification?.body}');
+
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(message.data);
+      print('Got a message whilst in the foreground!');
+      print(message.data);
+      print('Got a message whilst in the foreground!');
+      await AwesomeNotifications().createNotification(
+          actionButtons: [
+            NotificationActionButton(key: "key", label: "Принять"),
+            NotificationActionButton(key: "key", label: "Отклонить")
+          ],
+          content: NotificationContent(
+            id: 10,
+            actionType: ActionType.Default,
+            channelKey: 'sound_channel',
+            payload: {"call_id": message.data["call_id"]},
+            category: NotificationCategory.Call,
+            title: '${message.data["callerName"]}',
+            body: 'Вам поступил звонок',
+          )
+      );
+      print('Notification Title: ${message.notification?.title}');
+      print('Notification Body: ${message.notification?.body}');
+
+    });
+
+  }
+
+  static Future<void> setIsolateBackground() async {
+
+    FirebaseMessaging.onBackgroundMessage(PushData.firebaseMessagingBackgroundHandler);
+
+    AwesomeNotifications().setListeners(
+        onActionReceivedMethod: NotificationController.onActionReceivedMethod
+    );
+
+    await AwesomeNotifications().initialize(
+        null,
+        [
+          NotificationChannel(
+              channelGroupKey: 'basic_channel_group',
+              channelKey: 'sound_channel',
+              soundSource: "resource://raw/isound",
+              channelName: 'Basic notifications',
+              playSound: true,
+              channelDescription: 'Notification channel for basic tests',
+              defaultColor: Color(0xFF9D50DD),
+              ledColor: Colors.white
+          )
+        ],
+        // Channel groups are only visual and are not required
+        channelGroups: [
+          NotificationChannelGroup(
+              channelGroupKey: 'basic_channel_group',
+              channelGroupName: 'Basic group'
+          )
+        ],
+        debug: false
+    );
+
+
+  }
+
+
 }
 
 Future<void> send(String deviceToken, String callID, String name) async{
@@ -60,8 +153,8 @@ Future<void> send(String deviceToken, String callID, String name) async{
     "message": {
       "token": deviceToken,
       "notification": {
-        "title": "Вам звонят",
-        "body": "Вам звонят! Возьмите трубку"
+        "title": "",
+        "body": ""
       },
 
       "data": {
@@ -69,15 +162,6 @@ Future<void> send(String deviceToken, String callID, String name) async{
         "callerName": "${name}"
       },
 
-      "android":{
-        "priority":"high"
-      },
-
-      "apns":{
-        "headers":{
-          "apns-priority":"5"
-        }
-      },
     }
   };
 

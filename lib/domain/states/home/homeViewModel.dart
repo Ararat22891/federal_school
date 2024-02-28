@@ -1,10 +1,12 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:federal_school/data/push/pushData.dart';
 import 'package:federal_school/presentation/pages/home/calendar/calendarHomeView.dart';
 import 'package:federal_school/presentation/pages/home/call/callView.dart';
 import 'package:federal_school/presentation/pages/home/chat/chatHomeView.dart';
 import 'package:federal_school/presentation/pages/home/contact/contactView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -108,6 +110,8 @@ abstract class _HomeViewModel with Store {
 
   @action
   Future<void> getUserData() async {
+    await PushData.setIsolateForeground();
+    await PushData.setIsolateBackground();
     User user = FirebaseAuth.instance.currentUser!;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("users").child(user.uid);
@@ -117,6 +121,14 @@ abstract class _HomeViewModel with Store {
       snapshot.value;
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       userData = UserData.fromJson(data);
+      String? key = await FirebaseMessaging.instance.getToken();
+
+
+
+      ref.update({
+        "deviceToken": key!
+      });
+
       print(userData?.deviceToken);
     }
   }
