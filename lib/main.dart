@@ -1,4 +1,3 @@
-
 import 'dart:math';
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
@@ -120,9 +119,9 @@ class SchoolApp extends StatelessWidget{
 }
 
 String generateRandomString(int len) {
-  var r = Random();
+  var randomObj = Random();
   const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-  return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
+  return List.generate(len, (index) => _chars[randomObj.nextInt(_chars.length)]).join();
 }
 
 
