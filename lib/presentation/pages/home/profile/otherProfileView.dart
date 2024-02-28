@@ -1,7 +1,8 @@
+import 'package:federal_school/data/push/pushData.dart';
 import 'package:federal_school/main.dart';
 import 'package:federal_school/presentation/pages/call/callView.dart';
-import 'package:federal_school/presentation/pages/home/call/callView.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
@@ -157,8 +158,12 @@ class OtherProfileView extends StatelessWidget {
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context){
-                                    send(userData.deviceToken);
-                                    return CallingView(channelName: "channelName");
+                                    String s = generateRandomString(12);
+                                    s = "test";
+                                    User user = FirebaseAuth.instance.currentUser!;
+                                    String name = user.displayName!.isEmpty ? "Неизвестный пользователь": user.displayName!;
+                                    send(userData.deviceToken,s, name);
+                                    return CallingView(channelName: s);
                                   }
                               ));
                         },

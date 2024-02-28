@@ -23,7 +23,6 @@ class _CallingViewState extends State<CallingView> {
         channelName: widget.channelName,
       ),
       agoraChannelData: AgoraChannelData(
-          videoEncoderConfiguration: VideoEncoderConfiguration(frameRate: 60),
           channelProfileType: ChannelProfileType.channelProfileCommunication1v1
       )
   );

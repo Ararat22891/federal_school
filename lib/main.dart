@@ -1,8 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:federal_school/data/push/notificationController.dart';
+import 'package:federal_school/data/push/pushData.dart';
 import 'package:federal_school/domain/models/user/user.dart';
 import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
@@ -20,14 +24,10 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
-import 'package:http/http.dart' as http;
-import 'package:googleapis_auth/auth_io.dart' as auth;
 
 User? _user;
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,8 +39,65 @@ void main() async{
   await FirebaseAppCheck.instance.activate(
       androidProvider: AndroidProvider.playIntegrity
   );
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(PushData.firebaseMessagingBackgroundHandler);
+
+
+ await AwesomeNotifications().initialize(
+      null,
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'sound_channel',
+            soundSource: "resource://raw/isound",
+            channelName: 'Basic notifications',
+            playSound: true,
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white
+        )
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupKey: 'basic_channel_group',
+            channelGroupName: 'Basic group'
+        )
+      ],
+      debug: false
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    print(message.data);
+    print('Got a message whilst in the foreground!');
+    print(message.data);
+    if (message.notification != null) {
+
+     await AwesomeNotifications().createNotification(
+       actionButtons: [
+         NotificationActionButton(key: "key", label: "Принять"),
+         NotificationActionButton(key: "key", label: "Отклонить")
+       ],
+          content: NotificationContent(
+            id: 10,
+
+            actionType: ActionType.Default,
+            channelKey: 'sound_channel',
+            category: NotificationCategory.Call,
+            title: 'Hello World!',
+            body: 'This is my first notification!',
+          )
+      );
+      print('Notification Title: ${message.notification?.title}');
+      print('Notification Body: ${message.notification?.body}');
+      runApp(SchoolApp());
+    }
+  });
   _user = FirebaseAuth.instance.currentUser;
+
+
+  AwesomeNotifications().setListeners(
+      onActionReceivedMethod: NotificationController.onActionReceivedMethod
+  );
   runApp(SchoolApp());
 }
 
@@ -48,6 +105,9 @@ void main() async{
 
 
 class SchoolApp extends StatelessWidget{
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,64 +128,10 @@ class SchoolApp extends StatelessWidget{
 
 }
 
-
-Future<void> send(String deviceToken) async{
-  var json = {
-    "type": "service_account",
-    "project_id": "federalschool-47496",
-    "private_key_id": "867541a2568b9991a45f8044db8881d4808335f9",
-    "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDFddGDj/OqT/hH\nYABiWk9Cf26VRXHLJFXtU0HGOfep2mBf2rE7xEoDGOTCHzEyoXiOxpdGW7gz8rQB\n1K0fviiABsyAM5/2iuua8RsWZtF1m91QDcec+XylpWGTNMW+v/kydofQhH1CeAOj\nByF+8Zcsj1aIXkF20zdCsmjXS+cCV5oIs7eLKwkb6edFlXffxcFPqOKbnQObuoaW\nb/rHXqT7SQlp/iRPq1NNe2JSXGhuQEyx1LJt8yvJ9B5G/LMrJx8P3/NtO8DeBBy0\nvkvDiyWL31F6TzBHClAzeMFtR1uV/4NotEax9GCkN5lepYyESsBdlxnAC4F29kls\nq7ZHlcivAgMBAAECggEASVcEzeYqHQBd2XjFO8KKPMsi8gtchBSHW8H4JJ2EKNCk\nygVqnaW+zZ6x3I4EUmdZ5UHKjwXjCVxkUmfBM5CH72FXFGjYSZR4hNB3fJ8Mvi95\niFHN6bZafxXJg4jux3X7IyyWLjL/aTA1PZiY7tLhkNneTIEhtHYnyLyGJy0YbKwg\nrMnjh1M3gO39Lj+286WBwFsESDnBXQCcdKgccDFlsy1AKuG8ZJiAmm7vAq/7EAF6\nzAXdd57AzfIWMCMShCMQAxtdUWZmQR1w4s2q1mRzRplCIQaJDBjWnS4H486F11z8\nbPWRCCMmKdnXH/q+gZD1iuQubAFQOZb7bo5j0iKhuQKBgQDqvN40MBxrC047qdyl\nqo1yIvB9aQ4VYw+TdATzPTTils7IHMJCwD8FfMR44gS5I+uWRLdcDRbHAkQ7a1HY\n0Wl0dQN3okLKNh1rFWtiSBcwuhDSRBwTHkEoJlmpIilW9kpzBymrm2KxHSoKURlL\nl1VyzebI8Di2P7/7epxxJ7jzJwKBgQDXWI2/NK7kshTJ1kLCnizLUatExAYpOsmH\nRjurmhvQnbDO+Z02lOND30OwIV10uKIJKeCqMvu9jVWjYrFRvM90Uyb7Tb0kHZLy\nYjLKpU1qOcxtjPf1zaF2h3AoyoQdn77zw8lG3aDHmILcUW5sGD8i9Vq5keLfNaSV\n8Hvldh5TOQKBgCPdOWHl2+Gq94f8Gt8g4L2Igw/WJjW0TePsfPkg59yax/shEbkb\nIEXZWzdQ6QHUcCEkXJNu2IUNXplpezbSP/dwDViQ7P1yKSp8Okzo0Mo8E2fcyiFN\npQzaVyaVNpW3yYYrmP1EH18KIqsy2teGxqJkvRcERNXrhYyJni9Xr1VPAoGAU5lb\nHdlz8/B2RYzaSfdh6GSCGqYGxka+KbfIPmwLVEeDdjZNI/1U5OptupiZUVDEBs6t\nGyXDuOh/UHhl4hdsafpF7dVWEgkxHMumcCkQDqb1h6nsMQ5tGjimAA/ujhmP5c4h\n+1LaseGxG5q5RVl8WTPqzpOmAYUvqc28K25Zg3ECgYAyHkmNR4DMZv/yBAA+QuBM\naNlH2LhsTPmZo5QHWgimTJw15tm1xfbXn8PI79PTsX18eRCeduyOMOajJIrfAliP\nZgzOJwFzySdwSckagmI4yxlJpSu7ymZM6ry1o3P18qb5vgA1buy0eUjxGgYd8scG\nI9wsPuv7VrllifjN7dusMA==\n-----END PRIVATE KEY-----\n",
-    "client_email": "firebase-adminsdk-4ry8l@federalschool-47496.iam.gserviceaccount.com",
-    "client_id": "107470453864219028120",
-    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-4ry8l%40federalschool-47496.iam.gserviceaccount.com",
-    "universe_domain": "googleapis.com"
-  };
-
-  final client = http.Client ();
-  final scope = 'https://www.googleapis.com/auth/firebase.messaging';
-
-  final credentials = await auth.clientViaServiceAccount (auth.ServiceAccountCredentials.fromJson (jsonEncode(json)), [scope]);
-  final accessToken = credentials.credentials.accessToken;
-
-
-
-  final projectId = 'federalschool-47496';
-
-  final body = {
-    "message": {
-      "token": deviceToken,
-      "notification": {
-        "title": "Вам звонят",
-        "body": "Вам звонят! Возьмите трубку"
-      },
-      "android":{
-        "priority":"high"
-      },
-      "apns":{
-        "headers":{
-          "apns-priority":"5"
-        }
-      },
-    }
-  };
-
-  final url = 'https://fcm.googleapis.com/v1/projects/$projectId/messages:send';
-
-
-  final headers = {
-    'Authorization': 'Bearer ${accessToken.data}'
-  };
-
-  final response = await client.post (Uri.parse (url), body: jsonEncode(body), headers: headers);
-  if (response.statusCode == 200) {
-    print ('Message sent: ${response.body}');
-  } else {
-    print ('Error sending message: ${response.body}');
-  }
-
+String generateRandomString(int len) {
+  var r = Random();
+  const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  return List.generate(len, (index) => _chars[r.nextInt(_chars.length)]).join();
 }
 
 
