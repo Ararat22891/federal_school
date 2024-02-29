@@ -25,6 +25,45 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
     });
   }
 
+  late final _$chatsAtom = Atom(name: '_ChatViewModel.chats', context: context);
+
+  @override
+  List<ChatCellModel> get chats {
+    _$chatsAtom.reportRead();
+    return super.chats;
+  }
+
+  @override
+  set chats(List<ChatCellModel> value) {
+    _$chatsAtom.reportWrite(value, super.chats, () {
+      super.chats = value;
+    });
+  }
+
+  late final _$isDataLoadedAtom =
+      Atom(name: '_ChatViewModel.isDataLoaded', context: context);
+
+  @override
+  bool get isDataLoaded {
+    _$isDataLoadedAtom.reportRead();
+    return super.isDataLoaded;
+  }
+
+  @override
+  set isDataLoaded(bool value) {
+    _$isDataLoadedAtom.reportWrite(value, super.isDataLoaded, () {
+      super.isDataLoaded = value;
+    });
+  }
+
+  late final _$getChatListAsyncAction =
+      AsyncAction('_ChatViewModel.getChatList', context: context);
+
+  @override
+  Future<void> getChatList() {
+    return _$getChatListAsyncAction.run(() => super.getChatList());
+  }
+
   late final _$_ChatViewModelActionController =
       ActionController(name: '_ChatViewModel', context: context);
 
@@ -42,7 +81,9 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
   @override
   String toString() {
     return '''
-selection: ${selection}
+selection: ${selection},
+chats: ${chats},
+isDataLoaded: ${isDataLoaded}
     ''';
   }
 }

@@ -1,18 +1,32 @@
 
+
+import '../user/user.dart';
+
 class ChatCellModel{
-  String _user1UID;
-  String _user2UID;
-  String _lastMessage;
-  DateTime _sentTime;
-  int _newMessagesCount;
+  UserData otherUser;
+  String lastMessage;
+  DateTime sentTime;
+  int newMessagesCount;
 
-  ChatCellModel(this._user1UID, this._user2UID, this._lastMessage, this._sentTime,
-      this._newMessagesCount);
+  ChatCellModel(this.otherUser,  this.lastMessage, this.sentTime,
+      this.newMessagesCount);
 
-  int get newMessagesCount => _newMessagesCount;
-  DateTime get sentTime => _sentTime;
-  String get lastMessage => _lastMessage;
-  String get user1UID => _user1UID;
-  String get user2UID => _user2UID;
 
+  Map<String, dynamic> toJson() {
+    return {
+      'otherUser': otherUser,
+      'lastMessage': lastMessage,
+      'sentTime': sentTime.toIso8601String(),
+      'newMessagesCount': newMessagesCount,
+    };
+  }
+
+  factory ChatCellModel.fromJson(Map<String, dynamic> json) {
+    return ChatCellModel(
+      json['otherUser'],
+      json['lastMessage'],
+      DateTime.parse(json['sentTime']),
+      json['newMessagesCount'],
+    );
+  }
 }

@@ -1,6 +1,8 @@
 
+import 'package:federal_school/domain/models/user/user.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
+import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,17 +12,17 @@ import '../../../../domain/models/chat/chatCellModel.dart';
 
 class ChatMesageCellView extends StatelessWidget {
 
-  ChatCellModel? chat;
+  ChatCellModel chat;
   ChatMesageCellView({required this.chat});
 
   @override
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
 
-    String fullName = "";
-    String date = formatMessageDate(chat!.sentTime);
+    String fullName = chat.otherUser.name == null ? "Неизвестный пользователь": "${chat.otherUser.surname} ${chat.otherUser.name}";
+    String date = formatMessageDate(chat.sentTime);
     int newMessageCount = chat!.newMessagesCount;
-    bool isVerified = true;
+    bool isVerified = chat.otherUser.role! > 1 ? true: false;
 
     return Material(
       color: Colors.transparent,
@@ -28,21 +30,21 @@ class ChatMesageCellView extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 6),
         child: InkWell(
             onTap: (){
-              // Navigator.push(context, MaterialPageRoute(
-              //     builder: (context) => DialogView()
-              // )
-              // );
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => DialogView(chat.otherUser)
+              )
+              );
             },
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    // foregroundImage: Image.network(chat.photoPath!).image,
-                    backgroundImage: Image.asset("assets/bird.jpg").image,
+                  MyCircleAvatar(
+                    networkAsset: chat.otherUser.photoPath,
                     radius: 30,
                   ),
+
                   Container(width: 12,),
 
 
@@ -50,7 +52,7 @@ class ChatMesageCellView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       VerifiedNameViewAsset(name: fullName, isVerified: isVerified),
-                      // Text(chat.lastMessage, style: TextStyle(color: Colors.grey, fontSize: 12,), overflow: TextOverflow.ellipsis,),
+                      Text(chat.lastMessage, style: TextStyle(color: Colors.grey, fontSize: 14,), overflow: TextOverflow.ellipsis,),
                     ],
                   ),),
                   Column(

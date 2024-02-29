@@ -64,13 +64,25 @@ class ChatHomeView extends StatelessWidget {
         Container(
           height: 10,
         ),
+
         Expanded(child: Observer(builder: (context) {
           return chatViewModel.selection == ChatType.message
-              ? ListView.builder(
-                  itemCount: 0,
-                  itemBuilder: (context, index) {
-                    return ChatMesageCellView(chat: null);
-                  })
+              ? Observer(
+              builder: (context){
+                if(chatViewModel.isDataLoaded) {
+                  return ListView.builder(
+                      itemCount: chatViewModel.chats.length,
+                      itemBuilder: (context, index) {
+                        return ChatMesageCellView(chat: chatViewModel.chats[index]);
+                      });
+                }
+                else{
+                  return Center(
+                    child: Text("Начните свое обшение!"),
+                  );
+                }
+              }
+          )
               : ListView.builder(
                   itemCount: ChatGroupCellModel.groups.length,
                   itemBuilder: (context, index) {
