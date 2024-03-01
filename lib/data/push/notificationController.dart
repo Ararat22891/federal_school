@@ -1,3 +1,4 @@
+import 'package:permission_handler/permission_handler.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:federal_school/main.dart';
 import 'package:federal_school/presentation/pages/call/callView.dart';
@@ -28,7 +29,7 @@ class NotificationController {
   @pragma("vm:entry-point")
   static Future <void> onActionReceivedMethod(ReceivedAction receivedAction) async {
     // Your code goes here
-    print("fksaklfamfsa");
+    await [Permission.camera, Permission.microphone].request();
     await navigatorKey.currentState!.push(
         MaterialPageRoute(builder: (context) => CallingView(channelName: receivedAction.payload!["call_id"]!)));
     // Navigate into pages, avoiding to open the notification details page over another details page already opened

@@ -8,7 +8,6 @@ import '../../../models/user/user.dart';
 
 part 'contactViewModel.g.dart';
 
-
 class ContactViewModel = _ContactViewModel with _$ContactViewModel;
 
 

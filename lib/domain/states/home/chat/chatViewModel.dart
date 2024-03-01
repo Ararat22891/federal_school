@@ -13,6 +13,8 @@ class ChatViewModel = _ChatViewModel with _$ChatViewModel;
 
 enum ChatType { message, group }
 
+enum ChatStatus {empty, loading, got}
+
 abstract class _ChatViewModel with Store {
   _ChatViewModel(){
     getChatList();
@@ -27,6 +29,9 @@ abstract class _ChatViewModel with Store {
   @observable
   bool isDataLoaded = false;
 
+  @observable
+  ChatStatus status = ChatStatus.empty;
+
   @action
   void setTypeChat(Set<ChatType> chatType) {
     selection = chatType.first;
@@ -37,6 +42,7 @@ abstract class _ChatViewModel with Store {
     User user = FirebaseAuth.instance.currentUser!;
     List<String> chatId = [];
 
+    status = ChatStatus.loading;
     await FirebaseDatabase.instance.ref("chats").onValue.listen(
             (event) {
               chats.clear();
@@ -65,7 +71,7 @@ abstract class _ChatViewModel with Store {
                                             0
                                         );
                                         chats.add(item);
-                                        isDataLoaded = true;
+                                        status = ChatStatus.got;
                                       }
                               );
 
@@ -78,5 +84,7 @@ abstract class _ChatViewModel with Store {
               }
             }
     );
+
+    if (chats.length == 0) status = ChatStatus.empty;
   }
 }

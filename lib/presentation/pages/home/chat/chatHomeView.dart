@@ -69,17 +69,26 @@ class ChatHomeView extends StatelessWidget {
           return chatViewModel.selection == ChatType.message
               ? Observer(
               builder: (context){
-                if(chatViewModel.isDataLoaded) {
-                  return ListView.builder(
-                      itemCount: chatViewModel.chats.length,
-                      itemBuilder: (context, index) {
-                        return ChatMesageCellView(chat: chatViewModel.chats[index]);
-                      });
-                }
-                else{
-                  return Center(
-                    child: Text("Начните свое обшение!"),
-                  );
+                switch(chatViewModel.status){
+                  case ChatStatus.empty:
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset("assets/empty_chat.png",),
+                          Text('У вас нет новых сообщений, начните диалог через раздел "Контакты"', style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,)
+
+                        ],
+                    );
+                  case ChatStatus.loading:
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  case ChatStatus.got:
+                    return ListView.builder(
+                        itemCount: chatViewModel.chats.length,
+                        itemBuilder: (context, index) {
+                          return ChatMesageCellView(chat: chatViewModel.chats[index]);
+                        });
                 }
               }
           )

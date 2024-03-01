@@ -56,6 +56,22 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
     });
   }
 
+  late final _$statusAtom =
+      Atom(name: '_ChatViewModel.status', context: context);
+
+  @override
+  ChatStatus get status {
+    _$statusAtom.reportRead();
+    return super.status;
+  }
+
+  @override
+  set status(ChatStatus value) {
+    _$statusAtom.reportWrite(value, super.status, () {
+      super.status = value;
+    });
+  }
+
   late final _$getChatListAsyncAction =
       AsyncAction('_ChatViewModel.getChatList', context: context);
 
@@ -83,7 +99,8 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
     return '''
 selection: ${selection},
 chats: ${chats},
-isDataLoaded: ${isDataLoaded}
+isDataLoaded: ${isDataLoaded},
+status: ${status}
     ''';
   }
 }
