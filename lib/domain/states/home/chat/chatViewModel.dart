@@ -38,53 +38,61 @@ abstract class _ChatViewModel with Store {
   }
 
   @action
-  Future<void> getChatList() async{
+  Future<void> getChatList() async {
+    chats.clear();
     User user = FirebaseAuth.instance.currentUser!;
     List<String> chatId = [];
 
+
     status = ChatStatus.loading;
-    await FirebaseDatabase.instance.ref("chats").onValue.listen(
-            (event) {
-              chats.clear();
-              for(var child in event.snapshot.children){
-                  chatId = child.key!.split("_");
-                  chatId.sort();
-                  if(chatId.contains(user.uid)){
-                    final allMessagesRef = FirebaseDatabase.instance
-                        .ref("chats/${child.key}")
-                        .orderByChild("sentTime");
 
-                    allMessagesRef.onValue.listen(
-                            (data) {
-                              var map = Map<String, dynamic>.from(data.snapshot.children.last.value as Map);
-                              var dialog = DialogModel.fromJson(map);
-
-                              FirebaseDatabase.instance.ref("users").child(chatId.first).get().then(
-                                      (value){
-                                        print(value);
-                                        var otherUserMap = Map<String,dynamic>.from(value.value as Map);
-                                        var otherUser = UserData.fromJson(otherUserMap);
-                                        var item = ChatCellModel(
-                                            otherUser,
-                                            dialog.message,
-                                            dialog.sentTime,
-                                            0
-                                        );
-                                        chats.add(item);
-                                        status = ChatStatus.got;
-                                      }
-                              );
+    List<String> messUser = [];
 
 
-                            }
-                    );
-
-
-                  }
-              }
+    FirebaseDatabase.instance
+        .ref("chats")
+        .onValue
+        .listen(
+            (messages) async {
+          status = ChatStatus.loading;
+          messUser.clear();
+          chatId.clear();
+          chats.clear();
+          for (var chat in messages.snapshot.children) {
+            var all = chat.key!.split("_");
+            if (all.contains(user.uid)) {
+              chatId.add(all.join("_"));
+              all.remove(user.uid);
+              messUser.add(all.first);
             }
-    );
+          }
 
-    if (chats.length == 0) status = ChatStatus.empty;
+          for (int i = 0; i < chatId.length; i++) {
+            var getted = await FirebaseDatabase.instance.ref("chats").child(
+                chatId[i]).orderByChild("sentTime").get();
+            var gettedMap = Map<String, dynamic>.from(
+                getted.children.last.value as Map);
+            print(gettedMap);
+            var dialog = DialogModel.fromJson(gettedMap);
+
+            var otherUserInfo = await FirebaseDatabase.instance.ref('users')
+                .child(messUser[i])
+                .get();
+
+            var otherUserMap = Map<String, dynamic>.from(
+                otherUserInfo.value as Map);
+            var otherUser = UserData.fromJson(otherUserMap);
+
+            ChatCellModel item = ChatCellModel(
+                otherUser, dialog.message, dialog.sentTime, 0);
+            chats.add(item);
+          }
+
+          if (chats.length == 0)
+            status = ChatStatus.empty;
+          else
+            status = ChatStatus.got;
+        }
+    );
   }
 }

@@ -41,6 +41,42 @@ mixin _$DialogViewModel on _DialogViewModel, Store {
     });
   }
 
+  late final _$controllerAtom =
+      Atom(name: '_DialogViewModel.controller', context: context);
+
+  @override
+  TextEditingController get controller {
+    _$controllerAtom.reportRead();
+    return super.controller;
+  }
+
+  bool _controllerIsInitialized = false;
+
+  @override
+  set controller(TextEditingController value) {
+    _$controllerAtom.reportWrite(
+        value, _controllerIsInitialized ? super.controller : null, () {
+      super.controller = value;
+      _controllerIsInitialized = true;
+    });
+  }
+
+  late final _$isSendableAtom =
+      Atom(name: '_DialogViewModel.isSendable', context: context);
+
+  @override
+  bool get isSendable {
+    _$isSendableAtom.reportRead();
+    return super.isSendable;
+  }
+
+  @override
+  set isSendable(bool value) {
+    _$isSendableAtom.reportWrite(value, super.isSendable, () {
+      super.isSendable = value;
+    });
+  }
+
   late final _$sendMessageAsyncAction =
       AsyncAction('_DialogViewModel.sendMessage', context: context);
 
@@ -52,6 +88,17 @@ mixin _$DialogViewModel on _DialogViewModel, Store {
 
   late final _$_DialogViewModelActionController =
       ActionController(name: '_DialogViewModel', context: context);
+
+  @override
+  void onChanged(String text) {
+    final _$actionInfo = _$_DialogViewModelActionController.startAction(
+        name: '_DialogViewModel.onChanged');
+    try {
+      return super.onChanged(text);
+    } finally {
+      _$_DialogViewModelActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void getMessages(String myUid, String foreignUID) {
@@ -68,7 +115,9 @@ mixin _$DialogViewModel on _DialogViewModel, Store {
   String toString() {
     return '''
 isDataLoaded: ${isDataLoaded},
-dialogs: ${dialogs}
+dialogs: ${dialogs},
+controller: ${controller},
+isSendable: ${isSendable}
     ''';
   }
 }

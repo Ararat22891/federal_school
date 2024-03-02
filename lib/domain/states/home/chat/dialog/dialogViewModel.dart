@@ -17,7 +17,21 @@ abstract class _DialogViewModel with Store {
   @observable
   List<DialogModel> dialogs = [];
 
+  @observable
   late TextEditingController controller;
+
+
+  @observable
+  bool isSendable = false;
+
+
+  @action
+  void onChanged(String text){
+    if (text.isNotEmpty){
+      isSendable = true;
+    }
+    else isSendable = false;
+  }
 
   @action
   void getMessages(String myUid, String foreignUID){
@@ -28,13 +42,14 @@ abstract class _DialogViewModel with Store {
             (event) {
               dialogs.clear();
               isDataLoaded = false;
+              event.snapshot.children;
               for (final child in event.snapshot.children){
                 final data = Map<String, dynamic>.from(child.value as Map);
                 DialogModel userData = DialogModel.fromJson(data);
                 dialogs.add(userData);
               }
-
               isDataLoaded = true;
+
             }
     );
   }
@@ -48,5 +63,6 @@ abstract class _DialogViewModel with Store {
     ref.set(
       DialogModel(uuid: ref.key!, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
     );
+    controller.clear();
   }
 }

@@ -1,12 +1,10 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:federal_school/domain/states/home/homeViewModel.dart';
-import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/pages/home/profile/profileView.dart';
 import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../Colors.dart';
@@ -33,6 +31,7 @@ class _HomeViewState extends State<HomeView> {
     return ThemeSwitchingArea(
         child: GradientContainer(
             child: Scaffold(
+                resizeToAvoidBottomInset: false,
                 backgroundColor: Colors.transparent,
                 appBar: PreferredSize(
                     preferredSize: Size(double.infinity, kToolbarHeight),
@@ -61,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
                     return homeViewModel.screens[homeViewModel.selectedIndex];
                   }),                ),
                 floatingActionButtonLocation:
-                    FloatingActionButtonLocation.centerDocked,
+                    FloatingActionButtonLocation.miniCenterDocked,
                 floatingActionButton: Container(
                   margin: EdgeInsets.only(top: 70),
                   child: InkWell(

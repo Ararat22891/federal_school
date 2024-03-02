@@ -145,11 +145,14 @@ class _DialogViewState extends State<DialogView> {
                                   cursorColor: Colors.green,
                                   controller: _dialogViewModel.controller,
                                   textCapitalization: TextCapitalization.sentences,
+                                  onChanged: _dialogViewModel.onChanged,
                                   style: TextStyle(
                                       color: Theme.of(context)
                                           .textTheme
-                                          .bodyMedium
-                                          ?.color),
+                                          .titleMedium
+                                          ?.color,
+                                    fontWeight: FontWeight.bold
+                                  ),
                                   autofocus: false,
                                   decoration: const InputDecoration.collapsed(
                                     hintText: 'Напишите сообщение...',
@@ -160,9 +163,16 @@ class _DialogViewState extends State<DialogView> {
                                   ),
                                 ),
                               ),
-                              IconButton(onPressed: () {
-                                _dialogViewModel.sendMessage(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
-                              }, icon: Icon(Icons.send)),
+                              Observer(builder: (context){
+                                return IconButton(onPressed: !_dialogViewModel.isSendable ?
+                                null : () {
+                                  _dialogViewModel.sendMessage(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
+                                },
+                                    icon: Icon(
+                                      Icons.send,
+                                      color: Theme.of(context).textTheme.titleMedium!.color,
+                                    ));
+                              })
                             ],
                           ),
                         )),

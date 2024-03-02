@@ -100,6 +100,7 @@ flutter:
      - assets/bird.jpg
      - assets/red_circle_error.png
      - assets/servAcc.json
+     - assets/empty_chat.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

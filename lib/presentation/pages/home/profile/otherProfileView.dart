@@ -161,7 +161,9 @@ class OtherProfileView extends StatelessWidget {
                                     String s = generateRandomString(12);
                                     s = "test";
                                     User user = FirebaseAuth.instance.currentUser!;
-                                    String name = user.displayName!.isEmpty ? "Неизвестный пользователь": user.displayName!;
+
+                                    String? userInfo = user.displayName;
+                                    String name = userInfo ?? "Неизвестный пользователь";
                                     send(userData.deviceToken,s, name);
                                     return CallingView(channelName: s);
                                   }
