@@ -1,18 +1,22 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:federal_school/data/exceptionHandler.dart';
 import 'package:federal_school/data/push/notificationController.dart';
 import 'package:federal_school/data/push/pushData.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
+import 'package:federal_school/snackBar.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 User? _user;
@@ -28,13 +32,20 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseAppCheck.instance.activate(
-      androidProvider: AndroidProvider.playIntegrity
+      androidProvider: AndroidProvider.playIntegrity,
+      appleProvider: AppleProvider.debug
+  );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
   );
 
   _user = FirebaseAuth.instance.currentUser;
-
-
   runApp(SchoolApp());
+
+  
 }
 
 
@@ -45,18 +56,48 @@ class SchoolApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return ThemeProvider(
-      initTheme: lightTheme(),
-      builder: (context, theme){
-        return MaterialApp(
-            navigatorKey: navigatorKey,
-            home: _user == null ? LoginView() : HomeView(),
-            themeMode: ThemeMode.light,
-            theme: theme,
-            darkTheme: darkTheme(),
-          );
-      },
+    return Provider(
+        create: (context) => ExceptionHandler(),
+        builder: (context, child){
+          return StreamBuilder(
+            stream: Provider.of<ExceptionHandler>(context).stream,
+            builder: (context, snapshot){
+              if(snapshot.hasData){
+                SnackbarGlobal.show(snapshot.data!);
+              }
+              return ThemeProvider(
+                initTheme: lightTheme(),
+                builder: (context, theme){
+                  return MaterialApp(
+                    navigatorKey: navigatorKey,
+                    scaffoldMessengerKey: SnackbarGlobal.key,
+                    home: _user == null ? LoginView() : HomeView(),
+                    themeMode: ThemeMode.light,
+                    theme: theme,
+                    darkTheme: darkTheme(),
 
+                  );
+                },
+
+              );
+            },
+          );
+        }
+    );
+  }
+}
+
+
+class MacOsApp extends StatelessWidget{
+  MacOsApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+        return MaterialApp(
+          navigatorKey: navigatorKey,
+          home:  Center(
+            child: FlutterLogo(),
+          ),
     );
   }
 }

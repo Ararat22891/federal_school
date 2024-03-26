@@ -1,4 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:federal_school/data/exceptionHandler.dart';
 import 'package:federal_school/domain/states/home/homeViewModel.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/pages/home/profile/profileView.dart';
@@ -7,6 +8,7 @@ import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
 import '../../Colors.dart';
 
 class HomeView extends StatefulWidget {
@@ -16,6 +18,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   HomeViewModel homeViewModel = HomeViewModel();
+  int i = 0;
 
 
   @override
@@ -26,6 +29,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    print(i);
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
     return ThemeSwitchingArea(

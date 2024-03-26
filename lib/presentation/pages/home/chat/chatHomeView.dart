@@ -71,13 +71,17 @@ class ChatHomeView extends StatelessWidget {
               builder: (context){
                 switch(chatViewModel.status){
                   case ChatStatus.empty:
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    return Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset("assets/empty_chat.png",),
                           Text('У вас нет новых сообщений, начните диалог через раздел "Контакты"', style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center,)
 
                         ],
+                      ),
                     );
                   case ChatStatus.loading:
                     return Center(

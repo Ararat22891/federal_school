@@ -64,6 +64,14 @@ mixin _$ProfileViewModel on _ProfileViewModel, Store {
     });
   }
 
+  late final _$uploadProfileAsyncAction =
+      AsyncAction('_ProfileViewModel.uploadProfile', context: context);
+
+  @override
+  Future<void> uploadProfile() {
+    return _$uploadProfileAsyncAction.run(() => super.uploadProfile());
+  }
+
   late final _$_ProfileViewModelActionController =
       ActionController(name: '_ProfileViewModel', context: context);
 

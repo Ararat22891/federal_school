@@ -94,5 +94,7 @@ abstract class _ChatViewModel with Store {
             status = ChatStatus.got;
         }
     );
+
+
   }
 }

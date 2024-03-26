@@ -20,6 +20,8 @@ abstract class _DialogViewModel with Store {
   @observable
   late TextEditingController controller;
 
+  ScrollController scrollController= ScrollController();
+
 
   @observable
   bool isSendable = false;
@@ -62,6 +64,11 @@ abstract class _DialogViewModel with Store {
     var ref = FirebaseDatabase.instance.ref("chats").child(chatUID).push();
     ref.set(
       DialogModel(uuid: ref.key!, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
+    );
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+    duration: Duration(seconds: 2),
+    curve: Curves.fastOutSlowIn,
     );
     controller.clear();
   }

@@ -1,9 +1,14 @@
 
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 part 'profileViewModel.g.dart';
 
@@ -63,6 +68,41 @@ abstract class _ProfileViewModel with Store{
       else {
         return "Введите корректное ФИО";
       }
+    }
+  }
+
+
+  @action
+  Future<void> uploadProfile() async{
+    final _firebaseStorage = FirebaseStorage.instance;
+    await Permission.storage.request();
+    final _imagePicker = ImagePicker();
+    XFile? image;
+    //Check Permissions
+    await Permission.photos;
+
+
+    var permissionStatus = await Permission.storage.status;
+
+    if (permissionStatus.isGranted) {
+      //Select Image
+      image = await _imagePicker.pickMedia();
+      if (image == null) {
+        return;
+      }
+      var file = File(image!.path);
+
+
+
+      //Upload to Firebase
+      var snapshot = await _firebaseStorage.ref()
+          .child('avatars/${user!.uid}')
+          .putFile(file);
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+      print(downloadUrl);
+      FirebaseDatabase.instance.ref("users").child(user!.uid).update({
+        "photoPath": downloadUrl,
+      });
     }
   }
 

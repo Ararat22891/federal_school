@@ -101,6 +101,7 @@ class _DialogViewState extends State<DialogView> {
                           builder: (context){
                             if(_dialogViewModel.isDataLoaded){
                               return ListView.separated(
+                                controller: _dialogViewModel.scrollController,
                                 itemCount: _dialogViewModel.dialogs.length,
                                 itemBuilder: (context, index) {
                                   return DialoogViewAsset(
@@ -116,7 +117,7 @@ class _DialogViewState extends State<DialogView> {
                             }
                             else{
                               return Center(
-                                child: Text("Напишите первое сообщение!"),
+                                child: Text("Напишите первое сообщение!", style: Theme.of(context).textTheme.titleMedium,),
                               );
                             }
                           }

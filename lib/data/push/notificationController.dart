@@ -31,9 +31,12 @@ class NotificationController {
     // Your code goes here
     await [Permission.camera, Permission.microphone].request();
 
-    await navigatorKey.currentState!.push(
-        MaterialPageRoute(builder: (context) => CallingView(channelName: receivedAction.payload!["call_id"]!)));
-    // Navigate into pages, avoiding to open the notification details page over another details page already opened
+    if (receivedAction.buttonKeyPressed == "yes"){
+      await navigatorKey.currentState!.push(
+          MaterialPageRoute(builder: (context) => CallingView(channelName: receivedAction.payload!["call_id"]!)));
+      // Navigate into pages, avoiding to open the notification details page over another details page already opened
+
+    }
 
   }
 }

@@ -64,7 +64,6 @@ class _MyProfileViewState extends State<MyProfileView> {
                           else{
                             profileViewModel.isEdit = !profileViewModel.isEdit;
                           }
-
                         },
                             icon: Observer(
                                 builder: (context) =>
@@ -78,12 +77,29 @@ class _MyProfileViewState extends State<MyProfileView> {
                       ),
                     ),
                     Spacer(),
-                    CircleAvatar(
-                        backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
-                            ? Image.network(widget.viewModel.userData!.photoPath!).image
-                            : Image.asset("assets/bird.jpg").image,
-                        maxRadius: MediaQuery.of(context).size.height/ 6.5,
+                    GestureDetector(
+                      child: Stack(
+                        children: [
+                          Observer(builder: (context){
+                            return CircleAvatar(
+                              backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
+                                  ? Image.network(widget.viewModel.userData!.photoPath!).image
+                                  : Image.asset("assets/bird.jpg").image,
+                              maxRadius: MediaQuery.of(context).size.height/ 6.5,
+                            );
+                          }),
+                          Positioned(
+                              bottom: 0,
+                              right: 20,
+                              child: Icon(Icons.add_circle, color: Colors.white, size: 40,)
+                          )
+                        ],
                       ),
+                      onTap: (){
+                        profileViewModel.uploadProfile();
+                        },
+                    ),
+
                     Spacer(),
                     Spacer(),
 

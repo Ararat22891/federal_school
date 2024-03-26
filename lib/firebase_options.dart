@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,11 +43,23 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDIc2jnP1SLri_3skLfVH1_GxcX8ZfTbjQ',
+    appId: '1:23107628194:web:803d80095b30ecc66a7bfb',
+    messagingSenderId: '23107628194',
+    projectId: 'federalschool-47496',
+    authDomain: 'federalschool-47496.firebaseapp.com',
+    databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
+    storageBucket: 'federalschool-47496.appspot.com',
+    measurementId: 'G-RVWXXW8BTE',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCXECv-6Qi4S_nZ_3Z-KnGjBZfRlZwep8s',
     appId: '1:23107628194:android:0587dff6edde252e6a7bfb',
     messagingSenderId: '23107628194',
     projectId: 'federalschool-47496',
+    databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
     storageBucket: 'federalschool-47496.appspot.com',
   );
 
@@ -62,7 +68,18 @@ class DefaultFirebaseOptions {
     appId: '1:23107628194:ios:32dc6c34f47f8fdc6a7bfb',
     messagingSenderId: '23107628194',
     projectId: 'federalschool-47496',
+    databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
     storageBucket: 'federalschool-47496.appspot.com',
     iosBundleId: 'com.tatdep.federalSchool',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBtIXh7lUadrn5ebJPi05nEg3uYJJsMP2o',
+    appId: '1:23107628194:ios:012a7ffef472168d6a7bfb',
+    messagingSenderId: '23107628194',
+    projectId: 'federalschool-47496',
+    databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
+    storageBucket: 'federalschool-47496.appspot.com',
+    iosBundleId: 'com.tatdep.diplom.RunnerTests',
   );
 }

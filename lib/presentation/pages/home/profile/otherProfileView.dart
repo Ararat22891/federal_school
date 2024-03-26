@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../../../data/notifications/sendNotification.dart';
 import '../../../../domain/models/user/user.dart';
 import '../../../Colors.dart';
 import '../../../widgets/GradientContainer.dart';
@@ -144,7 +145,20 @@ class OtherProfileView extends StatelessWidget {
                       ),
 
                       IconButton.filled(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context,
+                              MaterialPageRoute(
+                                  builder: (context){
+                                    String s = generateRandomString(12);
+                                    s = "test";
+                                    User user = FirebaseAuth.instance.currentUser!;
+                                    String? userInfo = user.displayName;
+                                    String name = userInfo ?? "Неизвестный пользователь";
+                                    send(userData.deviceToken,s, name);
+                                    return CallingView(channelName: s);
+                                  }
+                              ));
+                        },
                         style: IconButton.styleFrom(
                             padding: EdgeInsets.all(10),
                             backgroundColor: isLightTheme ? MyColors.grey : MyColors.darkThemeSecondary,
@@ -159,7 +173,6 @@ class OtherProfileView extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context){
                                     String s = generateRandomString(12);
-                                    s = "test";
                                     User user = FirebaseAuth.instance.currentUser!;
 
                                     String? userInfo = user.displayName;

@@ -115,22 +115,21 @@ abstract class _HomeViewModel with Store {
     User user = FirebaseAuth.instance.currentUser!;
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("users").child(user.uid);
-    var snapshot = await ref.get();
-    if (snapshot.exists) {
-      print(snapshot.value);
-      snapshot.value;
-      final data = Map<String, dynamic>.from(snapshot.value as Map);
-      userData = UserData.fromJson(data);
-      String? key = await FirebaseMessaging.instance.getToken();
+    ref.onValue.listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.exists) {
+        print(snapshot.value);
+        snapshot.value;
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+        userData = UserData.fromJson(data);
+        String? key = await FirebaseMessaging.instance.getToken();
 
+        ref.update({
+          "deviceToken": key!
+        });
 
-
-      ref.update({
-        "deviceToken": key!
-      });
-
-      print(userData?.deviceToken);
-    }
+      }
+    });
   }
 
   @action
