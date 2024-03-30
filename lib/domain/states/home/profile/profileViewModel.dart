@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:federal_school/snackBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -79,19 +80,18 @@ abstract class _ProfileViewModel with Store{
     final _imagePicker = ImagePicker();
     XFile? image;
     //Check Permissions
-    await Permission.photos;
+    await Permission.photos.request();
 
 
-    var permissionStatus = await Permission.storage.status;
+    var permissionStatus = await Permission.storage.isGranted || await Permission.photos.isGranted;
 
-    if (permissionStatus.isGranted) {
+    if (permissionStatus) {
       //Select Image
-      image = await _imagePicker.pickMedia();
+      image = await _imagePicker.pickImage(source: ImageSource.gallery);
       if (image == null) {
         return;
       }
       var file = File(image!.path);
-
 
 
       //Upload to Firebase
@@ -99,10 +99,12 @@ abstract class _ProfileViewModel with Store{
           .child('avatars/${user!.uid}')
           .putFile(file);
       var downloadUrl = await snapshot.ref.getDownloadURL();
-      print(downloadUrl);
       FirebaseDatabase.instance.ref("users").child(user!.uid).update({
         "photoPath": downloadUrl,
       });
+    }
+    else{
+      SnackbarGlobal.show("Вы не дали разрешение для работы с фото");
     }
   }
 
