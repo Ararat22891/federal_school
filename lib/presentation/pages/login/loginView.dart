@@ -64,11 +64,11 @@ class LoginView extends StatelessWidget {
                           ),
                           SizedBox(height: 24,),
                           DefaultButton(
-                              onPressed: (){
-                                showDialog(
+                              onPressed: () async{
+                                await showDialog(
                                     context: context,
                                     builder: (_){
-                                      return DialogVerificationView(
+                                      return new  DialogVerificationView(
                                         viewModel: viewModel,
                                       );
                                     }

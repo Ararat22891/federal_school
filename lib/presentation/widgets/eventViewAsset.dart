@@ -2,9 +2,13 @@
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/calendar/v3.dart' as Calendar;
+import 'package:intl/intl.dart';
 
 class EventViewAsset extends StatelessWidget {
-  const EventViewAsset({super.key});
+   EventViewAsset({required this.event});
+
+   Calendar.Event event;
 
   @override
   Widget build(BuildContext context) {
@@ -43,18 +47,40 @@ class EventViewAsset extends StatelessWidget {
                     ],
                   ),
                   Container(width: 12,),
-                  Text("10:22–13:00", style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 14),)
+                  Text(_getDateTime(event), style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold, fontSize: 14),)
                 ],
               ),
               Container(height: 8,),
-              Text("Лекция с Явлинским", overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(color: isLight ? Colors.black : Colors.white, fontWeight: FontWeight.bold),),
+              Text(event.summary ?? "Событие", overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(color: isLight ? Colors.black : Colors.white, fontWeight: FontWeight.bold),),
               Container(height: 8,),
-              Text("Быть всем!", style: TextStyle(color: Colors.grey,))
+              Text(event.description ?? "Партийное мероприятие", style: TextStyle(color: Colors.grey,))
             ],
           ),
         )
       );
-
-
   }
+
+
+
+   String _getDateTime(Calendar.Event event){
+     String actualDateTime = "";
+
+     DateTime? startDate = event.start?.date;
+     DateTime? startDateTime = event.start?.dateTime;
+     DateTime? endDate = event.end?.date;
+     DateTime? endDateTime = event.end?.dateTime;
+
+     if (startDate == null){
+       actualDateTime = DateFormat.Hm().format(startDateTime!);
+     }
+     else if (startDateTime == null){
+       actualDateTime = "Весь день";
+     }
+
+     if(endDate == null){
+       actualDateTime += " – ${DateFormat.Hm().format(endDateTime!)}";
+     }
+
+     return actualDateTime;
+   }
 }

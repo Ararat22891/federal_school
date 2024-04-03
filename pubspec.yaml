@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^1.0.7
   firebase_storage: ^11.6.10
   permission_handler: ^11.3.0
-  fluttertoast: ^8.2.4
+  googleapis: ^13.1.0
 
   flutter:
     sdk: flutter
@@ -105,6 +105,7 @@ flutter:
      - assets/red_circle_error.png
      - assets/servAcc.json
      - assets/empty_chat.png
+     - assets/calendarData.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

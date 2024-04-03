@@ -101,11 +101,11 @@ class DialogVerificationView extends StatelessWidget {
                           ),
                           Spacer(),
                           FilledButton(
-                              onPressed: (){
+                              onPressed: () async{
                                 viewModel.status = AuthStatus.loading;
                                 viewModel.signInWithTelephone();
                                 Navigator.pop(context);
-                                showModalBottomSheet<void>(
+                                await showModalBottomSheet<void>(
                                     context: context,
                                     isScrollControlled: true,
                                     builder: (context) => FractionallySizedBox(

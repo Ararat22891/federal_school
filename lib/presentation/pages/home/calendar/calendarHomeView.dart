@@ -68,6 +68,7 @@ class CalendarHomeView extends StatelessWidget {
                     color: isDark ? Colors.white : Colors.black
                 ),
                 formatButtonVisible: false),
+            eventLoader: viewModel.setEvents,
             availableCalendarFormats: {
               CalendarFormat.month: 'Month',
               CalendarFormat.week: 'Week'
@@ -91,11 +92,32 @@ class CalendarHomeView extends StatelessWidget {
                       width: 50,
                     ),
                     Expanded(
-                        child: ListView.builder(
-                            itemCount: 3,
-                            itemBuilder: (context, index) {
-                              return EventViewAsset();
-                            }))
+                        child: Observer(
+                          builder: (context){
+                            print(viewModel.thisDayEvents.length);
+                            if (viewModel.thisDayEvents.length != 0 ){
+                              return ListView.builder(
+                                  itemCount: viewModel.thisDayEvents.length,
+                                  itemBuilder: (context, index) {
+                                    return EventViewAsset(
+                                      event: viewModel.thisDayEvents[index],
+                                    );
+                                  });
+                            }
+                            else{
+                              return Center(
+                                child: Text(
+                                    "На этот день нет событий",
+                                    style: Theme.of(context).textTheme.labelLarge,
+                                ),
+                              );
+                            }
+
+
+
+                          },
+                        )
+                    )
                   ],
                 );
               }, onClosing: () {  },

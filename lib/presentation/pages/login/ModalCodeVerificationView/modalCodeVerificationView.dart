@@ -1,4 +1,5 @@
 
+import 'package:agora_uikit/agora_uikit.dart';
 import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
@@ -27,15 +28,10 @@ class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
 
   @override
   void initState() {
-    super.initState();
     widget.viewModel.pinEditingController = TextEditingController();
+    super.initState();
   }
 
-  @override
-  void dispose() {
-    widget.viewModel.pinEditingController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,12 +54,16 @@ class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
             child: Text("Мы отправили SMS с кодом проверки на Ваш\n телефон ${widget.viewModel.phoneNumber}", style: TextStyles.subBody, textAlign: TextAlign.center,),
           ),
 
-          Visibility(
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 3),
-              child: Text("00:20", style: TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 14),),
-            ),
-            visible: true,
+          Observer(
+              builder: (context){
+                return Visibility(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 3),
+                      child: Text("Повторная отправка доступна через: "+widget.viewModel.time.toString(), style: TextStyle(color: MyColors.darkbluetext, fontWeight: FontWeight.bold, fontSize: 14),)
+                  ),
+                  visible: widget.viewModel.time == 0 ? false : true,
+                );
+              }
           ),
           Spacer(),
           Observer(
@@ -140,19 +140,25 @@ class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12)
             ),
-            child: FilledButton(
-              onPressed: (){
+            child: Observer(
+              builder: (context){
+                return FilledButton(
+                  onPressed: widget.viewModel.time == 0 ? (){
+                    widget.viewModel.signInWithTelephone();
+
+                  } : null,
+                  child: Text("Отправить новый код", style: TextStyle(color: MyColors.darkbluetext, fontSize: 18),),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.white12,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)
+                        ),
+                        side: BorderSide(color: MyColors.darkbluetext, width: 3)
+                    ),
+                  ),
+                );
               },
-              child: Text("Отправить новый код", style: TextStyle(color: MyColors.darkbluetext, fontSize: 18),),
-              style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.white12),
-                  shape: MaterialStatePropertyAll(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)
-                      ),
-                    side: BorderSide(color: MyColors.darkbluetext, width: 3)
-                  ))
-              ),
-            ),
+            )
           ),
           Spacer(),
           Spacer(),

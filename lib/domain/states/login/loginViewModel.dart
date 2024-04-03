@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:federal_school/domain/models/user/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,30 +16,53 @@ enum AuthStatus{validCode, invalidCode, loading, main, incorrectNumb, wrongCode,
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "+79600777466";
+    String phoneNumber = "9677777777";
 
     @observable
     String? verificaionCode = "";
 
     @observable
+    int time = 30;
+
+    @observable
     String verificationId = "";
+
+    late Timer _timer;
 
     @observable
      AuthStatus status = AuthStatus.main;
 
     @observable
-    late TextEditingController pinEditingController;
+    TextEditingController pinEditingController = TextEditingController();
 
     final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
 
     @action
+    void startTimer(){
+        const oneSec = const Duration(seconds: 1);
+        _timer = new Timer.periodic(
+            oneSec,
+                (Timer timer) {
+                if (time == 0) {
+                        timer.cancel();
+                } else {
+                        time--;
+                }
+            },
+        );
+    }
+
+    @action
     Future<void> signInWithTelephone() async{
         print("+7${phoneNumber}");
+        time = 30;
+        startTimer();
         await _firebaseAuth.verifyPhoneNumber(
             phoneNumber: "+7${phoneNumber}",
-            verificationCompleted: (credential) async{
+            verificationCompleted: (credential) {
                 status = AuthStatus.validCode;
+                print("sucess");
             },
             verificationFailed: (e){
                 status = AuthStatus.error;
@@ -45,10 +70,11 @@ abstract class _LoginViewModel with Store{
             },
             codeSent: (String verificationId, int? resendToken) {
                 print("object");
-                status =AuthStatus.loading;
+                status =AuthStatus.main;
                 this.verificationId = verificationId;
             },
             codeAutoRetrievalTimeout: (String verificationId){
+                print("sms retr");
                 this.verificationId = verificationId;
             }
         );

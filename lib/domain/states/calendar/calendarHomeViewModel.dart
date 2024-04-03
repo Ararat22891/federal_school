@@ -1,4 +1,7 @@
+import 'package:federal_school/data/calendar/googleCalendarService.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/calendar/v3.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -8,7 +11,23 @@ class CalendarHomeViewModel = _CalendarHomeViewModel with _$CalendarHomeViewMode
 
 abstract class _CalendarHomeViewModel with Store{
 
+  _CalendarHomeViewModel(){
+    getEvents();
+
+  }
+
+
   ScrollController controller = ScrollController();
+  GoogleCalendarService _service = GoogleCalendarService();
+
+  @observable
+  Events events = Events();
+
+  @observable
+  List<Event> _thisDayEvents = [];
+
+  @computed
+  List<Event> get thisDayEvents => _thisDayEvents;
 
   @observable
   DateTime focusedDate = DateTime.now();
@@ -29,7 +48,45 @@ abstract class _CalendarHomeViewModel with Store{
   @action
   void onDaySelect(DateTime selecteDay, DateTime focusedDay){
     focusedDate = focusedDay;
-    print(draggableScrollableController.size);
+
+    if(events.items != null) {
+      _thisDayEvents = events.items!;
+      _thisDayEvents = _thisDayEvents.where(
+              (element) {
+            DateTime? dateTime = element.start!.dateTime ?? element.start!.date;
+            return (dateTime?.day == selecteDay.day
+                && dateTime?.month == selecteDay.month
+                && dateTime?.year == selecteDay.year);
+          }
+      ).toList();
+    }
+  }
+
+  @action
+  Future<void> getEvents() async{
+    events = await _service.getEvents();
+    print("sas"+events.items!.length.toString());
+  }
+
+  List<Event> setEvents(DateTime day) {
+    _thisDayEvents.clear();
+
+
+    final items = events.items;
+    if (items != null) {
+      String formattedDate = DateFormat("yyyy-MM-dd").format(day);
+      if (items.any((element) {
+        var date = DateFormat("yyyy-MM-dd").format((element.start?.dateTime) ?? (element.start?.date)!);
+        if(date == formattedDate){
+          _thisDayEvents.add(element);
+          return true;
+        }
+        return false;
+      })){
+        return _thisDayEvents;
+      }
+    }
+    return [];
   }
 
   void scroll(){

@@ -41,6 +41,21 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
+  late final _$timeAtom = Atom(name: '_LoginViewModel.time', context: context);
+
+  @override
+  int get time {
+    _$timeAtom.reportRead();
+    return super.time;
+  }
+
+  @override
+  set time(int value) {
+    _$timeAtom.reportWrite(value, super.time, () {
+      super.time = value;
+    });
+  }
+
   late final _$verificationIdAtom =
       Atom(name: '_LoginViewModel.verificationId', context: context);
 
@@ -82,15 +97,11 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return super.pinEditingController;
   }
 
-  bool _pinEditingControllerIsInitialized = false;
-
   @override
   set pinEditingController(TextEditingController value) {
-    _$pinEditingControllerAtom.reportWrite(value,
-        _pinEditingControllerIsInitialized ? super.pinEditingController : null,
+    _$pinEditingControllerAtom.reportWrite(value, super.pinEditingController,
         () {
       super.pinEditingController = value;
-      _pinEditingControllerIsInitialized = true;
     });
   }
 
@@ -111,11 +122,26 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     return _$checkOTPAsyncAction.run(() => super.checkOTP());
   }
 
+  late final _$_LoginViewModelActionController =
+      ActionController(name: '_LoginViewModel', context: context);
+
+  @override
+  void startTimer() {
+    final _$actionInfo = _$_LoginViewModelActionController.startAction(
+        name: '_LoginViewModel.startTimer');
+    try {
+      return super.startTimer();
+    } finally {
+      _$_LoginViewModelActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 phoneNumber: ${phoneNumber},
 verificaionCode: ${verificaionCode},
+time: ${time},
 verificationId: ${verificationId},
 status: ${status},
 pinEditingController: ${pinEditingController}
