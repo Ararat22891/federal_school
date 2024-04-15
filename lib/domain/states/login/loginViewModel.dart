@@ -103,6 +103,8 @@ abstract class _LoginViewModel with Store{
                         userUID: uid,
                         deviceToken: token!,
                         telNumber: FirebaseAuth.instance.currentUser!.phoneNumber!,
+                        isVerified: false,
+                        isEnable: true,
                         role: 0
                     ).toJson()
                 );

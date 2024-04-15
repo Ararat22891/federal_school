@@ -2,6 +2,8 @@ import 'package:federal_school/domain/models/dialog/dialogModel.dart';
 import 'package:federal_school/domain/states/home/chat/dialog/dialogViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogViewAsset.dart';
+import 'package:federal_school/presentation/pages/home/dialog/sentDayViewAsset.dart';
+import 'package:federal_school/presentation/pages/home/profile/otherProfileView.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
@@ -9,6 +11,7 @@ import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:grouped_list/grouped_list.dart';
 
 import '../../../../domain/models/user/user.dart';
 
@@ -22,19 +25,22 @@ class DialogView extends StatefulWidget {
 }
 
 class _DialogViewState extends State<DialogView> {
-  DialogViewModel _dialogViewModel = DialogViewModel();
+
+  late DialogViewModel _dialogViewModel ;
 
   @override
   void initState() {
     super.initState();
+    _dialogViewModel = DialogViewModel();
     _dialogViewModel.controller = TextEditingController();
+    _dialogViewModel.scrollController = ScrollController();
     _dialogViewModel.getMessages(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
   }
 
   @override
   void dispose() {
     _dialogViewModel.controller.dispose();
-
+    _dialogViewModel.scrollController.dispose();
     super.dispose();
   }
 
@@ -59,7 +65,15 @@ class _DialogViewState extends State<DialogView> {
               ),
               titleSpacing: 0,
               title: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context){
+                            return OtherProfileView(widget.data);
+                          }
+                      )
+                  );
+                },
                 child: Row(
                   children: [
                     MyCircleAvatar(
@@ -72,7 +86,7 @@ class _DialogViewState extends State<DialogView> {
                     Flexible(
                       child: VerifiedNameViewAsset(
                         name: widget.data.name == null ? "Неизвестный пользователь" : "${widget.data.surname} ${widget.data.name} ${widget.data.patronomyc}",
-                        isVerified: false,
+                        isVerified: widget.data.isVerified,
                         textStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -84,9 +98,17 @@ class _DialogViewState extends State<DialogView> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                              builder: (context){
+                                return videoCall(widget.data);
+                              }
+                          )
+                      );
+                    },
                     icon: Icon(
-                      Icons.call,
+                      Icons.videocam,
                       color: Colors.white,
                     ))
               ],
@@ -99,19 +121,35 @@ class _DialogViewState extends State<DialogView> {
                     child: Container(
                       child: Observer(
                           builder: (context){
-                            if(_dialogViewModel.isDataLoaded){
-                              return ListView.separated(
+                            if(_dialogViewModel.isDataLoaded) {
+                              return GroupedListView(
+                                elements: _dialogViewModel.dialogs,
                                 controller: _dialogViewModel.scrollController,
-                                itemCount: _dialogViewModel.dialogs.length,
-                                itemBuilder: (context, index) {
-                                  return DialoogViewAsset(
-                                      dialogModel: _dialogViewModel.dialogs[index]
-                                  );
+                                groupBy: (elements) =>
+                                    DateTime(
+                                      elements.sentTime.year,
+                                      elements.sentTime.month,
+                                      elements.sentTime.day,
+                                    ),
+                                groupComparator: (date1, date2) {
+                                  if (date1.isBefore(date2)) {
+                                    return 1;
+                                  } else
+                                    return 0;
                                 },
-                                separatorBuilder: (context, index) {
-                                  return Container(
-                                    height: 12,
-                                  );
+                                groupHeaderBuilder: (message) {
+                                  return SentDayViewAsset('${message.sentTime}');
+                                },
+                                floatingHeader: true,
+                                itemComparator: (item1, item2) {
+                                  if (item1.sentTime.isBefore(item2.sentTime)) {
+                                    return 1;
+                                  } else
+                                    return 0;
+                                },
+                                reverse: true,
+                                itemBuilder: (context, item) {
+                                  return DialoogViewAsset(dialogModel: item);
                                 },
                               );
                             }

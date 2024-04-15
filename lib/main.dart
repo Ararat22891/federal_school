@@ -6,14 +6,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:federal_school/data/exceptionHandler.dart';
 import 'package:federal_school/data/push/notificationController.dart';
 import 'package:federal_school/data/push/pushData.dart';
+import 'package:federal_school/domain/models/user/user.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
 import 'package:federal_school/snackBar.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/biglake/v1.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +46,21 @@ void main() async{
   );
 
   _user = FirebaseAuth.instance.currentUser;
+
+  if (_user != null){
+    var snap = await FirebaseDatabase.instance.ref('users').child(_user!.uid).get();
+    if(!snap.exists){
+      await _user?.delete();
+      await  FirebaseAuth.instance.signOut();
+      _user = null;
+    };
+
+
+  }
+
+
+
+
   runApp(SchoolApp());
 
   
@@ -56,33 +74,24 @@ class SchoolApp extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Provider(
-        create: (context) => ExceptionHandler(),
-        builder: (context, child){
-          return StreamBuilder(
-            stream: Provider.of<ExceptionHandler>(context).stream,
-            builder: (context, snapshot){
-              if(snapshot.hasData){
-                SnackbarGlobal.show(snapshot.data!);
-              }
-              return ThemeProvider(
-                initTheme: lightTheme(),
-                builder: (context, theme){
-                  return MaterialApp(
-                    navigatorKey: navigatorKey,
-                    scaffoldMessengerKey: SnackbarGlobal.key,
-                    home: _user == null ? LoginView() : HomeView(),
-                    themeMode: ThemeMode.light,
-                    theme: theme,
-                    darkTheme: darkTheme(),
 
-                  );
-                },
 
-              );
-            },
-          );
-        }
+
+
+    return ThemeProvider(
+      initTheme: lightTheme(),
+      builder: (context, theme) {
+        return MaterialApp(
+          navigatorKey: navigatorKey,
+          scaffoldMessengerKey: SnackbarGlobal.key,
+          home: _user == null ? LoginView() : HomeView(),
+          themeMode: ThemeMode.light,
+          theme: theme,
+          darkTheme: darkTheme(),
+
+        );
+      },
+
     );
   }
 }

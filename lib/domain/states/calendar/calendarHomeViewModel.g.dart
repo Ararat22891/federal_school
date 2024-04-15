@@ -9,6 +9,14 @@ part of 'calendarHomeViewModel.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CalendarHomeViewModel on _CalendarHomeViewModel, Store {
+  Computed<List<Event>>? _$thisDayEventsComputed;
+
+  @override
+  List<Event> get thisDayEvents => (_$thisDayEventsComputed ??=
+          Computed<List<Event>>(() => super.thisDayEvents,
+              name: '_CalendarHomeViewModel.thisDayEvents'))
+      .value;
+
   late final _$eventsAtom =
       Atom(name: '_CalendarHomeViewModel.events', context: context);
 
@@ -117,7 +125,8 @@ mixin _$CalendarHomeViewModel on _CalendarHomeViewModel, Store {
 events: ${events},
 focusedDate: ${focusedDate},
 maxExtent: ${maxExtent},
-calendarFormat: ${calendarFormat}
+calendarFormat: ${calendarFormat},
+thisDayEvents: ${thisDayEvents}
     ''';
   }
 }

@@ -13,7 +13,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
     return Container(
           decoration: BoxDecoration(
             gradient:  LinearGradient(
@@ -25,65 +24,74 @@ class LoginView extends StatelessWidget {
               end: Alignment.bottomRight,
             ),
           ),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Column(
-              children: [
-                Spacer(),
-                Container(
-                  height: height/2.5,
-                  child: Image.asset("assets/sitting_man.png",  ),
-                ),
-                Spacer(),
-                Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 18, vertical: 30),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              Positioned(
+                  child: Container(
+                    height: MediaQuery.of(context).size.height / 1.5,
+                    alignment: Alignment.center,
+                    child: Image.asset("assets/sitting_man.png",  ),
+                  ),),
+              Scaffold(
+                backgroundColor: Colors.transparent,
+                body: Column(
+                  children: [
+                    Spacer(),
+
+                    Spacer(),
+                    Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 18, vertical: 30),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Spacer(),
-                              Text("Войти", style: TextStyles.headline),
-                              Spacer()
+                              Row(
+                                children: [
+                                  Spacer(),
+                                  Text("Войти", style: TextStyles.headline),
+                                  Spacer()
+                                ],
+                              ),
+                              SizedBox(height: 16,),
+                              Text("Номер телефона",
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
+                              PhoneField(viewModel: viewModel,),
+                              Text("Введите номер своего телефона здесь", style: TextStyles.subBody),
+                              Visibility(
+                                child:Text("*Пожалуйста, введите свой номер телефона", style: TextStyles.errorBody),
+                                visible: false,
+                              ),
+                              SizedBox(height: 24,),
+                              DefaultButton(
+                                  onPressed: () async{
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_){
+                                          return new  DialogVerificationView(
+                                            viewModel: viewModel,
+                                          );
+                                        }
+                                    );
+                                  },
+                                  text: "Войти"
+                              ),
+
                             ],
                           ),
-                          SizedBox(height: 16,),
-                          Text("Номер телефона",
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          PhoneField(viewModel: viewModel,),
-                          Text("Введите номер своего телефона здесь", style: TextStyles.subBody),
-                          Visibility(
-                            child:Text("*Пожалуйста, введите свой номер телефона", style: TextStyles.errorBody),
-                            visible: false,
-                          ),
-                          SizedBox(height: 24,),
-                          DefaultButton(
-                              onPressed: () async{
-                                await showDialog(
-                                    context: context,
-                                    builder: (_){
-                                      return new  DialogVerificationView(
-                                        viewModel: viewModel,
-                                      );
-                                    }
-                                );
-                              },
-                              text: "Войти"
-                          ),
-
-                        ],
-                      ),
+                        )
                     )
-                )
-              ],
-            ),
-          ),
+                  ],
+                ),
+              ),
+            ],
+          )
+
     );
   }
 }

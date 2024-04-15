@@ -77,29 +77,42 @@ class _MyProfileViewState extends State<MyProfileView> {
                       ),
                     ),
                     Spacer(),
-                    GestureDetector(
-                      child: Stack(
-                        children: [
-                          Observer(builder: (context){
-                            return CircleAvatar(
-                              backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
-                                  ? Image.network(widget.viewModel.userData!.photoPath!).image
-                                  : Image.asset("assets/bird.jpg").image,
-                              maxRadius: MediaQuery.of(context).size.height/ 6.5,
-                            );
-                          }),
-                          Positioned(
-                              bottom: 0,
-                              right: 20,
-                              child: Icon(Icons.add_circle, color: Colors.white, size: 40,)
-                          )
-                        ],
-                      ),
-                      onTap: (){
-                        profileViewModel.uploadProfile();
-                        },
-                    ),
+                    Row(
+                      children: [
+                        Spacer(),
+                        GestureDetector(
+                          child: Observer(
+                              builder: (context){
+                                return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
 
+                                          CircleAvatar(
+                                            backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
+                                                ? Image.network(widget.viewModel.userData!.photoPath!).image
+                                                : Image.asset("assets/bird.jpg").image,
+                                            maxRadius: MediaQuery.of(context).size.height/ 6.5,
+                                          ),
+                                          profileViewModel.isLoadingPhoto ? CircularProgressIndicator(): Container(),
+
+                                    profileViewModel.isEdit ?
+                                    Positioned(
+                                        bottom: 0,
+                                        right: 20,
+                                        child: Icon(Icons.add_circle, color: Colors.white, size: 40,)
+                                    ) : Container()
+                                  ],
+                                );
+                              }
+                          ),
+                          onTap: (){
+                           profileViewModel.uploadProfile();
+                          },
+                        ),
+                        Spacer(),
+
+                      ],
+                    ),
                     Spacer(),
                     Spacer(),
 

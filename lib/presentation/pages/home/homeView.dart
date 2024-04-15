@@ -9,6 +9,7 @@ import 'package:federal_school/textStyles/textStyles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
+import '../../../domain/models/user/user.dart';
 import '../../../snackBar.dart';
 import '../../Colors.dart';
 
@@ -19,22 +20,19 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   HomeViewModel homeViewModel = HomeViewModel();
-  int i = 0;
 
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
+
     homeViewModel.getUserData();
+
+
   }
 
   @override
   Widget build(BuildContext context) {
-    print(i);
-    if(i == 0){
-      Provider.of<ExceptionHandler>(context).addExceptionWithText("exceptionText");
-      i++;
-    }
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
     return ThemeSwitchingArea(
@@ -74,8 +72,6 @@ class _HomeViewState extends State<HomeView> {
                   margin: EdgeInsets.only(top: 70),
                   child: InkWell(
                     onTap: () {
-                      SnackbarGlobal.show("message");
-
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (context){
                             return MyProfileView(viewModel: homeViewModel);

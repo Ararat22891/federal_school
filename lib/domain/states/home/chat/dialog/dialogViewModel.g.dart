@@ -29,13 +29,13 @@ mixin _$DialogViewModel on _DialogViewModel, Store {
       Atom(name: '_DialogViewModel.dialogs', context: context);
 
   @override
-  List<DialogModel> get dialogs {
+  ObservableList<DialogModel> get dialogs {
     _$dialogsAtom.reportRead();
     return super.dialogs;
   }
 
   @override
-  set dialogs(List<DialogModel> value) {
+  set dialogs(ObservableList<DialogModel> value) {
     _$dialogsAtom.reportWrite(value, super.dialogs, () {
       super.dialogs = value;
     });

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
 import '../../../presentation/themes/themes.dart';
+import '../../../snackBar.dart';
 import '../../models/user/user.dart';
 
 part 'homeViewModel.g.dart';
@@ -47,7 +48,6 @@ List<Widget> chatActions = [
 
 List<Widget> contactsActions = [
   SearchAnchor(
-      isFullScreen: false,
       builder: (context, controller) {
         return IconButton(
           icon: const Icon(
@@ -128,8 +128,13 @@ abstract class _HomeViewModel with Store {
           "deviceToken": key!
         });
 
+        if (!userData!.isEnable) {
+          SnackbarGlobal.show("Ваш аккаунт заблокирован!");
+        }
+
       }
     });
+
   }
 
   @action

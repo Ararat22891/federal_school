@@ -33,6 +33,22 @@ mixin _$ProfileViewModel on _ProfileViewModel, Store {
     });
   }
 
+  late final _$isLoadingPhotoAtom =
+      Atom(name: '_ProfileViewModel.isLoadingPhoto', context: context);
+
+  @override
+  bool get isLoadingPhoto {
+    _$isLoadingPhotoAtom.reportRead();
+    return super.isLoadingPhoto;
+  }
+
+  @override
+  set isLoadingPhoto(bool value) {
+    _$isLoadingPhotoAtom.reportWrite(value, super.isLoadingPhoto, () {
+      super.isLoadingPhoto = value;
+    });
+  }
+
   late final _$fioAtom = Atom(name: '_ProfileViewModel.fio', context: context);
 
   @override
@@ -101,6 +117,7 @@ mixin _$ProfileViewModel on _ProfileViewModel, Store {
   String toString() {
     return '''
 isEdit: ${isEdit},
+isLoadingPhoto: ${isLoadingPhoto},
 fio: ${fio},
 user: ${user},
 fullName: ${fullName}

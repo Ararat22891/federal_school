@@ -15,12 +15,12 @@ abstract class _DialogViewModel with Store {
 
 
   @observable
-  List<DialogModel> dialogs = [];
+  ObservableList<DialogModel> dialogs = ObservableList();
 
   @observable
   late TextEditingController controller;
 
-  ScrollController scrollController= ScrollController();
+  late ScrollController scrollController;
 
 
   @observable
@@ -39,12 +39,10 @@ abstract class _DialogViewModel with Store {
   void getMessages(String myUid, String foreignUID){
     List<String> sorted = [myUid, foreignUID]..sort();
     String chatUID = "${sorted.first}_${sorted[1]}";
-    print(chatUID);
     FirebaseDatabase.instance.ref("chats").child(chatUID).onValue.listen(
             (event) {
               dialogs.clear();
               isDataLoaded = false;
-              event.snapshot.children;
               for (final child in event.snapshot.children){
                 final data = Map<String, dynamic>.from(child.value as Map);
                 DialogModel userData = DialogModel.fromJson(data);
@@ -66,7 +64,7 @@ abstract class _DialogViewModel with Store {
       DialogModel(uuid: ref.key!, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
     );
     scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
+      scrollController.position.minScrollExtent,
     duration: Duration(seconds: 2),
     curve: Curves.fastOutSlowIn,
     );

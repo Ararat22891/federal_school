@@ -149,13 +149,7 @@ class OtherProfileView extends StatelessWidget {
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context){
-                                    String s = generateRandomString(12);
-                                    s = "test";
-                                    User user = FirebaseAuth.instance.currentUser!;
-                                    String? userInfo = user.displayName;
-                                    String name = userInfo ?? "Неизвестный пользователь";
-                                    send(userData.deviceToken,s, name);
-                                    return CallingView(channelName: s);
+                                    return videoCall(userData);
                                   }
                               ));
                         },
@@ -203,4 +197,14 @@ class OtherProfileView extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Widget videoCall(UserData userData){
+  String s = generateRandomString(12);
+  User user = FirebaseAuth.instance.currentUser!;
+  String? userInfo = user.displayName;
+  String name = userInfo ?? "Неизвестный пользователь";
+  send(userData.deviceToken,s, name);
+  return CallingView(channelName: s);
 }

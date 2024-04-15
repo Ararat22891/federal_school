@@ -1,5 +1,6 @@
 import 'package:federal_school/domain/models/contact/contactModel.dart';
 import 'package:federal_school/presentation/pages/home/profile/otherProfileView.dart';
+import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../domain/models/user/user.dart';
@@ -45,7 +46,7 @@ class ContactViewAsset extends StatelessWidget {
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(fullName, style: TextStyle(color: isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 16, fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis,),
+                        VerifiedNameViewAsset(name: fullName, isVerified: contact.isVerified, textStyle: TextStyle(color: isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 16, fontWeight: FontWeight.bold) ),
                         Container(height: 2,),
                         Text(contact.telNumber, style: TextStyle(color:  isLight ? MyColors.darkbluetext :MyColors.darkThemeFont, fontSize: 14, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis,),
                       ],

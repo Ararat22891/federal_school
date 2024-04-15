@@ -15,6 +15,8 @@ class UserData{
   String? patronomyc;
   String? photoPath;
   String telNumber;
+  bool isVerified;
+  bool isEnable;
   List<ContactModel>? contacts;
   int? role;// 0 - non-pupil ,1 - user, 2 – prepod/curator, 3 - moder
 
@@ -28,6 +30,8 @@ class UserData{
     this.patronomyc,
     this.photoPath,
     required this.telNumber,
+    required this.isVerified,
+     required this.isEnable,
      this.contacts,
     this.role
   });
@@ -43,6 +47,8 @@ class UserData{
       'photoPath': photoPath,
       'contacts': contacts,
       'telNumber': telNumber,
+      'isEnable': isEnable,
+      'isVerified': isVerified,
       'role': role
     };
   }
@@ -56,6 +62,8 @@ class UserData{
       patronomyc: json['patronomyc'],
       photoPath: json['photoPath'],
       telNumber: json['telNumber'],
+      isEnable:  json['isEnable'],
+      isVerified: json['isVerified'],
       contacts: json['contacts'] != null
           ? List<ContactModel>.from(
           json['contacts'].map((x) => ContactModel.fromJson(x)))
@@ -77,6 +85,8 @@ class UserData{
         patronomyc: "Floridovich",
         photoPath: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Kaiser_Wilhelm_II_of_Germany_-_1902.jpg/274px-Kaiser_Wilhelm_II_of_Germany_-_1902.jpg",
         telNumber: "+79600777466",
+        isVerified: true,
+        isEnable: true,
         role: 0
     ),
 
@@ -85,6 +95,8 @@ class UserData{
         deviceToken: "dasdasd",
         name: "Тимур",
         patronomyc: "Сергеевич",
+        isVerified: true,
+        isEnable: true,
         photoPath: "https://cdn.rxntxhj78z0b8muk.dprofile.ru/storage/673/profile/4f7566c26fc3d23d6b51a34458b92780e4edbe6c.jpg",
         telNumber:"+79638291036",
         role: 1
@@ -94,6 +106,8 @@ class UserData{
         surname: "Явлинский",
         deviceToken: "dasdasd",
         name: "Григорий",
+        isVerified: true,
+        isEnable: true,
         patronomyc: "Алексеевич",
         photoPath: "https://www.yavlinsky.ru/wp-content/uploads/2019/06/president2018-scaled-e1661079553751.jpg",
         telNumber: "+79653877466",
@@ -105,6 +119,8 @@ class UserData{
         surname: "Гончаров",
         name: "Кирилл",
         patronomyc: "Алексеевич",
+        isVerified: true,
+        isEnable: true,
         photoPath: "https://www.yabloko.ru/files/users/user165/goncharov.jpg",
         telNumber: "+79600839426",
         role: 3

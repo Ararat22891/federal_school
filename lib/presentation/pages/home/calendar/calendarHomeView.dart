@@ -82,6 +82,7 @@ class CalendarHomeView extends StatelessWidget {
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
               elevation: 0,
+              enableDrag: false,
               builder: (BuildContext context) {
                 return Column(
                   children: [

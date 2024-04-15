@@ -22,6 +22,9 @@ abstract class _ProfileViewModel with Store{
   bool isEdit = false;
 
   @observable
+  bool isLoadingPhoto = false;
+
+  @observable
   String fio = "";
   late TextEditingController controller;
   final formKey = GlobalKey<FormState>();
@@ -74,37 +77,45 @@ abstract class _ProfileViewModel with Store{
 
 
   @action
-  Future<void> uploadProfile() async{
-    final _firebaseStorage = FirebaseStorage.instance;
-    await Permission.storage.request();
-    final _imagePicker = ImagePicker();
-    XFile? image;
-    //Check Permissions
-    await Permission.photos.request();
+  Future<void> uploadProfile() async {
+    if (!isLoadingPhoto && isEdit) {
+      final _firebaseStorage = FirebaseStorage.instance;
+      await Permission.storage.request();
+      final _imagePicker = ImagePicker();
+      XFile? image;
+      //Check Permissions
+      await Permission.photos.request();
 
 
-    var permissionStatus = await Permission.storage.isGranted || await Permission.photos.isGranted;
+      var permissionStatus = await Permission.storage.isGranted ||
+          await Permission.photos.isGranted;
 
-    if (permissionStatus) {
-      //Select Image
-      image = await _imagePicker.pickImage(source: ImageSource.gallery);
-      if (image == null) {
-        return;
+      if (permissionStatus) {
+        //Select Image
+        isLoadingPhoto = true;
+        image = await _imagePicker.pickImage(source: ImageSource.gallery);
+        if (image == null) {
+          isLoadingPhoto = false;
+          return;
+        }
+        var file = File(image!.path);
+
+
+        //Upload to Firebase
+        var snapshot = await _firebaseStorage.ref()
+            .child('avatars/${user!.uid}')
+            .putFile(file);
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+
+        await user?.updatePhotoURL(downloadUrl);
+        FirebaseDatabase.instance.ref("users").child(user!.uid).update({
+          "photoPath": downloadUrl,
+        });
       }
-      var file = File(image!.path);
-
-
-      //Upload to Firebase
-      var snapshot = await _firebaseStorage.ref()
-          .child('avatars/${user!.uid}')
-          .putFile(file);
-      var downloadUrl = await snapshot.ref.getDownloadURL();
-      FirebaseDatabase.instance.ref("users").child(user!.uid).update({
-        "photoPath": downloadUrl,
-      });
-    }
-    else{
-      SnackbarGlobal.show("Вы не дали разрешение для работы с фото");
+      else {
+        SnackbarGlobal.show("Вы не дали разрешение для работы с фото");
+      }
+      isLoadingPhoto = false;
     }
   }
 

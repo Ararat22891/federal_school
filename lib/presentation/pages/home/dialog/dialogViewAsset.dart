@@ -20,12 +20,13 @@ class DialoogViewAsset extends StatelessWidget {
 
     bool isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
+
+
+    var userPhotoUrl = FirebaseAuth.instance.currentUser!.photoURL;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        isMe ?  Container() : MyCircleAvatar(
-          networkAsset: dialogModel.userInfo?.photoPath,
-        ),
+
         Expanded(
             child: Padding(
           padding: isMe
@@ -49,10 +50,7 @@ class DialoogViewAsset extends StatelessWidget {
                   ),
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        isMe  ? SizedBox() : Text( fullName, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),),
+                    child:
                         Wrap(
                           alignment: WrapAlignment.end,
                           crossAxisAlignment: WrapCrossAlignment.end,
@@ -71,8 +69,7 @@ class DialoogViewAsset extends StatelessWidget {
                                 ),
 
                               ],
-                            )
-                          ],
+
                         ),
                       ],
                     )
@@ -82,7 +79,7 @@ class DialoogViewAsset extends StatelessWidget {
         )),
         //
         isMe ? MyCircleAvatar(
-          networkAsset: dialogModel.userInfo?.photoPath,
+          networkAsset: userPhotoUrl,
         ) : Container()
       ],
     );
