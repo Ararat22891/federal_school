@@ -73,6 +73,7 @@ List<Widget> contactsActions = [
 ];
 
 abstract class _HomeViewModel with Store {
+
   @observable
   int selectedIndex = 0;
 
@@ -94,10 +95,10 @@ abstract class _HomeViewModel with Store {
 
   List<List<Widget>?> actions = [
     chatActions,
-    null,
+    [],
     null,
     contactsActions,
-    null
+    []
   ];
 
   @observable
@@ -128,10 +129,7 @@ abstract class _HomeViewModel with Store {
           "deviceToken": key!
         });
 
-        if (!userData!.isEnable) {
-          SnackbarGlobal.show("Ваш аккаунт заблокирован!");
-        }
-
+        actions.elementAt(1)?.add(Icon(Icons.add));
       }
     });
 

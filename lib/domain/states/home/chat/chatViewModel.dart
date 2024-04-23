@@ -23,8 +23,9 @@ abstract class _ChatViewModel with Store {
   @observable
   ChatType selection = ChatType.message;
 
-  @observable
-  List<ChatCellModel> chats = [];
+
+
+  ObservableList<ChatCellModel> chats = ObservableList();
 
   @observable
   bool isDataLoaded = false;
@@ -36,6 +37,9 @@ abstract class _ChatViewModel with Store {
   void setTypeChat(Set<ChatType> chatType) {
     selection = chatType.first;
   }
+
+
+
 
   @action
   Future<void> getChatList() async {
@@ -54,44 +58,73 @@ abstract class _ChatViewModel with Store {
         .onValue
         .listen(
             (messages) async {
-          status = ChatStatus.loading;
-          messUser.clear();
-          chatId.clear();
-          chats.clear();
-          for (var chat in messages.snapshot.children) {
-            var all = chat.key!.split("_");
-            if (all.contains(user.uid)) {
-              chatId.add(all.join("_"));
-              all.remove(user.uid);
-              messUser.add(all.first);
-            }
-          }
+                messUser.clear();
+                chatId.clear();
+                for (var chat in messages.snapshot.children) {
+                  var all = chat.key!.split("_");
+                  if (all.contains(user.uid)) {
+                    chatId.add(all.join("_"));
+                    all.remove(user.uid);
+                    messUser.add(all.first);
+                  }
+                }
+                chats.clear();
 
-          for (int i = 0; i < chatId.length; i++) {
-            var getted = await FirebaseDatabase.instance.ref("chats").child(
-                chatId[i]).orderByChild("sentTime").get();
-            var gettedMap = Map<String, dynamic>.from(
-                getted.children.last.value as Map);
-            print(gettedMap);
-            var dialog = DialogModel.fromJson(gettedMap);
 
-            var otherUserInfo = await FirebaseDatabase.instance.ref('users')
-                .child(messUser[i])
-                .get();
+                for (int i = 0; i < chatId.length; i++) {
+                  var getted = await FirebaseDatabase.instance.ref("chats")
+                      .child(
+                      chatId[i])
+                      .get();
+                  int unreadMessages = 0;
 
-            var otherUserMap = Map<String, dynamic>.from(
-                otherUserInfo.value as Map);
-            var otherUser = UserData.fromJson(otherUserMap);
+                  for (var j in getted.children) {
+                    if (j.key == "unread") {
+                      unreadMessages = j.value as int;
+                    }
+                  }
 
-            ChatCellModel item = ChatCellModel(
-                otherUser, dialog.message, dialog.sentTime, 0);
-            chats.add(item);
-          }
 
-          if (chats.length == 0)
-            status = ChatStatus.empty;
-          else
-            status = ChatStatus.got;
+                  var gettedMap = Map<String, dynamic>.from(
+                      getted.children.first.value as Map);
+
+                  var dialog = DialogModel.fromJson(gettedMap);
+
+                  var otherUserInfo = await FirebaseDatabase.instance.ref(
+                      'users')
+                      .child(messUser[i])
+                      .get();
+
+                  var otherUserMap = Map<String, dynamic>.from(
+                      otherUserInfo.value as Map);
+                  var otherUser = UserData.fromJson(otherUserMap);
+
+
+                  ChatCellModel item = ChatCellModel(
+                      dialog.uuid,
+                      otherUser, dialog.message, dialog.sentTime,
+                      unreadMessages);
+
+
+                  if(
+                  chats.any((element) => element.uid == item.uid)
+                  ){
+                    var changeChat = chats.where((element) => element.uid == item.uid);
+                    int index = chats.indexOf(changeChat);
+                    chats[index] = item;
+                  }
+                  else{
+                    chats.add(item);
+                  }
+
+                }
+
+
+                if (chats.length == 0)
+                  status = ChatStatus.empty;
+                else
+                  status = ChatStatus.got;
+
         }
     );
 

@@ -7,6 +7,7 @@ import 'package:federal_school/data/exceptionHandler.dart';
 import 'package:federal_school/data/push/notificationController.dart';
 import 'package:federal_school/data/push/pushData.dart';
 import 'package:federal_school/domain/models/user/user.dart';
+import 'package:federal_school/presentation/pages/blocked/blockedView.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/themes/themes.dart';
@@ -23,6 +24,7 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 User? _user;
+UserData? _userData;
 
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -46,25 +48,46 @@ void main() async{
   );
 
   _user = FirebaseAuth.instance.currentUser;
+  await   _user?.reload();
 
   if (_user != null){
     var snap = await FirebaseDatabase.instance.ref('users').child(_user!.uid).get();
+
     if(!snap.exists){
-      await _user?.delete();
-      await  FirebaseAuth.instance.signOut();
+
+
+      await FirebaseAuth.instance.signOut();
       _user = null;
-    };
+    }
+    else{
+      final data = Map<String, dynamic>.from(snap.value as Map);
+      _userData = UserData.fromJson(data);
+    }
 
 
   }
-
-
 
 
   runApp(SchoolApp());
 
   
 }
+
+Widget _redirect(UserData? user){
+  if(user == null){
+    return LoginView();
+  }
+  else if (user.isEnable){
+    return HomeView();
+  }
+  else if (!user.isEnable){
+    return BlockedView();
+  }
+
+  return Container();
+}
+
+
 
 
 
@@ -84,7 +107,7 @@ class SchoolApp extends StatelessWidget{
         return MaterialApp(
           navigatorKey: navigatorKey,
           scaffoldMessengerKey: SnackbarGlobal.key,
-          home: _user == null ? LoginView() : HomeView(),
+          home: _redirect(_userData),
           themeMode: ThemeMode.light,
           theme: theme,
           darkTheme: darkTheme(),

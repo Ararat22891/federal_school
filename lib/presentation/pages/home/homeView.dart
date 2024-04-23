@@ -25,164 +25,168 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState(){
     super.initState();
-
     homeViewModel.getUserData();
-
-
   }
 
   @override
   Widget build(BuildContext context) {
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
-    return ThemeSwitchingArea(
-        child: GradientContainer(
-            child: Scaffold(
-                resizeToAvoidBottomInset: false,
-                backgroundColor: Colors.transparent,
-                appBar: PreferredSize(
-                    preferredSize: Size(double.infinity, kToolbarHeight),
-                    child: Observer(
-                      builder: (context){
-                        return AppBar(
-                            title: Observer(
-                                builder: (context){
-                                  return Text(
-                                    homeViewModel.title[homeViewModel.selectedIndex],
-                                    style: TextStyle(
-                                        color: Colors.white, fontWeight: FontWeight.bold),
-                                  );
-                                }
-                            ),
-                            backgroundColor: Colors.transparent,
-                            surfaceTintColor: Colors.transparent,
-                            centerTitle: false,
-                            actions: homeViewModel.actions[homeViewModel.selectedIndex]
-                        );
+
+
+
+      return ThemeSwitchingArea(
+          child: GradientContainer(
+              child: Scaffold(
+                  resizeToAvoidBottomInset: false,
+                  backgroundColor: Colors.transparent,
+                  appBar: PreferredSize(
+                      preferredSize: Size(double.infinity, kToolbarHeight),
+                      child: Observer(
+                        builder: (context) {
+                          return AppBar(
+                              title: Observer(
+                                  builder: (context) {
+                                    return Text(
+                                      homeViewModel.title[homeViewModel
+                                          .selectedIndex],
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  }
+                              ),
+                              backgroundColor: Colors.transparent,
+                              surfaceTintColor: Colors.transparent,
+                              centerTitle: false,
+                              actions: homeViewModel.actions[homeViewModel
+                                  .selectedIndex]
+                          );
+                        },
+                      )
+                  ),
+                  body: RoundedContainer(
+                    child: Observer(builder: (context) {
+                      return homeViewModel.screens[homeViewModel.selectedIndex];
+                    }),),
+                  floatingActionButtonLocation:
+                  FloatingActionButtonLocation.miniCenterDocked,
+                  floatingActionButton: Container(
+                    margin: EdgeInsets.only(top: 70),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (context) {
+                              return MyProfileView(viewModel: homeViewModel);
+                            }
+                            ));
                       },
-                    )
-                ),
-                body: RoundedContainer(
-                  child: Observer(builder: (context) {
-                    return homeViewModel.screens[homeViewModel.selectedIndex];
-                  }),                ),
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.miniCenterDocked,
-                floatingActionButton: Container(
-                  margin: EdgeInsets.only(top: 70),
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context){
-                            return MyProfileView(viewModel: homeViewModel);
-                          }
-                          ));
-                    },
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
 
-                        CircleAvatar(
-                          radius: 34,
-                          backgroundColor: Colors.white,
-                          child: Observer(
-                              builder: (context){
-                               return MyCircleAvatar(
-                                 networkAsset: homeViewModel.userData?.photoPath,
-                                 radius: 30,
-                               );
-
-                              }
-                          )
-                        ),
-                        Text(
-                          "Профиль",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+                          CircleAvatar(
+                              radius: 34,
+                              backgroundColor: Colors.white,
+                              child: Observer(
+                                  builder: (context) {
+                                    return MyCircleAvatar(
+                                      networkAsset: homeViewModel.userData
+                                          ?.photoPath,
+                                      radius: 30,
+                                    );
+                                  }
+                              )
+                          ),
+                          Text(
+                            "Профиль",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
 
-                bottomNavigationBar: GradientContainer(
-                    child: NavigationBarTheme(
-                        data: NavigationBarThemeData(
-                            backgroundColor: Colors.transparent,
-                            indicatorColor: Colors.transparent,
-                            elevation: 0,
-                            labelTextStyle:
-                                MaterialStateProperty.resolveWith((state) {
-                              if (state.contains(MaterialState.selected)) {
-                                return TextStyle(
-                                    color: isLightTheme
-                                        ? MyColors.darkbluetext
-                                        : MyColors.darkThemeSelected,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold);
-                                ;
-                              } else if (!state
-                                  .contains(MaterialState.selected)) {
-                                return TextStyles.navBarItemUnSelected;
-                              }
-                            })),
-                        child: Observer(builder: (context) {
-                          return NavigationBar(
-                            selectedIndex: homeViewModel.selectedIndex,
-                            onDestinationSelected:
-                                homeViewModel.onDestinationSelected,
-                            destinations: [
-                              NavigationDestination(
+                  bottomNavigationBar: GradientContainer(
+                      child: NavigationBarTheme(
+                          data: NavigationBarThemeData(
+                              backgroundColor: Colors.transparent,
+                              indicatorColor: Colors.transparent,
+                              elevation: 0,
+                              labelTextStyle:
+                              MaterialStateProperty.resolveWith((state) {
+                                if (state.contains(MaterialState.selected)) {
+                                  return TextStyle(
+                                      color: isLightTheme
+                                          ? MyColors.darkbluetext
+                                          : MyColors.darkThemeSelected,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold);
+                                  ;
+                                } else if (!state
+                                    .contains(MaterialState.selected)) {
+                                  return TextStyles.navBarItemUnSelected;
+                                }
+                              })),
+                          child: Observer(builder: (context) {
+                            return NavigationBar(
+                              selectedIndex: homeViewModel.selectedIndex,
+                              onDestinationSelected:
+                              homeViewModel.onDestinationSelected,
+                              destinations: [
+                                NavigationDestination(
+                                    icon: Icon(
+                                      Icons.chat_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    selectedIcon: Icon(
+                                      Icons.chat,
+                                      color: isLightTheme
+                                          ? MyColors.darkbluetext
+                                          : MyColors.darkThemeSelected,
+                                    ),
+                                    label: "Чат"),
+                                NavigationDestination(
+                                    icon: Icon(
+                                      Icons.calendar_month_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    selectedIcon: Icon(
+                                      Icons.calendar_month,
+                                      color: isLightTheme
+                                          ? MyColors.darkbluetext
+                                          : MyColors.darkThemeSelected,
+                                    ),
+                                    label: "Календарь"),
+                                Container(),
+                                NavigationDestination(
+                                    icon: Icon(
+                                      Icons.account_circle_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    selectedIcon: Icon(
+                                      Icons.account_circle,
+                                      color: isLightTheme
+                                          ? MyColors.darkbluetext
+                                          : MyColors.darkThemeSelected,
+                                    ),
+                                    label: "Контакты"),
+                                NavigationDestination(
                                   icon: Icon(
-                                    Icons.chat_outlined,
+                                    Icons.call_outlined,
                                     color: Colors.white,
                                   ),
+                                  label: "Звонки",
                                   selectedIcon: Icon(
-                                    Icons.chat,
+                                    Icons.call,
                                     color: isLightTheme
                                         ? MyColors.darkbluetext
                                         : MyColors.darkThemeSelected,
                                   ),
-                                  label: "Чат"),
-                              NavigationDestination(
-                                  icon: Icon(
-                                    Icons.calendar_month_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  selectedIcon: Icon(
-                                    Icons.calendar_month,
-                                    color: isLightTheme
-                                        ? MyColors.darkbluetext
-                                        : MyColors.darkThemeSelected,
-                                  ),
-                                  label: "Календарь"),
-                              Container(),
-                              NavigationDestination(
-                                  icon: Icon(
-                                    Icons.account_circle_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  selectedIcon: Icon(
-                                    Icons.account_circle,
-                                    color: isLightTheme
-                                        ? MyColors.darkbluetext
-                                        : MyColors.darkThemeSelected,
-                                  ),
-                                  label: "Контакты"),
-                              NavigationDestination(
-                                icon: Icon(
-                                  Icons.call_outlined,
-                                  color: Colors.white,
-                                ),
-                                label: "Звонки",
-                                selectedIcon: Icon(
-                                  Icons.call,
-                                  color: isLightTheme
-                                      ? MyColors.darkbluetext
-                                      : MyColors.darkThemeSelected,
-                                ),
-                              )
-                            ],
-                          );
-                        }))))));
+                                )
+                              ],
+                            );
+                          }))))));
+
   }
 }

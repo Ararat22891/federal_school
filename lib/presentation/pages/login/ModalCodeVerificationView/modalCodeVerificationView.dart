@@ -106,6 +106,7 @@ class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
                             case AuthStatus.validCode:
                               return StatusDialog(
                                 status: AuthStatus.validCode,
+                                isEnabled: widget.viewModel.isBlocked,
                               );
                             case AuthStatus.invalidCode:
                               return StatusDialog(

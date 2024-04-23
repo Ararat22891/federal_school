@@ -13,7 +13,6 @@ abstract class _CalendarHomeViewModel with Store{
 
   _CalendarHomeViewModel(){
     getEvents();
-
   }
 
 
@@ -64,6 +63,7 @@ abstract class _CalendarHomeViewModel with Store{
 
   @action
   Future<void> getEvents() async{
+    await _service.init();
     events = await _service.getEvents();
     print("sas"+events.items!.length.toString());
   }

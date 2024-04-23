@@ -40,6 +40,7 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
     int newMessageCount = widget.chat!.newMessagesCount;
     bool isVerified = widget.chat.otherUser.isVerified;
 
+
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -104,7 +105,7 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                                 color: isLightTheme ? MyColors.darkbluetext : MyColors.darkThemeFont,
                                 shape: BoxShape.circle,
                               ),
-                              child: Text("2", style: TextStyle(
+                              child: Text(widget.chat.newMessagesCount.toString(), style: TextStyle(
                                   color: isLightTheme ? Colors.white : Colors.black,
                                   fontSize: 14, fontWeight: FontWeight.bold
                               ),),

@@ -51,6 +51,7 @@ dependencies:
   grouped_list: ^5.1.2
   url_launcher: ^6.2.6
   flutter_widget_from_html_core: ^0.14.11
+  visibility_detector: ^0.4.0+2
 
   flutter:
     sdk: flutter
@@ -108,6 +109,7 @@ flutter:
      - assets/servAcc.json
      - assets/empty_chat.png
      - assets/calendarData.json
+     - assets/sad_man.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

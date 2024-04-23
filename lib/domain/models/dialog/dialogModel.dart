@@ -18,6 +18,7 @@ ReadStatus getReadStatus(int status){
 
 class DialogModel{
   String uuid;
+  String chatUid;
   UserData? userInfo;
   String message;
   String senderUID;
@@ -27,6 +28,7 @@ class DialogModel{
   DialogModel(
   {
     required this.uuid,
+    required this.chatUid,
     this.userInfo,
     required this.senderUID,
     required this.message,
@@ -39,6 +41,7 @@ class DialogModel{
   static DialogModel fromJson(Map<String, dynamic> json) {
     return DialogModel(
       uuid:  json['uuid'] as String,
+      chatUid: json['chatUid'] as String,
       userInfo:  json['userInfo'] != null ? UserData.fromJson(json['userInfo']) : null,
       senderUID: json['senderUid'] as String,
       message:  json['message'] as String,
@@ -50,6 +53,7 @@ class DialogModel{
   Map<String, dynamic> toJson() {
     return {
       'uuid': uuid,
+      'chatUid': chatUid,
       'userInfo': userInfo != null ? userInfo!.toJson() : null,
       'senderUid': senderUID,
       'message': message,

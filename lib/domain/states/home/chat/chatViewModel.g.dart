@@ -25,21 +25,6 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
     });
   }
 
-  late final _$chatsAtom = Atom(name: '_ChatViewModel.chats', context: context);
-
-  @override
-  List<ChatCellModel> get chats {
-    _$chatsAtom.reportRead();
-    return super.chats;
-  }
-
-  @override
-  set chats(List<ChatCellModel> value) {
-    _$chatsAtom.reportWrite(value, super.chats, () {
-      super.chats = value;
-    });
-  }
-
   late final _$isDataLoadedAtom =
       Atom(name: '_ChatViewModel.isDataLoaded', context: context);
 
@@ -98,7 +83,6 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
   String toString() {
     return '''
 selection: ${selection},
-chats: ${chats},
 isDataLoaded: ${isDataLoaded},
 status: ${status}
     ''';

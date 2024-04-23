@@ -59,9 +59,25 @@ abstract class _DialogViewModel with Store {
     List<String> sorted = [myUid, foreignUID]..sort();
     String chatUID = "${sorted.first}_${sorted[1]}";
     print(chatUID);
-    var ref = FirebaseDatabase.instance.ref("chats").child(chatUID).push();
-    ref.set(
-      DialogModel(uuid: ref.key!, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
+    var ref = FirebaseDatabase.instance.ref("chats").child(chatUID);
+    var n = await ref.child("unread").get();
+    if(n.exists){
+      int count = n.value as int;
+      ref.update({
+        "unread": count++
+      }
+      );
+    }
+
+    ref.update({
+      "unread": 1
+    }
+    );
+
+    var newRef = ref.push();
+
+    newRef.set(
+      DialogModel(uuid: newRef.key!, chatUid: chatUID, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
     );
     scrollController.animateTo(
       scrollController.position.minScrollExtent,

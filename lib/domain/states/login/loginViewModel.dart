@@ -27,6 +27,8 @@ abstract class _LoginViewModel with Store{
     @observable
     String verificationId = "";
 
+    bool isBlocked = true;
+
     late Timer _timer;
 
     @observable
@@ -112,6 +114,14 @@ abstract class _LoginViewModel with Store{
 
 
             if(answer.user != null){
+
+
+                if(snapshot.value != null){
+                    final data = Map<String, dynamic>.from(snapshot.value as Map);
+                    UserData userData = UserData.fromJson(data);
+                    isBlocked = userData.isEnable;
+                }
+
                 status = AuthStatus.validCode;
             }
             else{
