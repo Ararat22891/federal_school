@@ -3,8 +3,6 @@ import 'package:googleapis/calendar/v3.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
 class GoogleCalendarService {
-
-
   String _file = "";
   String _scopeCalendar = "";
   String _scopeEvents = "";
@@ -20,24 +18,19 @@ class GoogleCalendarService {
   }
 
   Future<Events> getEvents() async{
+    await init();
 
     final httpClient = await clientViaServiceAccount(
         credentials, [_scopeCalendar, _scopeEvents]);
     final calendarApi = CalendarApi(httpClient);
     final events = await calendarApi.events.list(_calendarId);
-
-    final event = Event()
-      ..summary = 'Название события'
-      ..description = 'Описание события'
-      ..start = EventDateTime(dateTime: DateTime.now())
-      ..end = EventDateTime(dateTime: DateTime.now().add(Duration(hours: 1)));
-    await calendarApi.events.insert(event, _calendarId);
     httpClient.close();
 
     return events;
   }
 
   Future<void> addEvent(String summary, String description, EventDateTime start, EventDateTime? end) async{
+    await init();
     final httpClient = await clientViaServiceAccount(
         credentials, [_scopeCalendar, _scopeEvents]);
     final calendarApi = CalendarApi(httpClient);

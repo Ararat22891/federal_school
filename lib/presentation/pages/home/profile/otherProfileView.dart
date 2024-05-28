@@ -144,35 +144,14 @@ class OtherProfileView extends StatelessWidget {
                         ),
                       ),
 
+
+
                       IconButton.filled(
                         onPressed: (){
                           Navigator.push(context,
                               MaterialPageRoute(
                                   builder: (context){
                                     return videoCall(userData);
-                                  }
-                              ));
-                        },
-                        style: IconButton.styleFrom(
-                            padding: EdgeInsets.all(10),
-                            backgroundColor: isLightTheme ? MyColors.grey : MyColors.darkThemeSecondary,
-                            foregroundColor: isLightTheme ? MyColors.darkbluetext : MyColors.darkThemeFont
-                        ),
-                        icon: Icon(Icons.call),
-                      ),
-
-                      IconButton.filled(
-                        onPressed: (){
-                          Navigator.push(context,
-                              MaterialPageRoute(
-                                  builder: (context){
-                                    String s = generateRandomString(12);
-                                    User user = FirebaseAuth.instance.currentUser!;
-
-                                    String? userInfo = user.displayName;
-                                    String name = userInfo ?? "Неизвестный пользователь";
-                                    send(userData.deviceToken,s, name);
-                                    return CallingView(channelName: s);
                                   }
                               ));
                         },
@@ -203,8 +182,14 @@ class OtherProfileView extends StatelessWidget {
 Widget videoCall(UserData userData){
   String s = generateRandomString(12);
   User user = FirebaseAuth.instance.currentUser!;
+
   String? userInfo = user.displayName;
   String name = userInfo ?? "Неизвестный пользователь";
-  send(userData.deviceToken,s, name);
+  var data = {
+    "type": "Звонок",
+    "call_id" : s,
+    "callerName": name
+  };
+  send(userData.deviceToken, data);
   return CallingView(channelName: s);
 }

@@ -24,19 +24,7 @@ class _CallingViewState extends State<CallingView> {
         channelName: widget.channelName,
 
       ),
-      agoraChannelData: AgoraChannelData(
-          channelProfileType: ChannelProfileType.channelProfileCommunication,
-      ),
-    agoraEventHandlers: AgoraRtcEventHandlers(
-      onUserMuteVideo: (connection, id, muted){
-        print("llll");
-        print("llll "+ muted.toString());
-      },
-      onUserEnableLocalVideo: (connection, id, muted){
-        print("llll");
 
-      }
-    )
 
   );
 
@@ -50,14 +38,10 @@ class _CallingViewState extends State<CallingView> {
   void initAgora() async {
     await [Permission.microphone, Permission.camera].request();
     await client.initialize();
-    await client.engine.muteLocalVideoStream(true);
   }
 
   @override
   Widget build(BuildContext context) {
-    print("sadasdsadas");
-    client.engine.muteLocalVideoStream(true);
-    print("sadasdsadas");
     return Scaffold(
       body: Stack(
         children: [

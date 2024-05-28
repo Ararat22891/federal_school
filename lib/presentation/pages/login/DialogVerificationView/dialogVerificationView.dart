@@ -5,10 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../ModalCodeVerificationView/modalCodeVerificationView.dart';
 
-class DialogVerificationView extends StatelessWidget {
+class DialogVerificationView extends StatefulWidget {
   LoginViewModel viewModel;
 
   DialogVerificationView({required this.viewModel});
+
+  @override
+  State<DialogVerificationView> createState() => _DialogVerificationViewState();
+}
+
+class _DialogVerificationViewState extends State<DialogVerificationView> {
+
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +33,7 @@ class DialogVerificationView extends StatelessWidget {
           children: [
             Observer(
                 builder: (context){
-                  switch(viewModel.status){
+                  switch(widget.viewModel.status){
                     case AuthStatus.incorrectNumb:
                       return Icon(Icons.error, size: 70, color: Colors.red,);
                     case AuthStatus.loading:
@@ -46,7 +58,7 @@ class DialogVerificationView extends StatelessWidget {
 
             Observer(
                 builder: (context){
-                  switch(viewModel.status){
+                  switch(widget.viewModel.status){
                     case AuthStatus.loading:
                       return FittedBox(
                         child: Text("Проверка номера телефона", style: TextStyles.headline,)
@@ -69,11 +81,11 @@ class DialogVerificationView extends StatelessWidget {
             Container(height: 4,),
             Observer(
                 builder: (context){
-                  return viewModel.status == AuthStatus.main ?
+                  return widget.viewModel.status == AuthStatus.main ?
                   Column(
                     children: [
                       Text("Ваш код будет отправлен на номер ", style: TextStyles.subBody,),
-                      Text(viewModel.phoneNumber, style: TextStyle(color: MyColors.darkbluetext, fontSize: 14, fontWeight: FontWeight.bold),),
+                      Text(widget.viewModel.phoneNumber, style: TextStyle(color: MyColors.darkbluetext, fontSize: 14, fontWeight: FontWeight.bold),),
                       Container(height: 24,),
 
                     ],
@@ -83,7 +95,7 @@ class DialogVerificationView extends StatelessWidget {
 
             Observer(
                 builder: (context){
-                  switch(viewModel.status){
+                  switch(widget.viewModel.status){
                     case AuthStatus.loading:
                       return Container();
                     case AuthStatus.main:
@@ -102,8 +114,8 @@ class DialogVerificationView extends StatelessWidget {
                           Spacer(),
                           FilledButton(
                               onPressed: () async{
-                                viewModel.status = AuthStatus.loading;
-                                viewModel.signInWithTelephone();
+                                widget.viewModel.status = AuthStatus.loading;
+                                widget.viewModel.signInWithTelephone();
                                 Navigator.pop(context);
                                 await showModalBottomSheet<void>(
                                     context: context,
@@ -111,7 +123,7 @@ class DialogVerificationView extends StatelessWidget {
                                     builder: (context) => FractionallySizedBox(
                                       heightFactor: 0.9,
                                       child: ModalCodeVerificationView(
-                                        viewModel: viewModel,
+                                        viewModel: widget.viewModel,
                                       ),
                                     )
                                 );

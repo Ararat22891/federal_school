@@ -7,8 +7,9 @@ class RoundedContainer extends StatelessWidget {
 
   Widget? child;
   EdgeInsets? padding;
+  BorderRadiusGeometry? borderRadius;
 
-  RoundedContainer({ this.child, this.padding});
+  RoundedContainer({ this.child, this.padding, this.borderRadius});
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +20,10 @@ class RoundedContainer extends StatelessWidget {
           color: isLightTheme
               ? MyColors.white
               : MyColors.darkThemeContainer,
-          borderRadius: BorderRadius.only(
+          borderRadius: borderRadius ?? BorderRadius.only(
               topLeft: Radius.circular(30),
-              topRight: Radius.circular(30))),
+              topRight: Radius.circular(30))
+      ),
       child: child ??  Container(),
     );
   }

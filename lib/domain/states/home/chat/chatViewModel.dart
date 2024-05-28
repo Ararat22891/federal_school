@@ -68,55 +68,80 @@ abstract class _ChatViewModel with Store {
                     messUser.add(all.first);
                   }
                 }
-                chats.clear();
+
+                if(chatId.length == 0){
+                  chats.clear();
+                }
+                else {
+                  for (int i = 0; i < chatId.length; i++) {
+                    var getted = await FirebaseDatabase.instance.ref("chats")
+                        .child(
+                        chatId[i])
+                        .get();
+                    int unreadMessages = 0;
+
+                    for (var j in getted.children) {
+                      if (j.key == "unread") {
+                        unreadMessages = j.value as int;
+                      }
+                    }
 
 
-                for (int i = 0; i < chatId.length; i++) {
-                  var getted = await FirebaseDatabase.instance.ref("chats")
-                      .child(
-                      chatId[i])
-                      .get();
-                  int unreadMessages = 0;
+                    var iss = getted.children.length - 2;
 
-                  for (var j in getted.children) {
-                    if (j.key == "unread") {
-                      unreadMessages = j.value as int;
+                    var gettedMap = Map<String, dynamic>.from(
+                        getted.children
+                            .elementAt(iss)
+                            .value as Map
+                    );
+
+                    var dialog = DialogModel.fromJson(gettedMap);
+
+                    var otherUserInfo = await FirebaseDatabase.instance.ref(
+                        'users')
+                        .child(messUser[i])
+                        .get();
+
+                    var otherUserMap = Map<String, dynamic>.from(
+                        otherUserInfo.value as Map);
+                    var otherUser = UserData.fromJson(otherUserMap);
+                    late ChatCellModel item;
+
+                    if(dialog.senderUID == user.uid){
+                       item = ChatCellModel(
+                          dialog.chatUid,
+                          otherUser, dialog.message, dialog.sentTime,
+                          0, dialog.readStatus,
+                          dialog.senderUID
+                       );
+                    }
+                    else{
+                       item = ChatCellModel(
+                          dialog.chatUid,
+                          otherUser, dialog.message, dialog.sentTime,
+                          unreadMessages, dialog.readStatus,
+                           dialog.senderUID
+
+                       );
+                    }
+
+
+
+
+
+                    if (
+                    chats.any((element) => element.uid == item.uid)
+                    ) {
+                      var changeChat = chats.where((element) =>
+                      element.uid == item.uid);
+                      int index = chats.indexOf(changeChat.first);
+                      chats[index] = item;
+                    }
+
+                    else {
+                      chats.add(item);
                     }
                   }
-
-
-                  var gettedMap = Map<String, dynamic>.from(
-                      getted.children.first.value as Map);
-
-                  var dialog = DialogModel.fromJson(gettedMap);
-
-                  var otherUserInfo = await FirebaseDatabase.instance.ref(
-                      'users')
-                      .child(messUser[i])
-                      .get();
-
-                  var otherUserMap = Map<String, dynamic>.from(
-                      otherUserInfo.value as Map);
-                  var otherUser = UserData.fromJson(otherUserMap);
-
-
-                  ChatCellModel item = ChatCellModel(
-                      dialog.uuid,
-                      otherUser, dialog.message, dialog.sentTime,
-                      unreadMessages);
-
-
-                  if(
-                  chats.any((element) => element.uid == item.uid)
-                  ){
-                    var changeChat = chats.where((element) => element.uid == item.uid);
-                    int index = chats.indexOf(changeChat);
-                    chats[index] = item;
-                  }
-                  else{
-                    chats.add(item);
-                  }
-
                 }
 
 

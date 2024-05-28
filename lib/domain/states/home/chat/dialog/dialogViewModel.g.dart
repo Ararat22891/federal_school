@@ -81,9 +81,18 @@ mixin _$DialogViewModel on _DialogViewModel, Store {
       AsyncAction('_DialogViewModel.sendMessage', context: context);
 
   @override
-  Future<void> sendMessage(String myUid, String foreignUID) {
+  Future<void> sendMessage(String myUid, UserData userData) {
     return _$sendMessageAsyncAction
-        .run(() => super.sendMessage(myUid, foreignUID));
+        .run(() => super.sendMessage(myUid, userData));
+  }
+
+  late final _$getReadedMessageAsyncAction =
+      AsyncAction('_DialogViewModel.getReadedMessage', context: context);
+
+  @override
+  Future<void> getReadedMessage(DialogModel dialogModel, bool isMe) {
+    return _$getReadedMessageAsyncAction
+        .run(() => super.getReadedMessage(dialogModel, isMe));
   }
 
   late final _$_DialogViewModelActionController =

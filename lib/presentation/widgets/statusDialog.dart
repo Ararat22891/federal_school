@@ -101,7 +101,6 @@ class StatusDialog extends StatelessWidget {
                   FilledButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      Navigator.pop(context);
                     },
                     child: Text("Повторить",
                       style: TextStyle(color: Colors.white, fontSize: 14),),

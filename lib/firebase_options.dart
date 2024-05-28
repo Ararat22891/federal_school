@@ -27,10 +27,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.macOS:
         return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -75,11 +72,23 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyBtIXh7lUadrn5ebJPi05nEg3uYJJsMP2o',
-    appId: '1:23107628194:ios:012a7ffef472168d6a7bfb',
+    appId: '1:23107628194:ios:bd95f7b560608a276a7bfb',
     messagingSenderId: '23107628194',
     projectId: 'federalschool-47496',
     databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
     storageBucket: 'federalschool-47496.appspot.com',
-    iosBundleId: 'com.tatdep.diplom.RunnerTests',
+    iosBundleId: 'com.tatdep.diplom',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCXECv-6Qi4S_nZ_3Z-KnGjBZfRlZwep8s',
+    appId: '1:23107628194:web:b990db04a327e1ab6a7bfb',
+    messagingSenderId: '23107628194',
+    projectId: 'federalschool-47496',
+    authDomain: 'federalschool-47496.firebaseapp.com',
+    databaseURL: 'https://federalschool-47496-default-rtdb.firebaseio.com',
+    storageBucket: 'federalschool-47496.appspot.com',
+    measurementId: 'G-ZGJVVC07KX',
+  );
+
 }

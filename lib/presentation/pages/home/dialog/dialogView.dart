@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../domain/models/user/user.dart';
 
@@ -122,9 +123,11 @@ class _DialogViewState extends State<DialogView> {
                       child: Observer(
                           builder: (context){
                             if(_dialogViewModel.isDataLoaded) {
+
                               return GroupedListView(
                                 elements: _dialogViewModel.dialogs,
                                 controller: _dialogViewModel.scrollController,
+                                sort: false,
                                 groupBy: (elements) =>
                                     DateTime(
                                       elements.sentTime.year,
@@ -133,23 +136,21 @@ class _DialogViewState extends State<DialogView> {
                                     ),
                                 groupComparator: (date1, date2) {
                                   if (date1.isBefore(date2)) {
-                                    return 1;
-                                  } else
                                     return 0;
+                                  } else
+                                    return 1;
                                 },
                                 groupHeaderBuilder: (message) {
                                   return SentDayViewAsset('${message.sentTime}');
                                 },
-                                floatingHeader: true,
                                 itemComparator: (item1, item2) {
                                   if (item1.sentTime.isBefore(item2.sentTime)) {
-                                    return 1;
-                                  } else
                                     return 0;
+                                  } else
+                                    return 1;
                                 },
-                                reverse: true,
                                 itemBuilder: (context, item) {
-                                  return DialoogViewAsset(dialogModel: item);
+                                  return DialoogViewAsset(dialogModel: item, viewModel: _dialogViewModel,);
                                 },
                               );
                             }
@@ -168,16 +169,16 @@ class _DialogViewState extends State<DialogView> {
                           alignment: Alignment.bottomCenter,
                           child: Row(
                             children: [
-                              IconButton.filled(
-                                onPressed: () {},
-                                style: IconButton.styleFrom(
-                                    backgroundColor: isLight
-                                        ? MyColors.darkbluetext
-                                        : MyColors.darkThemeFont),
-                                icon: Icon(
-                                  Icons.attach_file,
-                                ),
-                              ),
+                              // IconButton.filled(
+                              //   onPressed: () {},
+                              //   style: IconButton.styleFrom(
+                              //       backgroundColor: isLight
+                              //           ? MyColors.darkbluetext
+                              //           : MyColors.darkThemeFont),
+                              //   icon: Icon(
+                              //     Icons.attach_file,
+                              //   ),
+                              // ),
                               SizedBox(width: 15),
                               Expanded(
                                 child: TextField(
@@ -205,7 +206,7 @@ class _DialogViewState extends State<DialogView> {
                               Observer(builder: (context){
                                 return IconButton(onPressed: !_dialogViewModel.isSendable ?
                                 null : () {
-                                  _dialogViewModel.sendMessage(FirebaseAuth.instance.currentUser!.uid, widget.data.userUID);
+                                  _dialogViewModel.sendMessage(FirebaseAuth.instance.currentUser!.uid, widget.data);
                                 },
                                     icon: Icon(
                                       Icons.send,

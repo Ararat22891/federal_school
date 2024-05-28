@@ -9,11 +9,11 @@ part of 'calendarHomeViewModel.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$CalendarHomeViewModel on _CalendarHomeViewModel, Store {
-  Computed<List<Event>>? _$thisDayEventsComputed;
+  Computed<ObservableList<Event>>? _$thisDayEventsComputed;
 
   @override
-  List<Event> get thisDayEvents => (_$thisDayEventsComputed ??=
-          Computed<List<Event>>(() => super.thisDayEvents,
+  ObservableList<Event> get thisDayEvents => (_$thisDayEventsComputed ??=
+          Computed<ObservableList<Event>>(() => super.thisDayEvents,
               name: '_CalendarHomeViewModel.thisDayEvents'))
       .value;
 
@@ -33,19 +33,51 @@ mixin _$CalendarHomeViewModel on _CalendarHomeViewModel, Store {
     });
   }
 
+  late final _$allEventsAtom =
+      Atom(name: '_CalendarHomeViewModel.allEvents', context: context);
+
+  @override
+  ObservableList<Event?>? get allEvents {
+    _$allEventsAtom.reportRead();
+    return super.allEvents;
+  }
+
+  @override
+  set allEvents(ObservableList<Event?>? value) {
+    _$allEventsAtom.reportWrite(value, super.allEvents, () {
+      super.allEvents = value;
+    });
+  }
+
   late final _$_thisDayEventsAtom =
       Atom(name: '_CalendarHomeViewModel._thisDayEvents', context: context);
 
   @override
-  List<Event> get _thisDayEvents {
+  ObservableList<Event> get _thisDayEvents {
     _$_thisDayEventsAtom.reportRead();
     return super._thisDayEvents;
   }
 
   @override
-  set _thisDayEvents(List<Event> value) {
+  set _thisDayEvents(ObservableList<Event> value) {
     _$_thisDayEventsAtom.reportWrite(value, super._thisDayEvents, () {
       super._thisDayEvents = value;
+    });
+  }
+
+  late final _$_setsAtom =
+      Atom(name: '_CalendarHomeViewModel._sets', context: context);
+
+  @override
+  ObservableList<Event> get _sets {
+    _$_setsAtom.reportRead();
+    return super._sets;
+  }
+
+  @override
+  set _sets(ObservableList<Event> value) {
+    _$_setsAtom.reportWrite(value, super._sets, () {
+      super._sets = value;
     });
   }
 
@@ -123,6 +155,7 @@ mixin _$CalendarHomeViewModel on _CalendarHomeViewModel, Store {
   String toString() {
     return '''
 events: ${events},
+allEvents: ${allEvents},
 focusedDate: ${focusedDate},
 maxExtent: ${maxExtent},
 calendarFormat: ${calendarFormat},

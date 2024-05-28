@@ -1,6 +1,7 @@
 import 'package:federal_school/domain/states/home/homeViewModel.dart';
 import 'package:federal_school/domain/states/home/profile/profileViewModel.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
+import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
@@ -22,7 +23,7 @@ class _MyProfileViewState extends State<MyProfileView> {
 
   @override
   void initState() {
-    profileViewModel.controller = TextEditingController(text: profileViewModel.fullName);
+    profileViewModel.controller = TextEditingController();
     super.initState();
   }
 
@@ -37,6 +38,7 @@ class _MyProfileViewState extends State<MyProfileView> {
   Widget build(BuildContext context) {
     var isLightTheme =
         Theme.of(context).brightness == Brightness.light ? true : false;
+
     return Scaffold(
       body: Column(
         children: [
@@ -87,12 +89,11 @@ class _MyProfileViewState extends State<MyProfileView> {
                                   alignment: Alignment.center,
                                   children: [
 
-                                          CircleAvatar(
-                                            backgroundImage: (widget.viewModel.userData?.photoPath ?? "").isNotEmpty
-                                                ? Image.network(widget.viewModel.userData!.photoPath!).image
-                                                : Image.asset("assets/bird.jpg").image,
-                                            maxRadius: MediaQuery.of(context).size.height/ 6.5,
-                                          ),
+                                    MyCircleAvatar(
+                                      networkAsset: widget.viewModel.userData!.photoPath!,
+                                      maxRadius: MediaQuery.of(context).size.height/ 6.5,
+
+                                    ),
                                           profileViewModel.isLoadingPhoto ? CircularProgressIndicator(): Container(),
 
                                     profileViewModel.isEdit ?
@@ -139,20 +140,22 @@ class _MyProfileViewState extends State<MyProfileView> {
                   Form(
                     key: profileViewModel.formKey,
                     child: Observer(
-                      builder: (context) =>
-                          TextFormField(
-                            controller: profileViewModel.controller,
-                            style: Theme.of(context).textTheme.titleMedium,
-                            readOnly: !profileViewModel.isEdit,
-                            enabled: profileViewModel.isEdit,
-                            validator: profileViewModel.validateFIO,
-                            decoration: InputDecoration(
-                              isDense: true,
-                              hintText: "Введите ФИО",
-                              contentPadding: EdgeInsets.symmetric(horizontal: 6),
-                            ),
-                          ),
-                    ),
+                      builder: (context) {
+                        profileViewModel.controller.text = widget.viewModel.fullName ?? "";
+                        return TextFormField(
+                                controller: profileViewModel.controller,
+                                style: Theme.of(context).textTheme.titleMedium,
+                                readOnly: !profileViewModel.isEdit,
+                                enabled: profileViewModel.isEdit,
+                                validator: profileViewModel.validateFIO,
+                                decoration: InputDecoration(
+                                  isDense: true,
+                                  hintText: "Введите ФИО",
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 6),
+                                ),
+                              );
+                            }),
                   ),
 
                   Container(
@@ -163,7 +166,7 @@ class _MyProfileViewState extends State<MyProfileView> {
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   TextFormField(
-                    initialValue:profileViewModel.user!.phoneNumber,
+                    initialValue: widget.viewModel.userData!.telNumber,
                     style: Theme.of(context).textTheme.titleMedium,
                     enabled: false,
                     decoration: InputDecoration(
@@ -174,19 +177,25 @@ class _MyProfileViewState extends State<MyProfileView> {
                   Container(
                     height: 12,
                   ),
-                  Text(
-                    "Статус",
-                    style: Theme.of(context).textTheme.labelLarge,
-                  ),
-                  TextFormField(
-                    initialValue: widget.viewModel.role,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    enabled: false,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 6),
-                    ),
-                  ),
+                  Observer(builder: (context){
+                    return Text(
+                      "Роль",
+                      style: Theme.of(context).textTheme.labelLarge,
+                    );
+                  }),
+                  Observer(
+                      builder: (context){
+                        return TextFormField(
+                          style: Theme.of(context).textTheme.titleMedium,
+                          enabled: false,
+                          controller: TextEditingController(text: widget.viewModel.role),
+                          decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                          ),
+                        );
+                      }
+                  )
                 ],
               ),
             ),

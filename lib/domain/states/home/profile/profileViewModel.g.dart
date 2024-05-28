@@ -16,6 +16,19 @@ mixin _$ProfileViewModel on _ProfileViewModel, Store {
       (_$fullNameComputed ??= Computed<String?>(() => super.fullName,
               name: '_ProfileViewModel.fullName'))
           .value;
+  Computed<String?>? _$roleComputed;
+
+  @override
+  String? get role => (_$roleComputed ??=
+          Computed<String?>(() => super.role, name: '_ProfileViewModel.role'))
+      .value;
+  Computed<String?>? _$telNumberComputed;
+
+  @override
+  String? get telNumber =>
+      (_$telNumberComputed ??= Computed<String?>(() => super.telNumber,
+              name: '_ProfileViewModel.telNumber'))
+          .value;
 
   late final _$isEditAtom =
       Atom(name: '_ProfileViewModel.isEdit', context: context);
@@ -80,6 +93,22 @@ mixin _$ProfileViewModel on _ProfileViewModel, Store {
     });
   }
 
+  late final _$userDataAtom =
+      Atom(name: '_ProfileViewModel.userData', context: context);
+
+  @override
+  UserData? get userData {
+    _$userDataAtom.reportRead();
+    return super.userData;
+  }
+
+  @override
+  set userData(UserData? value) {
+    _$userDataAtom.reportWrite(value, super.userData, () {
+      super.userData = value;
+    });
+  }
+
   late final _$uploadProfileAsyncAction =
       AsyncAction('_ProfileViewModel.uploadProfile', context: context);
 
@@ -120,7 +149,10 @@ isEdit: ${isEdit},
 isLoadingPhoto: ${isLoadingPhoto},
 fio: ${fio},
 user: ${user},
-fullName: ${fullName}
+userData: ${userData},
+fullName: ${fullName},
+role: ${role},
+telNumber: ${telNumber}
     ''';
   }
 }

@@ -8,9 +8,11 @@ class ChatCellModel{
   String lastMessage;
   DateTime sentTime;
   int newMessagesCount;
+  int readStatus;
+  String senderID;
 
   ChatCellModel(this.uid,this.otherUser,  this.lastMessage, this.sentTime,
-      this.newMessagesCount);
+      this.newMessagesCount, this.readStatus, this.senderID);
 
 
   Map<String, dynamic> toJson() {
@@ -20,6 +22,8 @@ class ChatCellModel{
       'lastMessage': lastMessage,
       'sentTime': sentTime.toIso8601String(),
       'newMessagesCount': newMessagesCount,
+      'readStatus': readStatus,
+      'senderID':senderID
     };
   }
 
@@ -30,6 +34,8 @@ class ChatCellModel{
       json['lastMessage'],
       DateTime.parse(json['sentTime']),
       json['newMessagesCount'],
+      json['readStatus'],
+      json['senderID']
     );
   }
 }

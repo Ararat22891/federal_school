@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:federal_school/data/userDataSingltone.dart';
 import 'package:federal_school/snackBar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -11,12 +12,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../models/user/user.dart';
+
 part 'profileViewModel.g.dart';
 
 class ProfileViewModel = _ProfileViewModel with _$ProfileViewModel;
 
 
 abstract class _ProfileViewModel with Store{
+  _ProfileViewModel(){
+    userData = GlobalSingltone.getInstanse().instance;
+  }
 
   @observable
   bool isEdit = false;
@@ -32,12 +38,25 @@ abstract class _ProfileViewModel with Store{
   @observable
   User? user = FirebaseAuth.instance.currentUser;
 
+  @observable
+  UserData? userData;
+
   @computed
   String? get fullName{
-    if (user != null){
-      return user!.displayName;
+    if (userData != null){
+      return "${userData?.surname} ${userData?.name} ${userData?.patronomyc}";
     }
     return null;
+  }
+
+  @computed
+  String? get role{
+    return getRole(userData!.role!);
+  }
+
+  @computed
+  String? get telNumber{
+    return userData!.telNumber;
   }
 
 
@@ -74,7 +93,6 @@ abstract class _ProfileViewModel with Store{
       }
     }
   }
-
 
   @action
   Future<void> uploadProfile() async {

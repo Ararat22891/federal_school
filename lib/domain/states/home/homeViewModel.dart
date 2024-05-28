@@ -1,14 +1,17 @@
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:federal_school/data/push/pushData.dart';
+import 'package:federal_school/data/userDataSingltone.dart';
 import 'package:federal_school/presentation/pages/home/calendar/calendarHomeView.dart';
-import 'package:federal_school/presentation/pages/home/call/callView.dart';
+import 'package:federal_school/presentation/pages/home/call/courseView.dart';
 import 'package:federal_school/presentation/pages/home/chat/chatHomeView.dart';
 import 'package:federal_school/presentation/pages/home/contact/contactView.dart';
+import 'package:federal_school/presentation/pages/home/settings/settingsView.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../presentation/themes/themes.dart';
 import '../../../snackBar.dart';
@@ -18,62 +21,7 @@ part 'homeViewModel.g.dart';
 
 class HomeViewModel = _HomeViewModel with _$HomeViewModel;
 
-List<Widget> chatActions = [
-  IconButton(
-      onPressed: () {},
-      icon: Icon(
-        Icons.settings_outlined,
-        color: Colors.white,
-      )),
-  ThemeSwitcher.withTheme(
-    builder: (context, switcher, theme) {
-      return IconButton(
-          onPressed: () {
-            switcher.changeTheme(
-                theme: theme.brightness == Brightness.light
-                    ? darkTheme()
-                    : lightTheme(),
-                isReversed:
-                    theme.brightness == Brightness.light ? false : true);
-          },
-          icon: Icon(
-            theme.brightness == Brightness.light
-                ? Icons.dark_mode_outlined
-                : Icons.light_mode_outlined,
-            color: Colors.white,
-          ));
-    },
-  ),
-];
-
-List<Widget> contactsActions = [
-  SearchAnchor(
-      builder: (context, controller) {
-        return IconButton(
-          icon: const Icon(
-            Icons.search,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            controller.openView();
-          },
-        );
-      },
-      suggestionsBuilder: (context, controller) {
-        return List<ListTile>.generate(5, (int index) {
-          final String item = 'item $index';
-          return ListTile(
-            title: Text(item),
-            onTap: () {
-              controller.closeView(item);
-            },
-          );
-        });
-      })
-];
-
 abstract class _HomeViewModel with Store {
-
   @observable
   int selectedIndex = 0;
 
@@ -82,7 +30,7 @@ abstract class _HomeViewModel with Store {
     CalendarHomeView(),
     Container(),
     ContactView(),
-    CallView()
+    CourseView()
   ];
 
   List<String> title = [
@@ -90,14 +38,14 @@ abstract class _HomeViewModel with Store {
     "Календарь событий",
     "",
     "Контакты",
-    "Звонки"
+    "Курсы"
   ];
 
   List<List<Widget>?> actions = [
-    chatActions,
+    null,
     [],
     null,
-    contactsActions,
+    null,
     []
   ];
 
@@ -109,34 +57,53 @@ abstract class _HomeViewModel with Store {
     return getRole(userData?.role ?? 0);
   }
 
+  @computed
+  String? get fullName{
+    if (userData != null){
+      if(userData?.surname == null){
+        return "Неизвестный пользователь";
+      }
+      return "${userData?.surname} ${userData?.name} ${userData?.patronomyc}";
+    }
+    return "Неизвестный пользователь";
+  }
+
+
+
+
   @action
   Future<void> getUserData() async {
-    await PushData.setIsolateForeground();
+
+    var s =  await AwesomeNotifications().requestPermissionToSendNotifications();
+    print(s);
+    userData = GlobalSingltone.getInstanse().instance;
     await PushData.setIsolateBackground();
+    PushData.setIsolateForeground();
     User user = FirebaseAuth.instance.currentUser!;
+
     DatabaseReference ref =
         FirebaseDatabase.instance.ref("users").child(user.uid);
-    ref.onValue.listen((event) async {
-      var snapshot = event.snapshot;
-      if (snapshot.exists) {
-        print(snapshot.value);
-        snapshot.value;
-        final data = Map<String, dynamic>.from(snapshot.value as Map);
-        userData = UserData.fromJson(data);
-        String? key = await FirebaseMessaging.instance.getToken();
 
-        ref.update({
-          "deviceToken": key!
-        });
+     ref.onValue.listen((event) {
+      if(event.snapshot.exists){
+        final data = Map<String, dynamic>.from(event.snapshot.value as Map);
 
-        actions.elementAt(1)?.add(Icon(Icons.add));
+        GlobalSingltone.getInstanse().setInstance(UserData.fromJson(data));
+        userData = GlobalSingltone.getInstanse().instance;
       }
+    });
+
+
+    String? key = await FirebaseMessaging.instance.getToken();
+    await ref.update({
+      "deviceToken": key!
     });
 
   }
 
   @action
   void onDestinationSelected(int selectedIndex) {
+
     this.selectedIndex = selectedIndex;
   }
 }

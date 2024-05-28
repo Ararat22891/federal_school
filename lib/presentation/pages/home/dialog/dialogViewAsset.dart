@@ -8,10 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import '../../../../domain/states/home/chat/dialog/dialogViewModel.dart';
+
 class DialoogViewAsset extends StatelessWidget {
   DialogModel dialogModel;
+  DialogViewModel viewModel;
 
-  DialoogViewAsset({required this.dialogModel});
+  DialoogViewAsset({required this.dialogModel, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
@@ -88,11 +91,8 @@ class DialoogViewAsset extends StatelessWidget {
               ) : Container()
             ],
           ),
-          onVisibilityChanged: (info){
-            FirebaseDatabase.instance.ref("chats").child(dialogModel.chatUid)
-                .child(dialogModel.uuid).update({
-              'readStatus': 1
-            });
+          onVisibilityChanged: (info) async{
+            await viewModel.getReadedMessage(dialogModel, isMe);
           }
       );
     }
@@ -103,8 +103,8 @@ class DialoogViewAsset extends StatelessWidget {
             Expanded(
                 child: Padding(
                   padding: isMe
-                      ? EdgeInsets.only(right: 10, left: 60, )
-                      : EdgeInsets.only(right: 60, left: 10, ),
+                      ? EdgeInsets.only(right: 10, left: 60, top: 2, bottom: 2)
+                      : EdgeInsets.only(right: 60, left: 10, top: 2, bottom: 2 ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment:
@@ -133,6 +133,11 @@ class DialoogViewAsset extends StatelessWidget {
                                   Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
+
+
+
+
+
                                       Text(
                                         "${DateFormat.Hm().format(dialogModel.sentTime)}",
                                         style: TextStyle(
@@ -156,5 +161,16 @@ class DialoogViewAsset extends StatelessWidget {
             ) : Container()
           ],
         );
+  }
+
+
+  Widget messageIcon(int readStatus){
+    if(readStatus == 0){
+      return Icon(Icons.done);
+    }
+    else if(readStatus == 1){
+      return Icon(Icons.done_all);
+    }
+    return Icon(Icons.error, color: Colors.red,);
   }
 }

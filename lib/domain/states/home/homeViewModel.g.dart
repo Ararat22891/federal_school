@@ -15,6 +15,13 @@ mixin _$HomeViewModel on _HomeViewModel, Store {
   String get role => (_$roleComputed ??=
           Computed<String>(() => super.role, name: '_HomeViewModel.role'))
       .value;
+  Computed<String?>? _$fullNameComputed;
+
+  @override
+  String? get fullName =>
+      (_$fullNameComputed ??= Computed<String?>(() => super.fullName,
+              name: '_HomeViewModel.fullName'))
+          .value;
 
   late final _$selectedIndexAtom =
       Atom(name: '_HomeViewModel.selectedIndex', context: context);
@@ -75,7 +82,8 @@ mixin _$HomeViewModel on _HomeViewModel, Store {
     return '''
 selectedIndex: ${selectedIndex},
 userData: ${userData},
-role: ${role}
+role: ${role},
+fullName: ${fullName}
     ''';
   }
 }

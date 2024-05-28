@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBabXSdstk0VwT7n4iqSkPggQbnLcD2g84</string>
+	<string>AIzaSyCR4FQ2RfgvBG4NlgfW7owApMfDntiMDvM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>253713240677</string>
+	<string>23107628194</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.tatdep.federalSchool</string>
 	<key>PROJECT_ID</key>
-	<string>federal-school</string>
+	<string>federalschool-47496</string>
 	<key>STORAGE_BUCKET</key>
-	<string>federal-school.appspot.com</string>
+	<string>federalschool-47496.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:253713240677:ios:7dd619a30ccfa5f7596c8c</string>
+	<string>1:23107628194:ios:32dc6c34f47f8fdc6a7bfb</string>
+	<key>DATABASE_URL</key>
+	<string>https://federalschool-47496-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

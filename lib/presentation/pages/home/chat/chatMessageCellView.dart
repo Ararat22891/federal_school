@@ -4,6 +4,7 @@ import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
 import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -98,7 +99,12 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(date, style: TextStyle(color: Colors.grey, fontSize: 12,),),
+                            Row(
+                              children: [
+                                messageIcon(widget.chat.readStatus, widget.chat.senderID),
+                                Text(date, style: TextStyle(color: Colors.grey, fontSize: 12,),),
+                              ],
+                            ),
                             newMessageCount > 0 ? Container(
                               padding: EdgeInsets.all(7),
                               decoration: BoxDecoration(
@@ -121,6 +127,20 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
         ),
       )
     );
+
+  }
+
+  Widget messageIcon(int readStatus, String uid){
+    if(FirebaseAuth.instance.currentUser?.uid == uid) {
+      if (readStatus == 0) {
+        return Icon(Icons.done, color: MyColors.beige,);
+      }
+      else if (readStatus == 1) {
+        return Icon(Icons.done_all, color: MyColors.beige,);
+      }
+      return Icon(Icons.error, color: Colors.red,);
+    }
+    return Container();
   }
 
   String formatMessageDate(DateTime messageDateTime) {

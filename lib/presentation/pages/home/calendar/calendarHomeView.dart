@@ -1,16 +1,27 @@
+import 'package:federal_school/presentation/pages/home/calendar/addEventView.dart';
+import 'package:federal_school/presentation/widgets/DefaultButton.dart';
 import 'package:federal_school/presentation/widgets/eventViewAsset.dart';
 import 'package:federal_school/domain/states/calendar/calendarHomeViewModel.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-class CalendarHomeView extends StatelessWidget {
+class CalendarHomeView extends StatefulWidget {
   CalendarHomeView({super.key});
 
+  @override
+  State<CalendarHomeView> createState() => _CalendarHomeViewState();
+}
+
+class _CalendarHomeViewState extends State<CalendarHomeView> {
   CalendarHomeViewModel viewModel = CalendarHomeViewModel();
 
+  @override
+  void initState() {
+    viewModel.getEvents();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +29,7 @@ class CalendarHomeView extends StatelessWidget {
     return Column(
       children: [
         Observer(builder: (context) {
+          viewModel.allEvents;
           return TableCalendar(
             key: viewModel.Key,
             focusedDay: viewModel.focusedDate,
@@ -76,9 +88,8 @@ class CalendarHomeView extends StatelessWidget {
             startingDayOfWeek: StartingDayOfWeek.monday,
           );
         }),
-        Expanded(child: Observer(
-          builder: (context) {
-            return BottomSheet(
+        Expanded(
+            child: BottomSheet(
               backgroundColor: Colors.transparent,
               shadowColor: Colors.transparent,
               elevation: 0,
@@ -97,20 +108,71 @@ class CalendarHomeView extends StatelessWidget {
                           builder: (context){
                             print(viewModel.thisDayEvents.length);
                             if (viewModel.thisDayEvents.length != 0 ){
-                              return ListView.builder(
-                                  itemCount: viewModel.thisDayEvents.length,
-                                  itemBuilder: (context, index) {
-                                    return EventViewAsset(
-                                      event: viewModel.thisDayEvents[index],
-                                    );
-                                  });
+                              return CustomScrollView(
+                                slivers: [
+                                  viewModel.userData!.role == 3 ?  SliverAppBar(
+                                    backgroundColor: Colors.transparent,
+                                    title: DefaultButton(
+                                      onPressed: (){
+                                        showDialog(context: context, builder: (context) => AddEventView(
+                                          selectedDay: viewModel.focusedDate,
+                                          calendarHomeViewModel: viewModel,
+                                        ));
+                                      },
+                                      text: "Добавить событие",
+                                    ),
+                                    titleSpacing: 0,
+                                    pinned: false,
+                                    floating: true,
+                                  ) : SliverToBoxAdapter(),
+                                  SliverList.builder(
+                                      itemCount: viewModel.thisDayEvents.length,
+                                      itemBuilder: (context, index) {
+                                        return EventViewAsset(
+                                          event: viewModel.thisDayEvents[index],
+                                        );
+                                      }
+                                  ),
+
+
+
+                                ],
+                              );
+
                             }
                             else{
-                              return Center(
-                                child: Text(
-                                    "На этот день нет событий",
-                                    style: Theme.of(context).textTheme.labelLarge,
-                                ),
+
+
+                              return CustomScrollView(
+                                slivers: [
+
+
+                                  viewModel.userData!.role == 3 ?  SliverAppBar(
+                                    backgroundColor: Colors.transparent,
+                                    title: DefaultButton(
+                                      onPressed: (){
+                                        showDialog(context: context, builder: (context) => AddEventView(
+                                          selectedDay: viewModel.focusedDate,
+                                          calendarHomeViewModel: viewModel,
+                                        ));
+                                      },
+                                      text: "Добавить событие",
+                                    ),
+                                    titleSpacing: 0,
+                                    pinned: false,
+                                    floating: true,
+                                  ) : SliverToBoxAdapter(),
+
+
+                                  SliverFillRemaining(
+                                    child: Center(
+                                      child: Text(
+                                        "На этот день нет событий",
+                                        style: Theme.of(context).textTheme.labelLarge,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               );
                             }
 
@@ -122,9 +184,8 @@ class CalendarHomeView extends StatelessWidget {
                   ],
                 );
               }, onClosing: () {  },
-            );
-          },
-        ))
+            )
+        )
       ],
     );
   }

@@ -88,6 +88,11 @@ class ChatHomeView extends StatelessWidget {
                       child: CircularProgressIndicator(),
                     );
                   case ChatStatus.got:
+                    chatViewModel.chats.sort(
+                        (first,second){
+                          return second.sentTime.compareTo(first.sentTime);
+                        }
+                    );
                     return ListView.builder(
                         itemCount: chatViewModel.chats.length,
                         itemBuilder: (context, index) {

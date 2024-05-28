@@ -3,10 +3,34 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
-enum NotificationType {call, declineCall}
+enum NotificationType{call, message, newEvent}
 
+String NotificationTypeToString(NotificationType type){
+  switch(type){
+    case NotificationType.call:
+      return "Звонок";
+    case NotificationType.message:
+      return "Сообшение";
+    case NotificationType.newEvent:
+      return "Событие";
 
-Future<void> send(String deviceToken, String callID, String name) async {
+  }
+}
+
+NotificationType toType(String type){
+  switch(type){
+    case "Звонок":
+      return NotificationType.call;
+    case "Сообшение" :
+      return NotificationType.message;
+    case "Событие" :
+      return NotificationType.newEvent;
+    default:
+      return NotificationType.newEvent;
+  }
+}
+
+Future<void> send(String deviceToken, Map<String, dynamic> data) async {
   var json = {
     "type": "service_account",
     "project_id": "federalschool-47496",
@@ -23,14 +47,11 @@ Future<void> send(String deviceToken, String callID, String name) async {
         "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-4ry8l%40federalschool-47496.iam.gserviceaccount.com",
     "universe_domain": "googleapis.com"
   };
-
   final client = http.Client();
   final scope = 'https://www.googleapis.com/auth/firebase.messaging';
-
   final credentials = await auth.clientViaServiceAccount(
       auth.ServiceAccountCredentials.fromJson(jsonEncode(json)), [scope]);
   final accessToken = credentials.credentials.accessToken;
-
   final projectId = 'federalschool-47496';
 
   final body = {
@@ -40,14 +61,12 @@ Future<void> send(String deviceToken, String callID, String name) async {
         "title": "",
         "body": "",
       },
-      "data": {"call_id": "$callID", "callerName": "${name}"},
+      "data": data
     }
   };
 
   final url = 'https://fcm.googleapis.com/v1/projects/$projectId/messages:send';
-
   final headers = {'Authorization': 'Bearer ${accessToken.data}'};
-
   final response = await client.post(Uri.parse(url),
       body: jsonEncode(body), headers: headers);
   if (response.statusCode == 200) {
