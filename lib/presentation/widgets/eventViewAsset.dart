@@ -67,7 +67,7 @@ class EventViewAsset extends StatelessWidget {
                         ],
                       ),
                       Container(height: 8,),
-                      Text(event.summary ?? "Событие", overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(color: isLight ? Colors.black : Colors.white, fontWeight: FontWeight.bold),),
+                      Text(event.summary ?? "Событие", overflow: TextOverflow.ellipsis, maxLines: 5, style: TextStyle(color: isLight ? Colors.black : Colors.white, fontWeight: FontWeight.bold),),
                       Container(height: 8,),
                       Text(event.description ?? "Партийное мероприятие", style: TextStyle(color: Colors.grey,),  overflow: TextOverflow.ellipsis,)
                     ],

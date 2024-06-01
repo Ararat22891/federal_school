@@ -1,6 +1,4 @@
-
 import 'package:federal_school/domain/models/user/user.dart';
-
 
 enum ReadStatus {sent, read, error}
 
@@ -14,6 +12,43 @@ ReadStatus getReadStatus(int status){
       return ReadStatus.error;
   }
   return ReadStatus.error;
+}
+
+
+class FullChat{
+  int unread;
+  List<DialogModel> dialogs;
+
+  FullChat({required this.unread, required this.dialogs});
+
+  static FullChat fromJson(Map<String, dynamic> json) {
+    int unread = json['unread'];
+    List<DialogModel> dialogs = [];
+
+
+    json.forEach((key, value) {
+      if(key != "unread") {
+        var j = Map<String, dynamic>.from(value);
+        dialogs.add(
+            DialogModel(
+              uuid: j['uuid'] as String,
+              chatUid: j['chatUid'] as String,
+              userInfo: j['userInfo'] != null ? UserData.fromJson(
+                  j['userInfo']) : null,
+              senderUID: j['senderUid'] as String,
+              message: j['message'] as String,
+              sentTime: DateTime.parse(j['sentTime']),
+              readStatus: j['readStatus'] as int,
+            ));
+      }
+
+    });
+
+    return FullChat(
+        unread: unread,
+        dialogs: dialogs
+    );
+  }
 }
 
 class DialogModel{

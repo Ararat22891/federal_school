@@ -57,6 +57,22 @@ mixin _$ChatViewModel on _ChatViewModel, Store {
     });
   }
 
+  late final _$getIosDataAsyncAction =
+      AsyncAction('_ChatViewModel.getIosData', context: context);
+
+  @override
+  Future<void> getIosData() {
+    return _$getIosDataAsyncAction.run(() => super.getIosData());
+  }
+
+  late final _$getAndroidDataAsyncAction =
+      AsyncAction('_ChatViewModel.getAndroidData', context: context);
+
+  @override
+  Future<void> getAndroidData() {
+    return _$getAndroidDataAsyncAction.run(() => super.getAndroidData());
+  }
+
   late final _$getChatListAsyncAction =
       AsyncAction('_ChatViewModel.getChatList', context: context);
 

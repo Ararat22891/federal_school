@@ -1,10 +1,8 @@
 import 'package:federal_school/presentation/Colors.dart';
-import 'package:federal_school/domain/models/chat/chatCellModel.dart';
 import 'package:federal_school/domain/models/chat/chatGroupCellModel.dart';
 import 'package:federal_school/presentation/pages/home/chat/chatGroupCellView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../../../domain/states/home/chat/chatViewModel.dart';
 import 'chatMessageCellView.dart';
 

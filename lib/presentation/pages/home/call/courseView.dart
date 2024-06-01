@@ -1,12 +1,7 @@
-
-
 import 'package:federal_school/domain/states/home/course/courseViewModel.dart';
 import 'package:federal_school/presentation/pages/home/call/courseViewAsset.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
-import '../../../../domain/models/course/CourseModel.dart';
-
 
 class CourseView extends StatefulWidget {
   @override

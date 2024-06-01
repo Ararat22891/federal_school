@@ -1,24 +1,15 @@
-
 import 'package:federal_school/data/userDataSingltone.dart';
 import 'package:federal_school/presentation/pages/home/call/addCourse/addCourseView.dart';
 import 'package:federal_school/presentation/pages/home/call/courseInfo/courseInfoView.dart';
-import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:googleapis/cloudsearch/v1.dart';
 import 'package:intl/intl.dart';
-
 import '../../../../domain/models/course/CourseModel.dart';
 import '../../../Colors.dart';
 
 class CourseViewAsset extends StatelessWidget {
-
   CourseModel courseModel;
-
   CourseViewAsset({required this.courseModel});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +38,8 @@ class CourseViewAsset extends StatelessWidget {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-
                       ),
                       clipBehavior: Clip.antiAlias,
-
                       child: FadeInImage.assetNetwork(
                         placeholder: "assets/bird.jpg",
                         image: courseModel.imagePath!,
@@ -58,10 +47,7 @@ class CourseViewAsset extends StatelessWidget {
                         width: 60, height: 60,
                       ),
                     ),
-
                     Container(width: 12,),
-
-
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -78,8 +64,6 @@ class CourseViewAsset extends StatelessWidget {
                         )
                       ],
                     ),),
-
-
                     IconButton(
                         onPressed:
                         canEdit ? (){
@@ -98,7 +82,6 @@ class CourseViewAsset extends StatelessWidget {
                           color: isLightTheme ? MyColors.darkbluetext : MyColors.darkThemeFont,
                         )
                     ),
-
                   ],
                 ),
               )
@@ -106,7 +89,6 @@ class CourseViewAsset extends StatelessWidget {
         )
     );
   }
-
 
   String formatMessageDate(DateTime messageDateTime) {
     DateTime now = DateTime.now();

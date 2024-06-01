@@ -2,7 +2,6 @@ import 'package:federal_school/presentation/pages/home/calendar/addEventView.dar
 import 'package:federal_school/presentation/widgets/DefaultButton.dart';
 import 'package:federal_school/presentation/widgets/eventViewAsset.dart';
 import 'package:federal_school/domain/states/calendar/calendarHomeViewModel.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -133,20 +132,12 @@ class _CalendarHomeViewState extends State<CalendarHomeView> {
                                         );
                                       }
                                   ),
-
-
-
                                 ],
                               );
-
                             }
                             else{
-
-
                               return CustomScrollView(
                                 slivers: [
-
-
                                   viewModel.userData!.role == 3 ?  SliverAppBar(
                                     backgroundColor: Colors.transparent,
                                     title: DefaultButton(
@@ -162,8 +153,6 @@ class _CalendarHomeViewState extends State<CalendarHomeView> {
                                     pinned: false,
                                     floating: true,
                                   ) : SliverToBoxAdapter(),
-
-
                                   SliverFillRemaining(
                                     child: Center(
                                       child: Text(
@@ -175,9 +164,6 @@ class _CalendarHomeViewState extends State<CalendarHomeView> {
                                 ],
                               );
                             }
-
-
-
                           },
                         )
                     )

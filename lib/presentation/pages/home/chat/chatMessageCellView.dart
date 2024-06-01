@@ -1,19 +1,13 @@
-
-import 'package:federal_school/domain/models/user/user.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:federal_school/presentation/pages/home/dialog/dialogView.dart';
 import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:federal_school/presentation/widgets/verifiedNameViewAsset.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../domain/models/chat/chatCellModel.dart';
-
-
 class ChatMesageCellView extends StatefulWidget {
-
   ChatCellModel chat;
   ChatMesageCellView({required this.chat});
 
@@ -22,7 +16,6 @@ class ChatMesageCellView extends StatefulWidget {
 }
 
 class _ChatMesageCellViewState extends State<ChatMesageCellView> {
-
   late MenuController _menuController;
 
   @override
@@ -31,16 +24,13 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
-
     String fullName = widget.chat.otherUser.name == null ? "Неизвестный пользовательsdasaddasdsads": "${widget.chat.otherUser.surname} ${widget.chat.otherUser.name}";
     String date = formatMessageDate(widget.chat.sentTime);
     int newMessageCount = widget.chat!.newMessagesCount;
     bool isVerified = widget.chat.otherUser.isVerified;
-
 
     return Material(
       color: Colors.transparent,
@@ -56,7 +46,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
             onLongPress: (){
               _menuController.open();
             },
-
             child: MenuAnchor(
               controller: _menuController,
                 menuChildren: [
@@ -65,7 +54,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                       child: Text("Заглушить"),
                       onPressed: (){},
                   ),
-
                   MenuItemButton(
                     leadingIcon: Icon(Icons.delete),
                     child: Text("Удалить чат"),
@@ -81,10 +69,7 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                       networkAsset: widget.chat.otherUser.photoPath,
                       radius: 30,
                     ),
-
                     Container(width: 12,),
-
-
                     Expanded(child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -94,7 +79,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                     ),),
                     Padding(
                         padding: EdgeInsets.only(left: 8,top: 5),
-
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -117,7 +101,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
                               ),),
                             ) : Container()
                           ],
-
                         )
                     )
                   ],
@@ -127,7 +110,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
         ),
       )
     );
-
   }
 
   Widget messageIcon(int readStatus, String uid){
@@ -146,7 +128,6 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
   String formatMessageDate(DateTime messageDateTime) {
     DateTime now = DateTime.now();
     Duration difference = now.difference(messageDateTime);
-
     if (difference.inDays == 0) {
       // Сообщение отправлено сегодня
       return DateFormat.Hm('ru').format(messageDateTime); // Часы и минуты

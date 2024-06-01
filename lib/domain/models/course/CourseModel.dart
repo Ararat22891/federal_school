@@ -1,7 +1,3 @@
-
-
-
-
 class CourseModel{
   String uid;
   String creatorID;

@@ -60,7 +60,7 @@ class DialogEventViewAsset extends StatelessWidget {
           Text(
             event.summary ?? "Событие",
             overflow: TextOverflow.ellipsis,
-            maxLines: 1,
+            maxLines: 5,
             style: TextStyle(
                 color: isLight ? Colors.black : Colors.white,
                 fontWeight: FontWeight.bold, fontSize: 20),

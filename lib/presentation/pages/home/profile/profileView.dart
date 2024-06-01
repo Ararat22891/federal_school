@@ -4,14 +4,12 @@ import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/widgets/MyCircleAvatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
-import '../../../../domain/models/user/user.dart';
 import '../../../Colors.dart';
 
 class MyProfileView extends StatefulWidget {
   HomeViewModel viewModel;
 
-  MyProfileView({ required this.viewModel});
+  MyProfileView({required this.viewModel});
 
   @override
   State<MyProfileView> createState() => _MyProfileViewState();
@@ -19,7 +17,6 @@ class MyProfileView extends StatefulWidget {
 
 class _MyProfileViewState extends State<MyProfileView> {
   ProfileViewModel profileViewModel = ProfileViewModel();
-
 
   @override
   void initState() {
@@ -33,7 +30,6 @@ class _MyProfileViewState extends State<MyProfileView> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     var isLightTheme =
@@ -45,32 +41,39 @@ class _MyProfileViewState extends State<MyProfileView> {
           Expanded(
             flex: 2,
             child: Material(
-              color: isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
+              color:
+                  isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
               child: GradientContainer(
-                boxRadius: BorderRadius.only(bottomRight: Radius.circular(25), bottomLeft:  Radius.circular(25)),
+                boxRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(25),
+                    bottomLeft: Radius.circular(25)),
                 child: Column(
-
                   children: [
                     AppBar(
                       backgroundColor: Colors.transparent,
                       centerTitle: true,
                       foregroundColor: Colors.white,
                       actions: [
-                        IconButton(onPressed: () {
-                          if(profileViewModel.isEdit){
-                            if(profileViewModel.formKey.currentState!.validate()){
-                              profileViewModel.saveData(profileViewModel.user!);
-                              profileViewModel.isEdit = !profileViewModel.isEdit;
-                            }
-                          }
-                          else{
-                            profileViewModel.isEdit = !profileViewModel.isEdit;
-                          }
-                        },
+                        IconButton(
+                            onPressed: () {
+                              if (profileViewModel.isEdit) {
+                                if (profileViewModel.formKey.currentState!
+                                    .validate()) {
+                                  profileViewModel
+                                      .saveData(profileViewModel.user!);
+                                  profileViewModel.isEdit =
+                                      !profileViewModel.isEdit;
+                                }
+                              } else {
+                                profileViewModel.isEdit =
+                                    !profileViewModel.isEdit;
+                              }
+                            },
                             icon: Observer(
-                                builder: (context) =>
-                                    Icon(profileViewModel.isEdit ? Icons.done : Icons.edit))
-                        )
+                                builder: (context) => Icon(
+                                    profileViewModel.isEdit
+                                        ? Icons.done
+                                        : Icons.edit)))
                       ],
                       title: Text(
                         "Профиль",
@@ -83,40 +86,41 @@ class _MyProfileViewState extends State<MyProfileView> {
                       children: [
                         Spacer(),
                         GestureDetector(
-                          child: Observer(
-                              builder: (context){
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-
-                                    MyCircleAvatar(
-                                      networkAsset: widget.viewModel.userData!.photoPath!,
-                                      maxRadius: MediaQuery.of(context).size.height/ 6.5,
-
-                                    ),
-                                          profileViewModel.isLoadingPhoto ? CircularProgressIndicator(): Container(),
-
-                                    profileViewModel.isEdit ?
-                                    Positioned(
+                          child: Observer(builder: (context) {
+                            return Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                MyCircleAvatar(
+                                  networkAsset:
+                                      widget.viewModel.userData!.photoPath!,
+                                  maxRadius:
+                                      MediaQuery.of(context).size.height / 6.5,
+                                ),
+                                profileViewModel.isLoadingPhoto
+                                    ? CircularProgressIndicator()
+                                    : Container(),
+                                profileViewModel.isEdit
+                                    ? Positioned(
                                         bottom: 0,
                                         right: 20,
-                                        child: Icon(Icons.add_circle, color: Colors.white, size: 40,)
-                                    ) : Container()
-                                  ],
-                                );
-                              }
-                          ),
-                          onTap: (){
-                           profileViewModel.uploadProfile();
+                                        child: Icon(
+                                          Icons.add_circle,
+                                          color: Colors.white,
+                                          size: 40,
+                                        ))
+                                    : Container()
+                              ],
+                            );
+                          }),
+                          onTap: () {
+                            profileViewModel.uploadProfile();
                           },
                         ),
                         Spacer(),
-
                       ],
                     ),
                     Spacer(),
                     Spacer(),
-
                   ],
                 ),
               ),
@@ -125,7 +129,8 @@ class _MyProfileViewState extends State<MyProfileView> {
           Flexible(
             flex: 2,
             child: Container(
-              color: isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
+              color:
+                  isLightTheme ? MyColors.white : MyColors.darkThemeContainer,
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,25 +144,23 @@ class _MyProfileViewState extends State<MyProfileView> {
                   ),
                   Form(
                     key: profileViewModel.formKey,
-                    child: Observer(
-                      builder: (context) {
-                        profileViewModel.controller.text = widget.viewModel.fullName ?? "";
-                        return TextFormField(
-                                controller: profileViewModel.controller,
-                                style: Theme.of(context).textTheme.titleMedium,
-                                readOnly: !profileViewModel.isEdit,
-                                enabled: profileViewModel.isEdit,
-                                validator: profileViewModel.validateFIO,
-                                decoration: InputDecoration(
-                                  isDense: true,
-                                  hintText: "Введите ФИО",
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 6),
-                                ),
-                              );
-                            }),
+                    child: Observer(builder: (context) {
+                      profileViewModel.controller.text =
+                          widget.viewModel.fullName ?? "";
+                      return TextFormField(
+                        controller: profileViewModel.controller,
+                        style: Theme.of(context).textTheme.titleMedium,
+                        readOnly: !profileViewModel.isEdit,
+                        enabled: profileViewModel.isEdit,
+                        validator: profileViewModel.validateFIO,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          hintText: "Введите ФИО",
+                          contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                        ),
+                      );
+                    }),
                   ),
-
                   Container(
                     height: 12,
                   ),
@@ -177,25 +180,24 @@ class _MyProfileViewState extends State<MyProfileView> {
                   Container(
                     height: 12,
                   ),
-                  Observer(builder: (context){
+                  Observer(builder: (context) {
                     return Text(
                       "Роль",
                       style: Theme.of(context).textTheme.labelLarge,
                     );
                   }),
-                  Observer(
-                      builder: (context){
-                        return TextFormField(
-                          style: Theme.of(context).textTheme.titleMedium,
-                          enabled: false,
-                          controller: TextEditingController(text: widget.viewModel.role),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 6),
-                          ),
-                        );
-                      }
-                  )
+                  Observer(builder: (context) {
+                    return TextFormField(
+                      style: Theme.of(context).textTheme.titleMedium,
+                      enabled: false,
+                      controller:
+                          TextEditingController(text: widget.viewModel.role),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 6),
+                      ),
+                    );
+                  })
                 ],
               ),
             ),

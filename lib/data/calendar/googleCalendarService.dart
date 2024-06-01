@@ -6,7 +6,7 @@ class GoogleCalendarService {
   String _file = "";
   String _scopeCalendar = "";
   String _scopeEvents = "";
-  static const _calendarId = 'e7f6155adbdfce99773e3afc60e98272987b367c687af04982b812028b4d09d9@group.calendar.google.com';
+  static const _calendarId = 'p11hokmr3eougou3i9d4trvh9g@group.calendar.google.com';
 
   late ServiceAccountCredentials credentials;
 

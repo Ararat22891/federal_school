@@ -1,4 +1,3 @@
-
 import 'package:agora_rtc_engine/agora_rtc_engine.dart';
 import 'package:agora_uikit/agora_uikit.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -8,7 +7,6 @@ import 'package:flutter/material.dart';
 class CallingView extends StatefulWidget {
 
   String channelName;
-
   CallingView({required this.channelName});
 
   @override
@@ -16,18 +14,12 @@ class CallingView extends StatefulWidget {
 }
 
 class _CallingViewState extends State<CallingView> {
-
-
   late final AgoraClient client = AgoraClient(
       agoraConnectionData: AgoraConnectionData(
         appId: "116f18f433de42a9abb0c6d3f2ed5493",
         channelName: widget.channelName,
-
       ),
-
-
   );
-
 // Initialize the Agora Engine
   @override
   void initState() {

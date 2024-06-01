@@ -18,13 +18,4 @@ class ContactModel{
     };
   }
 
-
-
-  static var contacts = [
-    ContactModel(uid: "safefsfds"),
-    ContactModel(uid: "safefsfds"),
-    ContactModel(uid: "safefsfds"),
-    ContactModel(uid: "safefsfds"),
-
-  ];
 }

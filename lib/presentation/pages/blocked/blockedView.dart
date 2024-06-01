@@ -1,5 +1,3 @@
-
-
 import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/widgets/DefaultButton.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
@@ -14,18 +12,13 @@ class BlockedView extends StatelessWidget {
     return GradientContainer(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-
           body: Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-
-
                   Image.asset("assets/sad_man.png"),
-
-
                   Text(
                     'Ваш аккаунт заблокирован\nадминистрацией',
                     textAlign: TextAlign.center,

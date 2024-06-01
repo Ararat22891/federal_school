@@ -1,6 +1,4 @@
-
 import 'dart:async';
-
 import 'package:federal_school/domain/models/user/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';

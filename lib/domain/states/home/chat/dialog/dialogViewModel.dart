@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:isolate';
 
 import 'package:federal_school/data/notifications/sendNotification.dart';
@@ -74,7 +75,9 @@ abstract class _DialogViewModel with Store {
     String chatUID = "${sorted.first}_${sorted[1]}";
     print(chatUID);
     var ref = FirebaseDatabase.instance.ref("chats").child(chatUID);
-    var n = await ref.child("unread").get();
+    var n = await FirebaseDatabase.instance.ref("chats").child(chatUID).child("unread").get();
+    print(n.value);
+
     if(n.exists){
       int count = n.value as int;
       count++;
@@ -89,16 +92,12 @@ abstract class _DialogViewModel with Store {
       }
       );
     }
-
-
-
     var newRef = ref.push();
-
     newRef.set(
       DialogModel(uuid: newRef.key!, chatUid: chatUID, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
     );
     scrollController.animateTo(
-      scrollController.position.minScrollExtent,
+      scrollController.position.maxScrollExtent,
     duration: Duration(seconds: 2),
     curve: Curves.fastOutSlowIn,
     );

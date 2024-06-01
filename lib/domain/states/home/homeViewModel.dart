@@ -11,12 +11,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
-import 'package:permission_handler/permission_handler.dart';
-
-import '../../../presentation/themes/themes.dart';
-import '../../../snackBar.dart';
 import '../../models/user/user.dart';
-
 part 'homeViewModel.g.dart';
 
 class HomeViewModel = _HomeViewModel with _$HomeViewModel;
@@ -68,12 +63,8 @@ abstract class _HomeViewModel with Store {
     return "Неизвестный пользователь";
   }
 
-
-
-
   @action
   Future<void> getUserData() async {
-
     var s =  await AwesomeNotifications().requestPermissionToSendNotifications();
     print(s);
     userData = GlobalSingltone.getInstanse().instance;
@@ -92,7 +83,6 @@ abstract class _HomeViewModel with Store {
         userData = GlobalSingltone.getInstanse().instance;
       }
     });
-
 
     String? key = await FirebaseMessaging.instance.getToken();
     await ref.update({
