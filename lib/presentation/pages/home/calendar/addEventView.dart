@@ -132,6 +132,7 @@ class _AddEventViewState extends State<AddEventView> {
                           onPressed: () async{
                             if(eventViewModel.formKey.currentState!.validate()){
                               await eventViewModel.addEvent();
+                              Navigator.of(context).pop();
                               await widget.calendarHomeViewModel.getEvents();
                             }
                           },
@@ -148,8 +149,13 @@ class _AddEventViewState extends State<AddEventView> {
                     ],
                   ),
                 ) :
-                Center(
-                  child: CircularProgressIndicator(),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                      CircularProgressIndicator(),
+                  ],
                 )
             );
           },

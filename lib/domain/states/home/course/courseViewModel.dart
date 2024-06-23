@@ -29,7 +29,7 @@ abstract class _CourseViewModel with Store{
         final userInfoMap = Map<String, dynamic>.from(userInfoSnap.value as Map);
         UserData userData = UserData.fromJson(userInfoMap);
         String fio = userData.surname == null ? "Преподаватель" :"${userData!.surname} ${userData.name} ${userData.patronomyc}";
-        courseData.creatorID = fio;
+        courseData.creatorID = courseData.creatorID+"^"+fio;
         bool isAvailable = courseData.availableTo.isAfter(DateTime.now());
 
         if(isAvailable && !courses.any(

@@ -1,6 +1,7 @@
 import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../widgets/DefaultButton.dart';
 import '../../widgets/phoneField.dart';
 import '../../../textStyles/textStyles.dart';
@@ -68,24 +69,33 @@ class LoginView extends StatelessWidget {
                             ),
                             Text("Введите номер своего телефона здесь",
                                 style: TextStyles.subBody),
-                            Visibility(
-                              child: Text(
-                                  "*Пожалуйста, введите свой номер телефона",
-                                  style: TextStyles.errorBody),
-                              visible: false,
+                            Observer(
+                                builder: (context)=>
+                                    Visibility(
+                                      child: Text(
+                                          "*Пожалуйста, введите свой номер телефона",
+                                          style: TextStyles.errorBody),
+                                      visible: viewModel.errorVisibility,
+                                    ),
                             ),
                             SizedBox(
                               height: 24,
                             ),
                             DefaultButton(
                                 onPressed: () async {
-                                  await showDialog(
-                                      context: context,
-                                      builder: (_) {
-                                        return new DialogVerificationView(
-                                          viewModel: viewModel,
-                                        );
-                                      });
+                                  var arrayLength = viewModel.phoneNumber.split("").length;
+                                  if(arrayLength != 10){
+                                    viewModel.errorVisibility = true;
+                                  }
+                                  else {
+                                    await showDialog(
+                                        context: context,
+                                        builder: (_) {
+                                          return new DialogVerificationView(
+                                            viewModel: viewModel,
+                                          );
+                                        });
+                                  }
                                 },
                                 text: "Войти"),
                           ],

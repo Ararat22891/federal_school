@@ -55,11 +55,11 @@ class ContactViewAsset extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        contact.telNumber,
+                        getRole(contact.role!),
                         style: TextStyle(
                             color: isLight
-                                ? MyColors.darkbluetext
-                                : MyColors.darkThemeFont,
+                                ? Colors.grey[500]
+                                : MyColors.grey,
                             fontSize: 14,
                             fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,

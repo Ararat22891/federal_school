@@ -15,7 +15,19 @@ class CourseViewAsset extends StatelessWidget {
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
     var userRole = GlobalSingltone.getInstanse().instance!.role;
-    bool canEdit = courseModel.creatorID == FirebaseAuth.instance.currentUser!.uid && userRole == 2 ? true : false;
+    bool canEdit = courseModel.creatorID.split("^").first == FirebaseAuth.instance.currentUser!.uid && userRole == 2 ? true : false;
+
+
+    print("staaart");
+    print(canEdit);
+
+    print(courseModel.creatorID);
+
+    print(FirebaseAuth.instance.currentUser!.uid);
+    print(userRole);
+
+    print("eeenddd");
+
 
     return Material(
         color: Colors.transparent ,

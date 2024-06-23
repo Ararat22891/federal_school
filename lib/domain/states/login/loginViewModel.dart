@@ -14,7 +14,9 @@ enum AuthStatus{validCode, invalidCode, loading, main, incorrectNumb, wrongCode,
 abstract class _LoginViewModel with Store{
 
     @observable
-    String phoneNumber = "9677777777";
+    String phoneNumber = "";
+
+
 
     @observable
     String? verificaionCode = "";
@@ -23,9 +25,13 @@ abstract class _LoginViewModel with Store{
     int time = 30;
 
     @observable
+    bool errorVisibility = false;
+
+    @observable
     String verificationId = "";
 
     bool isBlocked = true;
+    bool isStudent = true;
 
     late Timer _timer;
 
@@ -118,6 +124,7 @@ abstract class _LoginViewModel with Store{
                     final data = Map<String, dynamic>.from(snapshot.value as Map);
                     UserData userData = UserData.fromJson(data);
                     isBlocked = userData.isEnable;
+                    isStudent = userData.role == 0 ? true : false;
                 }
 
                 status = AuthStatus.validCode;

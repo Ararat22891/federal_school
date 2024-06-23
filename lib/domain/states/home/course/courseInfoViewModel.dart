@@ -14,6 +14,14 @@ abstract class _CourseInfoViewModel with Store{
 
   @observable
   String _url = "";
+
+  @observable
+  String? _yotubeUrl;
+
+  @computed
+  String? get yotubeUrl => _yotubeUrl;
+
+
   set url(String value) {
     _url = value;
   }
@@ -25,11 +33,15 @@ abstract class _CourseInfoViewModel with Store{
 
   @action
   Future<void> loadVideo() async{
-    isVideoLoaded = false;
+      isVideoLoaded = false;
+      _yotubeUrl =  YoutubePlayerController.convertUrlToId(_url);
+      print(_yotubeUrl);
 
-    controller = YoutubePlayerController.fromVideoId(
-      videoId: YoutubePlayerController.convertUrlToId(_url)!
-    );
-    isVideoLoaded = true;
+      if(_yotubeUrl != null){
+        controller = YoutubePlayerController.fromVideoId(videoId: _yotubeUrl!);
+      }
+      controller = YoutubePlayerController();
+      isVideoLoaded = true;
+
   }
 }

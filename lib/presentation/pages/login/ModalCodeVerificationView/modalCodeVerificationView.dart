@@ -107,22 +107,27 @@ class _ModalCodeVerificationViewState extends State<ModalCodeVerificationView> {
                               return StatusDialog(
                                 status: AuthStatus.validCode,
                                 isEnabled: widget.viewModel.isBlocked,
+                                isStudent: widget.viewModel.isStudent,
                               );
                             case AuthStatus.invalidCode:
                               return StatusDialog(
                                 status: AuthStatus.invalidCode,
+                                isStudent: widget.viewModel.isStudent,
                               );
                             case AuthStatus.loading:
                               return StatusDialog(
                                 status: AuthStatus.loading,
+                                isStudent: widget.viewModel.isStudent,
                               );
                             case AuthStatus.networkError:
                               return StatusDialog(
                                 status: AuthStatus.networkError,
+                                isStudent: widget.viewModel.isStudent,
                               );
                             default:
                             return StatusDialog(
                               status: AuthStatus.wrongCode,
+                              isStudent: widget.viewModel.isStudent,
                             );
                           }
                         }

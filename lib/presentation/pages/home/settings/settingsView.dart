@@ -1,16 +1,26 @@
+import 'package:federal_school/domain/states/home/settings/settingsViewModel.dart';
+import 'package:federal_school/presentation/pages/login/loginView.dart';
 import 'package:federal_school/presentation/widgets/GradientContainer.dart';
 import 'package:federal_school/presentation/widgets/roundedContainer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../Colors.dart';
 
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key});
+  SettingsView({super.key});
+  SettingsViewModel state = SettingsViewModel();
 
   @override
   Widget build(BuildContext context) {
+    bool isLightTheme =
+    Theme.of(context).brightness == Brightness.dark ? false : true;
+
     return GradientContainer(
         child: Scaffold(
       backgroundColor: Colors.transparent,
+      
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         leading: IconButton(
@@ -33,171 +43,120 @@ class SettingsView extends StatelessWidget {
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          Flexible(
-            child: Image.asset(
+          Image.asset(
               "assets/settings_cat.png",
               scale: 3,
             ),
-          ),
-          RoundedContainer(
-            padding: EdgeInsets.all(12),
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "Уведомления",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontSize: 24),
-                    ),
-                    Spacer()
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1, color: MyColors.darkbluetext),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Push-уведомления",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                          Text(
-                            "Получать уведомления от чатов, звонков, событий",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Switch(value: true, onChanged: (sas) {})
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 12,
-                ),
-                Row(
-                  children: [
-                    Text("Поддержка",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontSize: 24)),
-                    Spacer()
-                  ],
-                ),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1, color: MyColors.darkbluetext),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "О нас",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                          Text(
-                            "Узнать о нас",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.chevron_right_outlined,
-                        size: 30,
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 12,
-                ),
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      border:
-                          Border.all(width: 1, color: MyColors.darkbluetext),
-                      borderRadius: BorderRadius.circular(12)),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "О приложении",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                          Text(
-                            "Все о приложении",
-                            style: TextStyle(
-                                color: MyColors.darkbluetext,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12),
-                          ),
-                        ],
-                      ),
-                      Spacer(),
-                      Icon(
-                        Icons.chevron_right_outlined,
-                        size: 30,
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                  height: 60,
-                ),
-                Align(
-                    alignment: Alignment.bottomCenter,
-                    child: FilledButton.tonalIcon(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.exit_to_app,
-                        color: Colors.white,
-                      ),
-                      label: Text("Выйти",
-                          style: TextStyle(color: Colors.white, fontSize: 24)),
-                      style:
-                          FilledButton.styleFrom(backgroundColor: Colors.red),
-                    )),
-              ],
-            ),
-          ),
+
+         Expanded(
+             child: RoundedContainer(
+               padding: EdgeInsets.all(12),
+               child: Column(
+                 mainAxisSize: MainAxisSize.max,
+                 children: [
+                   Row(
+                     children: [
+                       Text("Поддержка",
+                           style: Theme.of(context)
+                               .textTheme
+                               .titleMedium!
+                               .copyWith(fontSize: 24)),
+                       Spacer()
+                     ],
+                   ),
+                   SizedBox(height: 12,),
+                   Container(
+                       decoration: BoxDecoration(
+                           border: Border.all(width: 1, color: MyColors.darkbluetext),
+                           borderRadius: BorderRadius.circular(12)),
+                       child: GestureDetector(
+                         child: ListTile(
+                           title: Text(
+                             "О нас",
+                             style: Theme.of(context).textTheme.titleMedium
+                           ),
+                           subtitle: Text(
+                             "Узнать о нас",
+                             style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                               fontSize: 12
+                             )
+                           ),
+                           trailing:  Icon(
+                             Icons.chevron_right_outlined,
+                             size: 30,
+                           )
+                           ,
+                         ),
+                         onTap: () async{
+                           await launchUrlString("https://www.yabloko.ru", mode: LaunchMode.inAppBrowserView);
+                         },
+                       )
+                   ),
+                   Container(
+                     height: 12,
+                   ),
+                   Container(
+                       decoration: BoxDecoration(
+                           border:
+                           Border.all(width: 1, color: MyColors.darkbluetext),
+                           borderRadius: BorderRadius.circular(12)),
+
+                       child: GestureDetector(
+                         onTap: () async{
+                           await launchUrlString("https://school.yabloko.ru", mode: LaunchMode.inAppBrowserView);
+                         },
+                         child: ListTile(
+                             title: Text(
+                               "О ФПШ",
+                                 style: Theme.of(context).textTheme.titleMedium
+
+                             ),
+                             subtitle: Text(
+                               "Все о партийной школе",
+                                 style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                                     fontSize: 12
+                                 )
+                             ),
+                             trailing: Icon(
+                               Icons.chevron_right_outlined,
+                               size: 30,
+                             )
+                         ),
+                       )
+                   ),
+                   
+                   Expanded(
+                     child: Padding(
+                         padding: EdgeInsets.only(bottom: 12),
+                       child: Align(
+                           alignment: Alignment.bottomCenter,
+                           child: FilledButton.tonalIcon(
+                             onPressed: () async{
+                               await state.signOut();
+                               Navigator.of(context).pushAndRemoveUntil(
+                                   MaterialPageRoute(builder: (context) => LoginView()),
+                                       (route) => false
+                               );
+                             },
+                             icon: Icon(
+                               Icons.exit_to_app,
+                               color: Colors.white,
+                             ),
+                             label: Text("Выйти",
+                                 style: TextStyle(color: Colors.white, fontSize: 24)),
+                             style:
+                             FilledButton.styleFrom(backgroundColor: Colors.red),
+                           )),
+                     )
+                   ),
+
+                   SizedBox(height: 20,)
+                 ],
+               ),
+             ),)
         ],
       ),
+
     ));
   }
 }

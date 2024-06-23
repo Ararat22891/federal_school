@@ -19,66 +19,68 @@ class DialogEventViewAsset extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color:
-                            isLight ? MyColors.blue70 : MyColors.darkThemeFont),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
-                  ),
-                ],
-              ),
-              Container(
-                width: 12,
-              ),
-              Text(
-                _getDateTime(event),
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              )
-            ],
-          ),
-          Container(
-            height: 8,
-          ),
-          Text(
-            event.summary ?? "Событие",
-            overflow: TextOverflow.ellipsis,
-            maxLines: 5,
-            style: TextStyle(
-                color: isLight ? Colors.black : Colors.white,
-                fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          Container(
-            height: 8,
-          ),
-          HtmlWidget(
-               event.description ?? "Партийное мероприятие",
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color:
+                          isLight ? MyColors.blue70 : MyColors.darkThemeFont),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Colors.white),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 12,
+                ),
+                Text(
+                  _getDateTime(event),
+                  style: TextStyle(
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                )
+              ],
+            ),
+            Container(
+              height: 8,
+            ),
+            Text(
+              event.summary ?? "Событие",
+              overflow: TextOverflow.ellipsis,
+              maxLines: 5,
+              style: TextStyle(
+                  color: isLight ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            Container(
+              height: 8,
+            ),
+            HtmlWidget(
+              event.description ?? "Партийное мероприятие",
               textStyle: TextStyle(color: Colors.grey, fontSize: 16),
               onTapUrl: (url) {
-                 launchUrl(Uri.parse(url));
-                 return true;
+                launchUrl(Uri.parse(url));
+                return true;
               },
-          )
+            )
 
-        ],
-      ),
+          ],
+        ),
+      )
     );
   }
 
@@ -91,13 +93,13 @@ class DialogEventViewAsset extends StatelessWidget {
     DateTime? endDateTime = event.end?.dateTime;
 
     if (startDate == null) {
-      actualDateTime = DateFormat.Hm().format(startDateTime!);
+      actualDateTime = DateFormat.Hm().format(startDateTime!.add(Duration(hours: 3)));
     } else if (startDateTime == null) {
       actualDateTime = "Весь день";
     }
 
     if (endDate == null) {
-      actualDateTime += " – ${DateFormat.Hm().format(endDateTime!)}";
+      actualDateTime += " – ${DateFormat.Hm().format(endDateTime!.add(Duration(hours: 3)))}";
     }
 
     return actualDateTime;

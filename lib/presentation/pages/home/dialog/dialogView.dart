@@ -81,7 +81,7 @@ class _DialogViewState extends State<DialogView> {
                         name: widget.data.name == null
                             ? "Неизвестный пользователь"
                             : "${widget.data.surname} ${widget.data.name} ${widget.data.patronomyc}",
-                        isVerified: widget.data.isVerified,
+                        isVerified: widget.data!.role! > 1 ? true: false,
                         textStyle: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class _DialogViewState extends State<DialogView> {
                 children: [
                   Expanded(
                     child: Container(child: Observer(builder: (context) {
-                      if (_dialogViewModel.isDataLoaded) {
+                      if (_dialogViewModel.isDataLoaded && _dialogViewModel.dialogs.isNotEmpty) {
                         return GroupedListView(
                           elements: _dialogViewModel.dialogs,
                           controller: _dialogViewModel.scrollController,
@@ -171,7 +171,8 @@ class _DialogViewState extends State<DialogView> {
                           // ),
                           SizedBox(width: 15),
                           Expanded(
-                            child: TextField(
+                            child: Observer(builder:
+                            (context) => TextField(
                               cursorColor: Colors.green,
                               controller: _dialogViewModel.controller,
                               textCapitalization: TextCapitalization.sentences,
@@ -190,7 +191,8 @@ class _DialogViewState extends State<DialogView> {
                                     color: Colors.grey,
                                     fontStyle: FontStyle.italic),
                               ),
-                            ),
+                            )
+                            )
                           ),
                           Observer(builder: (context) {
                             return IconButton(
@@ -204,10 +206,10 @@ class _DialogViewState extends State<DialogView> {
                                       },
                                 icon: Icon(
                                   Icons.send,
-                                  color: Theme.of(context)
+                                  color: _dialogViewModel.isSendable ? Theme.of(context)
                                       .textTheme
                                       .titleMedium!
-                                      .color,
+                                      .color : Colors.grey,
                                 ));
                           })
                         ],

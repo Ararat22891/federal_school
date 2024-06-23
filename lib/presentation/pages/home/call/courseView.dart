@@ -21,12 +21,22 @@ class _CourseViewState extends State<CourseView> {
   Widget build(BuildContext context) {
     return Observer(
         builder: (context){
+          if(courseViewModel.courses.isNotEmpty)
           return  ListView.builder(
               itemCount: courseViewModel.courses.length,
               itemBuilder: (context, index){
+                print(courseViewModel.courses[index].creatorID);
                 return CourseViewAsset(courseModel: courseViewModel.courses[index]);
               }
           );
+          else{
+            return Center(
+              child: Text(
+                "Ожидайте добавления курсов",
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            );
+          }
         }
     );
   }

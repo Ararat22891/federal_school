@@ -102,8 +102,8 @@ class _CourseInfoViewState extends State<CourseInfoView> {
                                                   Container(
                                                     height: 8,
                                                   ),
-                                                  widget.courseModel.videoUrl == null
-                                                      ? Image.network(
+                                                  courseInfoViewModel.yotubeUrl == null
+                                                        ? Image.network(
                                                     widget.courseModel.imagePath!,
                                                     loadingBuilder: (BuildContext context,
                                                         Widget child,
@@ -139,7 +139,7 @@ class _CourseInfoViewState extends State<CourseInfoView> {
                                                       Expanded(
                                                         child: Padding(
                                                           padding: EdgeInsets.only(right: 15),
-                                                          child: Text("Автор: ${widget.courseModel.creatorID}",
+                                                          child: Text("Автор: ${widget.courseModel.creatorID.split("^")[1]}",
                                                               textAlign: TextAlign.end,
                                                               style: Theme.of(context)
                                                                   .textTheme
@@ -149,7 +149,7 @@ class _CourseInfoViewState extends State<CourseInfoView> {
                                                       )
                                                     ],
                                                   ),
-                                                  RoundedContainer(child: Container(height: 500,),)
+                                                  RoundedContainer(child: Container(height: MediaQuery.of(context).size.height / 3,),)
 
 
 

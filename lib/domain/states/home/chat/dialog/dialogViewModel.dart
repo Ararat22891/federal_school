@@ -96,6 +96,7 @@ abstract class _DialogViewModel with Store {
     newRef.set(
       DialogModel(uuid: newRef.key!, chatUid: chatUID, senderUID: myUid, message: controller.text, sentTime: DateTime.now(), readStatus: 0).toJson()
     );
+    controller.clear();
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
     duration: Duration(seconds: 2),
@@ -111,7 +112,7 @@ abstract class _DialogViewModel with Store {
       "sender": myFio,
       "chatUID": chatUID
     };
-    controller.clear();
+    controller.text = "";
     await send(userData.deviceToken, data);
 
   }

@@ -1,8 +1,8 @@
 import 'dart:math';
-import 'package:agora_uikit/agora_uikit.dart';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:federal_school/data/userDataSingltone.dart';
 import 'package:federal_school/domain/models/user/user.dart';
+import 'package:federal_school/presentation/pages/application/applicationView.dart';
 import 'package:federal_school/presentation/pages/blocked/blockedView.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/presentation/pages/login/loginView.dart';
@@ -45,13 +45,6 @@ void main() async {
     await GlobalSingltone.getInstanse().getInstance(userRef);
     _userData = GlobalSingltone.getInstanse().instance;
   }
-  var status = await Permission.notification.status;
-  print(status.isGranted);
-
-
-  var ss = await FirebaseDatabase.instance.ref("chats").child("3Kwcx3FeysTJvI2X5tn1h5sqqLd2_YR66q1ETeEOEbSgUODbLVwEFbG42").get();
-
-  print(ss.children);
 
   runApp(SchoolApp());
 }
@@ -59,10 +52,13 @@ void main() async {
 Widget _redirect(UserData? user) {
   if (user == null) {
     return LoginView();
-  } else if (user.isEnable) {
+  } else if (user.isEnable && user.role != 0) {
     return HomeView();
   } else if (!user.isEnable) {
     return BlockedView();
+  }
+  else if (user.role == 0){
+    return ApplicationView();
   }
   return Container();
 }
@@ -76,6 +72,7 @@ class SchoolApp extends StatelessWidget {
       initTheme: lightTheme(),
       builder: (context, theme) {
         return MaterialApp(
+          debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,
           scaffoldMessengerKey: SnackbarGlobal.key,
           home: _redirect(_userData),

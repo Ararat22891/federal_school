@@ -6,7 +6,7 @@ class GoogleCalendarService {
   String _file = "";
   String _scopeCalendar = "";
   String _scopeEvents = "";
-  static const _calendarId = 'p11hokmr3eougou3i9d4trvh9g@group.calendar.google.com';
+  static const _calendarId = 'e7f6155adbdfce99773e3afc60e98272987b367c687af04982b812028b4d09d9@group.calendar.google.com';
 
   late ServiceAccountCredentials credentials;
 
@@ -29,18 +29,36 @@ class GoogleCalendarService {
     return events;
   }
 
-  Future<void> addEvent(String summary, String description, EventDateTime start, EventDateTime? end) async{
+  Future<void> addEvent(String summary, String description, EventDateTime start) async{
     await init();
     final httpClient = await clientViaServiceAccount(
         credentials, [_scopeCalendar, _scopeEvents]);
     final calendarApi = CalendarApi(httpClient);
 
-    final event = Event()
-      ..summary = summary
-      ..description = description
-      ..start = start
-      ..end = end;
-    await calendarApi.events.insert(event, _calendarId);
+    if(start.dateTime != null){
+      var endTime = DateTime(start.dateTime!.year, start.dateTime!.month, start.dateTime!.day, 23,59);
+
+      final event = Event()
+        ..summary = summary
+        ..description = description
+        ..start = start
+        ..start?.dateTime = start.dateTime
+        ..end = EventDateTime(dateTime: endTime);
+      ;
+      await calendarApi.events.insert(event, _calendarId);
+    }
+    else{
+      final event = Event()
+        ..summary = summary
+        ..description = description
+        ..start = start
+        ..start?.date = start.date
+        ..end = start;
+      ;
+      await calendarApi.events.insert(event, _calendarId);
+    }
+
+
 
     httpClient.close();
 

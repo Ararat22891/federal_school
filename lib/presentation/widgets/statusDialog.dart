@@ -1,5 +1,6 @@
 import 'package:federal_school/domain/states/login/loginViewModel.dart';
 import 'package:federal_school/presentation/Colors.dart';
+import 'package:federal_school/presentation/pages/application/applicationView.dart';
 import 'package:federal_school/presentation/pages/blocked/blockedView.dart';
 import 'package:federal_school/presentation/pages/home/homeView.dart';
 import 'package:federal_school/textStyles/textStyles.dart';
@@ -8,10 +9,11 @@ import 'package:flutter/material.dart';
 class StatusDialog extends StatelessWidget {
 
 
-  StatusDialog({required this.status, this.isEnabled});
+  StatusDialog({required this.status, this.isEnabled, required this.isStudent});
 
   AuthStatus status;
   bool? isEnabled = false;
+  bool isStudent = true;
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +48,15 @@ class StatusDialog extends StatelessWidget {
 
                   FilledButton(
                     onPressed: () {
-                      if(isEnabled!) {
+                      if(isEnabled! && !isStudent) {
                         Navigator.pushAndRemoveUntil(context,
                             MaterialPageRoute(builder: (context) => HomeView()),
+                                (Route<dynamic> route) => false
+                        );
+                      }
+                      else if (isEnabled! && isStudent){
+                        Navigator.pushAndRemoveUntil(context,
+                            MaterialPageRoute(builder: (context) => ApplicationView()),
                                 (Route<dynamic> route) => false
                         );
                       }

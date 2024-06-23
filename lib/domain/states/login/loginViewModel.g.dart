@@ -56,6 +56,22 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
     });
   }
 
+  late final _$errorVisibilityAtom =
+      Atom(name: '_LoginViewModel.errorVisibility', context: context);
+
+  @override
+  bool get errorVisibility {
+    _$errorVisibilityAtom.reportRead();
+    return super.errorVisibility;
+  }
+
+  @override
+  set errorVisibility(bool value) {
+    _$errorVisibilityAtom.reportWrite(value, super.errorVisibility, () {
+      super.errorVisibility = value;
+    });
+  }
+
   late final _$verificationIdAtom =
       Atom(name: '_LoginViewModel.verificationId', context: context);
 
@@ -142,6 +158,7 @@ mixin _$LoginViewModel on _LoginViewModel, Store {
 phoneNumber: ${phoneNumber},
 verificaionCode: ${verificaionCode},
 time: ${time},
+errorVisibility: ${errorVisibility},
 verificationId: ${verificationId},
 status: ${status},
 pinEditingController: ${pinEditingController}

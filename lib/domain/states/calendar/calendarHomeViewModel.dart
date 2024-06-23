@@ -82,7 +82,6 @@ abstract class _CalendarHomeViewModel with Store{
   Future<void> getEvents() async{
     isReady = false;
     events = await _service.getEvents();
-    print("sas"+events.items!.length.toString());
     isReady = true;
     var s = events.items;
     allEvents = s?.toList().asObservable();

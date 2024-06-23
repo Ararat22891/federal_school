@@ -32,8 +32,11 @@ abstract class _AddEventViewModel with Store{
     if(selectedDate == null){
       return null;
     }
+    if(time != null)
+      selectedDate = DateTime(selectedDate!.year, selectedDate!.month, selectedDate!.day, time!.hour, time!.minute);
     var date = DateFormat.yMd("ru_RU").format(selectedDate!);
     var text = "${date}";
+
     if(time != null){
       selectedDate!.add(Duration(
         hours: time!.hour,
@@ -52,13 +55,18 @@ abstract class _AddEventViewModel with Store{
   Future<void> addEvent() async{
     isLoadingData = true;
     GoogleCalendarService service = GoogleCalendarService();
+    late EventDateTime start;
 
-    var start = EventDateTime(dateTime: selectedDate);
+    print(selectedDate!.hour);
+    if(selectedDate!.hour == 0)
+     start = EventDateTime(date: selectedDate);
+    else  start = EventDateTime(dateTime: selectedDate);
+
+
 
     await service.addEvent(
         nameCourseController.text,
         descriptionController.text,
-        start,
         start
     );
     isLoadingData = false;

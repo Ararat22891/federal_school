@@ -27,10 +27,10 @@ class _ChatMesageCellViewState extends State<ChatMesageCellView> {
   @override
   Widget build(BuildContext context) {
     var isLightTheme = Theme.of(context).brightness == Brightness.light;
-    String fullName = widget.chat.otherUser.name == null ? "Неизвестный пользовательsdasaddasdsads": "${widget.chat.otherUser.surname} ${widget.chat.otherUser.name}";
+    String fullName = widget.chat.otherUser.name == null ? "Неизвестный пользовательsdasaddasdsads": "${widget.chat.otherUser.surname} ${widget.chat.otherUser.name} ${widget.chat.otherUser.patronomyc}";
     String date = formatMessageDate(widget.chat.sentTime);
     int newMessageCount = widget.chat!.newMessagesCount;
-    bool isVerified = widget.chat.otherUser.isVerified;
+    bool isVerified = widget.chat.otherUser.role! > 1 ? true: false;
 
     return Material(
       color: Colors.transparent,

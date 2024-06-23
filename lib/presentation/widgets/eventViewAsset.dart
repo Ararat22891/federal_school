@@ -89,14 +89,14 @@ class EventViewAsset extends StatelessWidget {
      DateTime? endDateTime = event.end?.dateTime;
 
      if (startDate == null){
-       actualDateTime = DateFormat.Hm().format(startDateTime!);
+       actualDateTime = DateFormat.Hm().format(startDateTime!.add(Duration(hours: 3))!);
      }
      else if (startDateTime == null){
        actualDateTime = "Весь день";
      }
 
      if(endDate == null){
-       actualDateTime += " – ${DateFormat.Hm().format(endDateTime!)}";
+       actualDateTime += " – ${DateFormat.Hm().format(endDateTime!.add(Duration(hours: 3)))}";
      }
 
      return actualDateTime;

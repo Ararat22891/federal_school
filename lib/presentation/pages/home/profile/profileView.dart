@@ -92,7 +92,7 @@ class _MyProfileViewState extends State<MyProfileView> {
                               children: [
                                 MyCircleAvatar(
                                   networkAsset:
-                                      widget.viewModel.userData!.photoPath!,
+                                      widget.viewModel.userData?.photoPath ?? "",
                                   maxRadius:
                                       MediaQuery.of(context).size.height / 6.5,
                                 ),
